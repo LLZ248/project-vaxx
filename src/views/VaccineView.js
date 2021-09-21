@@ -1,23 +1,13 @@
 // reactstrap components
 import {
   Badge,
-  Col,
-  Button,
-  Card,
-  CardHeader,
-  CardFooter,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
   Media,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Progress,
   Table,
-  Container,
-  Row,
   UncontrolledTooltip,
 } from "reactstrap";
 import Header from "components/Headers/Header.js";

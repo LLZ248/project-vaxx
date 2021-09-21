@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Col, Card, CardHeader, Table, Container, Row } from "reactstrap";
 
 class Vaccine {
@@ -14,8 +15,24 @@ const vaccines = [
   new Vaccine(3 , "AstraZeneca", "AstraZeneca Biotech Ltd"),
 ]
 
+//fetch vaccines from database as json object (array)
+const fetchVaccines = async() => {
+  const res = await fetch('http://localhost:3307/vaccines');
+  const data = await res.json();
+  console.log('==>', data);
+  // return data;
+}
+
 const VaccineTable = ({ onRowSelect }) => {
   require("../assets/css/vaccineTable.css");
+
+  useEffect(() => {
+    fetchVaccines();
+  });
+  //making a synchronouos call to fetch
+  // const vaccines = '';
+  // console.log('==>', vaccines);
+
   return (
     <Container className="mt--8" fluid>
       <Row className="mt-5">
@@ -39,7 +56,7 @@ const VaccineTable = ({ onRowSelect }) => {
               id="vaccine-table"
             >
               <thead className="thead-light">
-                <tr className="hoverableRow">
+                <tr>
                   <th scope="col">Vaccine ID</th>
                   <th scope="col">Vaccine Name</th>
                   <th scope="col">Manufacturer</th>
@@ -48,6 +65,7 @@ const VaccineTable = ({ onRowSelect }) => {
               <tbody>
                 {vaccines.map((vaccine) => (
                   <tr
+                    className="hoverable-row"
                     key={vaccine.vaccineID}
                     role="button" //this change the cursor when mouse over
                     onClick={() => onRowSelect(vaccine)} //callback function

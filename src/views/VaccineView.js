@@ -23,29 +23,17 @@ import {
 import Header from "components/Headers/Header.js";
 import VaccineTable from "components/VaccineTable.js";
 
-class Vaccine {
-  constructor(vaccineID, vaccineName, manufacturer) {
-    this.vaccineID = vaccineID;
-    this.vaccineName = vaccineName;
-    this.manufacturer = manufacturer;
-  }
-}
 
-const vaccines = [
-  new Vaccine(1 , "Pfizer", "Pfizer Biotech Ltd"),
-  new Vaccine(2 , "Sinovac", "Sinovac Biotech Ltd"),
-  new Vaccine(3 , "AstraZeneca", "AstraZeneca Biotech Ltd"),
-]
 
 const onRowSelected = (selectedVaccine) => {
-  alert(selectedVaccine.vaccineID)
+  alert(selectedVaccine.manufacturer)
 }
 
 const VaccineView = () => {
   return (
     <>
       <Header />
-      <VaccineTable vaccines={vaccines} onRowSelect={onRowSelected}/>
+      <VaccineTable onRowSelect={onRowSelected}/>
 
       <Table className="align-items-center table-flush" responsive>
         <thead className="thead-light">

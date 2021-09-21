@@ -1,6 +1,21 @@
 import { Col, Card, CardHeader, Table, Container, Row } from "reactstrap";
 
-const VaccineTable = ({ vaccines, onRowSelect }) => {
+class Vaccine {
+  constructor(vaccineID, vaccineName, manufacturer) {
+    this.vaccineID = vaccineID;
+    this.vaccineName = vaccineName;
+    this.manufacturer = manufacturer;
+  }
+}
+
+const vaccines = [
+  new Vaccine(1 , "Pfizer", "Pfizer Biotech Ltd"),
+  new Vaccine(2 , "Sinovac", "Sinovac Biotech Ltd"),
+  new Vaccine(3 , "AstraZeneca", "AstraZeneca Biotech Ltd"),
+]
+
+const VaccineTable = ({ onRowSelect }) => {
+  require("../assets/css/vaccineTable.css");
   return (
     <Container className="mt--8" fluid>
       <Row className="mt-5">
@@ -24,7 +39,7 @@ const VaccineTable = ({ vaccines, onRowSelect }) => {
               id="vaccine-table"
             >
               <thead className="thead-light">
-                <tr>
+                <tr className="hoverableRow">
                   <th scope="col">Vaccine ID</th>
                   <th scope="col">Vaccine Name</th>
                   <th scope="col">Manufacturer</th>

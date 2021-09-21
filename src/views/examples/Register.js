@@ -15,69 +15,68 @@ import {
   Col,
 } from "reactstrap";
 
-type State = {
-  options: [{ [string]: string }],
-  value: string | void,
-};
+function HealthcareCentreAddressInput(props){
+  return (
+    <FormGroup>
+      <Input disabled={props.isDisabled} placeholder={props.value} type="text" />
+    </FormGroup>
+  );
+}
 
-const createOption = (label: string) => ({
+const createOption = (label) => ({
   label,
   value: label.toLowerCase().replace(/\W/g, ''),
 });
 
-const defaultOptions = [
-  createOption('One'),
-  createOption('Two'),
-  createOption('Three'),
+const healthcareCentres = [
+    {centreName:"Healthcare Centre 1", centreAddress:"No XX, XX ,XXXX"},
+    {centreName:"Healthcare Centre 2", centreAddress:"No 121, XX ,XXXX"},
+    {centreName:"Healthcare Centre 3", centreAddress:"No 213, XX ,XXXX"},
+    {centreName:"Healthcare Centre 4", centreAddress:"No 854, XX ,XXXX"},
 ];
 
+const defaultOptions = healthcareCentres.map((healthcareCentre)=>
+  createOption(healthcareCentre.centreName)
+);
 
-class Register extends Component<*, State> {
-  constructor() {
-    super();
-    this.state = {};
-    this.handleHealthcareChange = this.handleHealthcareChange.bind(this);
-    this.roleChange = this.roleChange.bind(this);
-    this.handleHealthcareCreate = this.handleHealthcareCreate.bind(this);
-  }
-
+class Register extends Component {
   state = {
     isLoading: false,
     options: defaultOptions,
-    value: undefined,
-  }
+    selectedCentreName: undefined,
+    selectedCentreAddress:undefined,
+  };
 
 
-  roleChange(event) {
+  roleChange = (event) => {
     this.setState({
       role: event.target.value
     });
   }
 
-  handleHealthcareChange = (newValue: any, actionMeta: any) => {
-    this.setState({ value: newValue });
+  handleHealthcareChange = (newValue) => {
+    const theCentreName = newValue.label;
+    const theCentreAddress = healthcareCentres.find((healthcareCentres)=>{
+      return healthcareCentres.centreName === theCentreName;
+    }).centreAddress;
+    this.setState({
+      selectedCentreName: theCentreName.value ,
+      selectedCentreAddress: theCentreAddress,
+    });
   };
 
-  handleHealthcareCreate = (inputValue: any) => {
-    this.setState({ isLoading: true });
-    //TODO: Add backend action here
-    console.group('Option created');
-    console.log('Wait a moment...');
-    setTimeout(() => {
+  handleHealthcareCreate = (inputValue) => {
       const { options } = this.state;
       const newOption = createOption(inputValue);
-      console.log(newOption);
-      console.groupEnd();
       this.setState({
-        isLoading: false,
         options: [...options, newOption],
-        value: newOption,
+        selectedCentreName: newOption,
+        selectedCentreAddress: undefined,
       });
-    }, 1000);
+      console.log(newOption);
   };
 
   render(){
-    const { isLoading, options, value } = this.state;
     return (
       <>
         <Col lg="6" md="8">
@@ -122,21 +121,23 @@ class Register extends Component<*, State> {
                 </FormGroup>
                 {this.state.role === "administrator" &&
                   <div className="admin-only">
+                    
                     <FormGroup>
                       <label>Healthcare Centre</label>
                       <CreatableSelect
                         isClearable
-                        isDisabled={isLoading}
-                        isLoading={isLoading}
                         onChange={this.handleHealthcareChange}
                         onCreateOption={this.handleHealthcareCreate}
-                        options={options}
-                        value={value}
+                        options={this.state.options}
+                        value={this.state.selectedCentreName}
                       />
                     </FormGroup>
-                    <FormGroup>
-                      <Input disabled placeholder="Healthcare Address" type="text" />
-                    </FormGroup>
+                    {
+                      this.state.selectedCentreAddress === undefined?
+                      <HealthcareCentreAddressInput isDisabled={false}  value={"Healthcare Centre Name"}/>:
+                      <HealthcareCentreAddressInput isDisabled={true} id="form-control-centreaddress" value={this.state.selectedCentreAddress}/>
+                    }
+                    
                   </div>
                 }
                 <label>Your Personal Information</label>

@@ -1,5 +1,5 @@
 // reactstrap components
-import { NavItem, NavLink, Nav, Container, Row, Col } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 
 const Login = () => {
   return (

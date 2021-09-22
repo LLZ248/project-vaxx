@@ -15,7 +15,6 @@ import {
   chartOptions,
   parseOptions
 } from "variables/charts.js";
-import React, { useState,useEffect } from 'react';
 import Header from "components/Headers/Header.js";
 
 

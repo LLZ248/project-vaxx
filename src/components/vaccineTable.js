@@ -1,13 +1,5 @@
 import { Col, Card, CardHeader, Table, Container, Row } from "reactstrap";
 
-class Vaccine {
-  constructor(vaccineID, vaccineName, manufacturer) {
-    this.vaccineID = vaccineID;
-    this.vaccineName = vaccineName;
-    this.manufacturer = manufacturer;
-  }
-}
-
 const VaccineTable = ({ vaccines, onRowSelect }) => {
   require("../assets/css/vaccineTable.css");
   return (

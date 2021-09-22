@@ -10,12 +10,11 @@ const Login = () => {
             <Col xl="6">
               <div className="copyright text-center text-xl-left text-muted">
                 © {new Date().getFullYear()}{" "}
-                <a
-                  className="font-weight-bold ml-1"
-                  target="_blank"
+                <span
+                  className="text-info font-weight-bold ml-1"
                 >
                   Project VAXX
-                </a>
+                </span>
               </div>
             </Col>
           </Row>

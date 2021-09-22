@@ -20,4 +20,15 @@ app.get('/vaccines', function(req, res) {
   })
 });
 
+app.post('/verifyPatient', function(req, res) {
+  const connection = require('./util/connection.js');
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  connection.getConnection(function(err, conn){
+    conn.query("select * FROM vaccine", function(err, rows) {
+         res.json(rows);
+    });
+  })
+});
+
 app.listen(5000, () => console.log('server started'));

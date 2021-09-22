@@ -4,7 +4,7 @@
   import { useState, useEffect } from "react";
   
   const onRowSelected = (selectedVaccine) => {
-    alert(selectedVaccine.manufacturer)
+    alert(selectedVaccine.vaccineName)
   }
   
   const fetchVaccines = async() => {
@@ -14,14 +14,14 @@
   }
   
   const VaccineView = () => {
-  
-    const [vaccines, setVaccines] = useState([])
-  
-    useEffect(async() => {
+    const [vaccines, setVaccines] = useState([]);
+    useEffect(() => {
+      async function fetchVaccineData(){
         const vaccines = await fetchVaccines();
         setVaccines(vaccines);
-  
-    }, [])
+      }
+      fetchVaccineData()
+    }, []);
   
     return (
       <>

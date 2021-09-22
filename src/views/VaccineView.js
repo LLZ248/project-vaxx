@@ -26,10 +26,11 @@ const onRowSelected = (selectedVaccine) => {
 // }
 
 const VaccineView = () => {
+  const projectVaxx = new ProjectVaxx();
   const [vaccines, setVaccines] = useState([]);
     useEffect(() => {
       async function fetchVaccineData(){
-        const vaccines = await ProjectVaxx.fetchVaccines();
+        const vaccines = await projectVaxx.fetchVaccines();
         setVaccines(vaccines);
       }
       fetchVaccineData()

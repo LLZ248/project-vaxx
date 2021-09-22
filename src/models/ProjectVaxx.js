@@ -1,18 +1,14 @@
 class ProjectVaxx {
 
     fetchDB = async(path) => {
-        const res =  await fetch('http://localhost:3307/' + path);
+        const res =  await fetch('http://localhost:5000/' + path);
         const data = await res.json();
         return data;
     }
 
-    fetchVaccines = async() => {
-        return await fetchDB('vaccines');
-    }
+    fetchVaccines = async() => await this.fetchDB('vaccines');
       
-    findVaccine(vaccineID) {
-        return fetchDB('vaccines/?vaccineID=' = vaccineID);
-    }
+    findVaccine = async(vaccineID) => await this.fetchDB('vaccines/?vaccineID=' + vaccineID);
 }
 
 export default ProjectVaxx;

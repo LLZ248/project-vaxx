@@ -1,0 +1,3 @@
+tr.hoverable-row:hover {
+    background-color: var(--info);
+}

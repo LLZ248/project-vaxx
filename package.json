@@ -16,6 +16,8 @@
   "homepage": "https://github.com/LLZ248/project-vaxx",
   "scripts": {
     "start": "react-scripts start",
+    "starti": "cross-env BROWSER=chrome BROWSER_ARGS=--incognito react-scripts start",
+    "dbcon": "nodemon --watch src/models/ -e js ./src/models/database-connection",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -39,7 +41,9 @@
     "bootstrap": "4.6.0",
     "chart.js": "2.9.4",
     "classnames": "2.3.1",
+    "cross-env": "^7.0.3",
     "moment": "2.29.1",
+    "mysql": "^2.18.1",
     "node-sass": "6.0.1",
     "node-sass-package-importer": "5.3.2",
     "nouislider": "15.2.0",

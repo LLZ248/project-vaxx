@@ -3,6 +3,11 @@ import { Col, Card, CardHeader, Table, Container, Row } from "reactstrap";
 const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) => {
   require("../assets/css/hoverableTable.css");
 
+  function hideableClass(columnName) {
+    return hideColumns === undefined || hideColumns.includes(columnName) ?
+    'd-none' : '';
+  };
+
   return (
     <Container className="mt--8" fluid>
       <Row className="mt-5">
@@ -27,9 +32,10 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
             >
               <thead className="thead-light">
                 <tr>
-                  <th scope="col" className={ !hideColumns || hideColumns.includes('vaccineID') ? "d-none" : ""}>Vaccine ID</th>
-                  <th scope="col" className={ !hideColumns || hideColumns.includes('vaccineName') ? "d-none" : ""}>Vaccine Name</th>
-                  <th scope="col" className={ !hideColumns || hideColumns.includes('manufacturer') ? "d-none" : ""}>Manufacturer</th>
+                  {/* <th scope="col" className={ !hideColumns || hideColumns.includes('vaccineID') ? "d-none" : ""}>Vaccine ID</th> */}
+                  <th scope="col" className={hideableClass('vaccineID')}>Vaccine ID</th>
+                  <th scope="col" className={hideableClass('vaccineName')}>Vaccine Name</th>
+                  <th scope="col" className={hideableClass('manufacturer')}>Manufacturer</th>
                 </tr>
               </thead>
               <tbody>

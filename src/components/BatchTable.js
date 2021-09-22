@@ -1,6 +1,6 @@
 import { Col, Card, CardHeader, Table, Container, Row } from "reactstrap";
 
-const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) => {
+const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
   require("../assets/css/hoverableTable.css");
 
   return (
@@ -15,7 +15,7 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
                 </div>
                 <div className="col">
                   <h6 className="text-right m-0">
-                   {message}
+                    {message}
                   </h6>
                 </div>
               </Row>
@@ -27,24 +27,24 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
             >
               <thead className="thead-light">
                 <tr>
-                  <th scope="col" className={hideColumns.includes('vaccineID') ? "d-none" : ""}>Vaccine ID</th>
-                  <th scope="col" className={hideColumns.includes('vaccineName') ? "d-none" : ""}>Vaccine Name</th>
-                  <th scope="col" className={hideColumns.includes('manufacturer') ? "d-none" : ""}>Manufacturer</th>
+                  <th scope="col">Vaccine ID</th>
+                  <th scope="col">Vaccine Name</th>
+                  <th scope="col">Manufacturer</th>
                 </tr>
               </thead>
               <tbody>
-                {vaccines.map(vaccine => (
+                {vaccines.map((vaccine) => (
                   <tr
                     className="hoverable-row"
                     key={vaccine.vaccineID}
                     role="button" //this change the cursor when mouse over
                     onClick={() => onRowSelect(vaccine)} //callback function
                   >
-                    {Object.keys(vaccine)
-                    .filter(key => !hideColumns.includes(key)) //extract property that are NOT hided
-                    .map(key => <td key={key}>{vaccine[key]}</td>)}</tr> //map the property to table data
-                    //note that the td key={key} is just to prevent error
-                    ))}
+                    <td>{vaccine.vaccineID}</td>
+                    <td>{vaccine.vaccineName}</td>
+                    <td>{vaccine.manufacturer}</td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </Card>
@@ -54,4 +54,4 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
   );
 };
 
-export default VaccineTable;
+export default BatchTable;

@@ -13,32 +13,33 @@ import {
 import Header from "components/Headers/Header.js";
 import VaccineTable from "components/VaccineTable.js";
 import { useState, useEffect } from "react";
-import ProjectVaxx from '../models/ProjectVaxx.js';
+import ProjectVaxx from "../models/ProjectVaxx.js";
 
 const onRowSelected = (selectedVaccine) => {
-  alert(selectedVaccine.manufacturer)
-}
-
-// const fetchVaccines = async() => {
-//   const res =  await fetch('http://localhost:5000/vaccines');
-//   const data = await res.json();
-//   return data;
-// }
+  alert(selectedVaccine.manufacturer);
+};
 
 const VaccineView = () => {
+  const projectVaxx = new ProjectVaxx();
   const [vaccines, setVaccines] = useState([]);
-    useEffect(() => {
-      async function fetchVaccineData(){
-        const vaccines = await ProjectVaxx.fetchVaccines();
-        setVaccines(vaccines);
-      }
-      fetchVaccineData()
-    }, []);
+  useEffect(() => {
+    async function fetchVaccineData() {
+      const vaccines = await projectVaxx.fetchVaccines();
+      setVaccines(vaccines);
+    }
+    fetchVaccineData();
+  });
 
   return (
     <>
       <Header />
-      <VaccineTable vaccines={vaccines} onRowSelect={onRowSelected}/>
+      <VaccineTable 
+        vaccines={vaccines} 
+        onRowSelect={onRowSelected} 
+        title="Vaccine Available"
+        message="Select a row to add batch"
+        hideColumns={'vaccineID'}
+      />
 
       <Table className="align-items-center table-flush" responsive>
         <thead className="thead-light">

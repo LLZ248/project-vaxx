@@ -38,7 +38,6 @@ const VaccineView = () => {
         onRowSelect={onRowSelected} 
         title="Vaccine Available"
         message="Select a row to add batch"
-        hideColumns={'vaccineID'}
       />
 
       <Table className="align-items-center table-flush" responsive>

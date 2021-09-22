@@ -27,9 +27,9 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
             >
               <thead className="thead-light">
                 <tr>
-                  <th scope="col" className={hideColumns.includes('vaccineID') ? "d-none" : ""}>Vaccine ID</th>
-                  <th scope="col" className={hideColumns.includes('vaccineName') ? "d-none" : ""}>Vaccine Name</th>
-                  <th scope="col" className={hideColumns.includes('manufacturer') ? "d-none" : ""}>Manufacturer</th>
+                  <th scope="col" className={ !hideColumns || hideColumns.includes('vaccineID') ? "d-none" : ""}>Vaccine ID</th>
+                  <th scope="col" className={ !hideColumns || hideColumns.includes('vaccineName') ? "d-none" : ""}>Vaccine Name</th>
+                  <th scope="col" className={ !hideColumns || hideColumns.includes('manufacturer') ? "d-none" : ""}>Manufacturer</th>
                 </tr>
               </thead>
               <tbody>
@@ -40,11 +40,15 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
                     role="button" //this change the cursor when mouse over
                     onClick={() => onRowSelect(vaccine)} //callback function
                   >
-                    {Object.keys(vaccine)
-                    .filter(key => !hideColumns.includes(key)) //extract property that are NOT hided
-                    .map(key => <td key={key}>{vaccine[key]}</td>)}</tr> //map the property to table data
-                    //note that the td key={key} is just to prevent error
-                    ))}
+                    {
+                    Object.keys(vaccine)
+                    .filter(key => !hideColumns || !hideColumns.includes(key)) //extract property that are NOT hided 
+                                                                               //if hideColumns is not undefined
+                    .map(key => 
+                      <td key={key}> {vaccine[key]} </td> //map the property value to <td>
+                      )}
+                  </tr>
+                  ))}
               </tbody>
             </Table>
           </Card>

@@ -1,7 +1,6 @@
 // node.js library that concatenates classes (strings)
 // javascipt plugin for creating charts
 import Chart from "chart.js";
-
 // reactstrap components
 import {
   Card,
@@ -16,8 +15,9 @@ import {
   chartOptions,
   parseOptions
 } from "variables/charts.js";
-
+import React, { useState,useEffect } from 'react';
 import Header from "components/Headers/Header.js";
+
 
 const Index = (props) => {
   if (window.Chart) {

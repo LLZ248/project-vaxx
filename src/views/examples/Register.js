@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import CreatableSelect from 'react-select/creatable';
+
+
 // reactstrap components
 import {
   Button,
@@ -14,6 +16,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+
 
 function HealthcareCentreAddressInput(props){
   return (
@@ -38,6 +41,7 @@ const healthcareCentres = [
 const defaultOptions = healthcareCentres.map((healthcareCentre)=>
   createOption(healthcareCentre.centreName)
 );
+
 
 class Register extends Component {
   state = {

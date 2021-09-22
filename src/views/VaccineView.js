@@ -29,10 +29,8 @@ const VaccineView = () => {
   const [vaccines, setVaccines] = useState([])
 
   useEffect(async() => {
-    
       const vaccines = await fetchVaccines();
       setVaccines(vaccines);
-
   }, [])
 
   return (

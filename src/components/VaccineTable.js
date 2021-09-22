@@ -1,34 +1,7 @@
-import { useEffect } from "react";
 import { Col, Card, CardHeader, Table, Container, Row } from "reactstrap";
-
-class Vaccine {
-  constructor(vaccineID, vaccineName, manufacturer) {
-    this.vaccineID = vaccineID;
-    this.vaccineName = vaccineName;
-    this.manufacturer = manufacturer;
-  }
-}
-
-// const vaccines = [
-//   new Vaccine(1 , "Pfizer", "Pfizer Biotech Ltd"),
-//   new Vaccine(2 , "Sinovac", "Sinovac Biotech Ltd"),
-//   new Vaccine(3 , "AstraZeneca", "AstraZeneca Biotech Ltd"),
-// ]
-
-//fetch vaccines from database as json object (array)
-// const fetchVaccines = async() => {
-//   const res = await fetch('http://localhost:3307/vaccines')  
-//   const data = await res.json();
-//   return data;
-// }
 
 const VaccineTable = ({ vaccines, onRowSelect }) => {
   require("../assets/css/vaccineTable.css");
-
-  // useEffect(() => {
-  //   const vaccines = fetchVaccines();
-    
-  // });
 
   return (
     <Container className="mt--8" fluid>

@@ -19,19 +19,20 @@ const onRowSelected = (selectedVaccine) => {
 }
 
 const fetchVaccines = async() => {
-  const res =  await fetch('http://localhost:3307/vaccines');
+  const res =  await fetch('http://localhost:5000/vaccines');
   const data = await res.json();
   return data;
 }
 
 const VaccineView = () => {
-
-  const [vaccines, setVaccines] = useState([])
-
-  useEffect(async() => {
-      const vaccines = await fetchVaccines();
-      setVaccines(vaccines);
-  }, [])
+  const [vaccines, setVaccines] = useState([]);
+    useEffect(() => {
+      async function fetchVaccineData(){
+        const vaccines = await fetchVaccines();
+        setVaccines(vaccines);
+      }
+      fetchVaccineData()
+    }, []);
 
   return (
     <>

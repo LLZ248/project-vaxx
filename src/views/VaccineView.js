@@ -13,22 +13,23 @@ import {
 import Header from "components/Headers/Header.js";
 import VaccineTable from "components/VaccineTable.js";
 import { useState, useEffect } from "react";
+import ProjectVaxx from '../models/ProjectVaxx.js';
 
 const onRowSelected = (selectedVaccine) => {
   alert(selectedVaccine.manufacturer)
 }
 
-const fetchVaccines = async() => {
-  const res =  await fetch('http://localhost:5000/vaccines');
-  const data = await res.json();
-  return data;
-}
+// const fetchVaccines = async() => {
+//   const res =  await fetch('http://localhost:5000/vaccines');
+//   const data = await res.json();
+//   return data;
+// }
 
 const VaccineView = () => {
   const [vaccines, setVaccines] = useState([]);
     useEffect(() => {
       async function fetchVaccineData(){
-        const vaccines = await fetchVaccines();
+        const vaccines = await ProjectVaxx.fetchVaccines();
         setVaccines(vaccines);
       }
       fetchVaccineData()

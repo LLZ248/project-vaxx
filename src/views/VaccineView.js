@@ -12,18 +12,33 @@ import {
 } from "reactstrap";
 import Header from "components/Headers/Header.js";
 import VaccineTable from "components/VaccineTable.js";
-
-
+import { useState, useEffect } from "react";
 
 const onRowSelected = (selectedVaccine) => {
   alert(selectedVaccine.manufacturer)
 }
 
+const fetchVaccines = async() => {
+  const res =  await fetch('http://localhost:3307/vaccines');
+  const data = await res.json();
+  return data;
+}
+
 const VaccineView = () => {
+
+  const [vaccines, setVaccines] = useState([])
+
+  useEffect(async() => {
+    
+      const vaccines = await fetchVaccines();
+      setVaccines(vaccines);
+
+  }, [])
+
   return (
     <>
       <Header />
-      <VaccineTable onRowSelect={onRowSelected}/>
+      <VaccineTable vaccines={vaccines} onRowSelect={onRowSelected}/>
 
       <Table className="align-items-center table-flush" responsive>
         <thead className="thead-light">

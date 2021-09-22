@@ -5,16 +5,6 @@ const mysql = require('mysql');
 const PORT = 3307;
 
 // First you need to create a connection to the db
-
-
-// connection.connect((err) => {
-//   if(err){
-//     console.log(err);
-//     return;
-//   }
-//   console.log('Connection established');
-// });
-
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -22,7 +12,6 @@ const connection = mysql.createConnection({
     port:'3306',
     database: 'project_vaxx'
   });
-
   
 console.log('connecting to db')
 
@@ -31,14 +20,15 @@ connection.connect((err) => {
 })
 
 app.get('/vaccines', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    
     connection.query('SELECT * FROM Vaccine;', (err, vaccines) => {
         if (err) console.log(err);
+      
         res.send(vaccines);
     })
 });
 
-app.get('/test', (req, res) => {
-    res.send('working');
-});
 
 app.listen(PORT, () => console.log(`Server started on ${PORT}`));

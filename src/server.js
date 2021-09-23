@@ -14,21 +14,21 @@ password: '',
 database: 'project_vaxx'
 });
 
+app.set('json spaces', 2) //pretty print json when requested
+
 app.use(express.json());
 app.use(session({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true
 }));
-app.use(urlencoded({extended : true}));
-app.use(json());
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
 
 connection.connect(err => console.log(err ? err : '**connected to db**'));
 
 // respond with "hello world" when a GET request is made to the homepage
 app.get('/', function (req, res) {
-  console.log(req.ip);
-  if(req.ip !== "http://localhost:3000") throw new Error('you do not have the access right');
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
   connection.query(req.query.sqlQuery, (err, rows) => err ? err : res.json(rows))

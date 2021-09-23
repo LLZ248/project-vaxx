@@ -14,9 +14,12 @@ password: '',
 database: 'project_vaxx'
 });
 
+app.set('json spaces', 2) //pretty print json when requested
+
 var tokens = [
   {"token":"fasdf","role":"admin","expireDatetime":"2021-9-29 : 15-05-50"}
 ]
+
 
 app.use(express.json());
 app.use(session({
@@ -31,7 +34,9 @@ connection.connect(err => console.log(err ? err : '**connected to db**'));
 
 // respond with "hello world" when a GET request is made to the homepage
 app.get('/', function (req, res) {
-  res.send('hello world')
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  connection.query(req.query.sqlQuery, (err, rows) => err ? err : res.json(rows))
 })
 
 app.get('/vaccines', function(req, res) {

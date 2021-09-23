@@ -6,6 +6,8 @@ import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js"
 import VaccineView from "views/VaccineView.js";
+import BatchView from "views/BatchView.js";
+import AdminDashboard from "views/Admin.js";
 
 var routes = [
   {
@@ -62,6 +64,20 @@ var routes = [
     name: "Vaccines",
     icon: "fa fa-syringe text-blue",
     component: VaccineView,
+    layout: "/admin",
+  },
+  {
+    path: "/addBatches",
+    name: "Add Batches",
+    icon: "fa fa-plus text-info",
+    component: BatchView,
+    layout: "/admin",
+  },
+  {
+    path: "/admin/dashboard",
+    name: "Admin Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    component: AdminDashboard,
     layout: "/admin",
   },
 ];

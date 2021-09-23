@@ -8,8 +8,13 @@ class ProjectVaxx {
 
     fetchVaccines = async() => await this.fetchDB('vaccines');
 
-      
     findVaccine = async(vaccineID) => await this.fetchDB('vaccines/?vaccineID=' + vaccineID);
+
+    getBatches = async() => await this.fetchDB('batches');
+      
+    findBatch = async(batchNo) => await this.fetchDB('vaccines/?batchNo=' + batchNo);
+
+
 }
 
 export default ProjectVaxx;

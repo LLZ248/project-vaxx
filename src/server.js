@@ -6,6 +6,14 @@ const crypto = require('crypto');
 const app = express();
 const PORT = 5000;
 
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+host: 'localhost',
+user: 'root',
+password: '',
+database: 'project_vaxx'
+});
+
 app.use(express.json());
 app.use(session({
 	secret: 'secret',
@@ -15,6 +23,7 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
+connection.connect(err => console.log(err ? err : '**connected to db**'));
 
 // respond with "hello world" when a GET request is made to the homepage
 app.get('/', function (req, res) {
@@ -22,14 +31,11 @@ app.get('/', function (req, res) {
 })
 
 app.get('/vaccines', function(req, res) {
-  const connection = require('./util/connection.js');
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  connection.getConnection(function(err, conn){
-    conn.query("select * FROM vaccine", function(err, rows) {
+    connection.query("select * FROM vaccine", function(err, rows) {
          res.json(rows);
     });
-  })
 });
 
 app.get('/healthcare-centres', function(req, res) {

@@ -33,35 +33,22 @@ app.get('/', function (req, res) {
 app.get('/vaccines', function(req, res) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-    connection.query("select * FROM vaccine", function(err, rows) {
-         res.json(rows);
-    });
+  connection.query("select * FROM vaccine", function(err, rows) {
+        res.json(rows);
+  });
 });
 
 app.get('/healthcare-centres', function(req, res) {
-  const connection = require('./util/connection.js');
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  connection.getConnection(function(err, conn){
-    conn.query("select * FROM healthcarecentre", function(err, rows) {
-         res.json(rows);
-    });
-  })
+  connection.query("select * FROM healthcarecentre", function(err, rows){
+    res.json(rows);
+  });
+
 });
 
-app.post('/verifyPatient', function(req, res) {
-  // const connection = require('./util/connection.js');
-  // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  // res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  // connection.getConnection(function(err, conn){
-  //   conn.query("select * FROM vaccine", function(err, rows) {
-  //        res.json(rows);
-  //   });
-  // })
-});
 
-app.post('/auth', function(request, response) {
-  const connection = require('./util/connection.js');
+app.post('/verifyPatient', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
 	if (username && password) {
@@ -70,18 +57,17 @@ app.post('/auth', function(request, response) {
     newPassword= data.digest('hex');
     newPasswordTxt = (""+newPassword).toUpperCase();
 
-		connection.getConnection(function(err, conn){
-      conn.query('SELECT * FROM patient WHERE username = \''+username+'\' AND password = \''+newPasswordTxt+'\'', function(err, rows) {
-        if (rows === undefined) {
-          response.send("UserName: "+username+"Wrong Password :"+newPasswordTxt);
-        } else {
-          request.session.loggedin = true;
-          request.session.username = username;
-          response.send('correct!');
-        }			
-        response.end();
-      });
-    })
+    connection.query('SELECT * FROM patient WHERE username = \''+username+'\' AND password = \''+newPasswordTxt+'\'', function(err, rows) {
+      if (rows === undefined) {
+        response.send("UserName: "+username+"Wrong Password :"+newPasswordTxt);
+      } else {
+        request.session.loggedin = true;
+        request.session.username = username;
+        response.send('correct!');
+      }			
+      response.end();
+    });
+
 	} else {
 		response.send('Please enter Username and Password!');
 		response.end();

@@ -30,6 +30,7 @@ const createOption = (label) => ({
   label,
   value: label,
 });
+
 const fetch = require('sync-fetch')
 const healthcareCentres = fetch('http://localhost:5000/healthcare-centres', {}).json();
 
@@ -60,9 +61,6 @@ class Register extends Component {
       selectedCentreName: theCentreName,
       selectedCentreAddress: theCentreAddress,
     });
-    console.log(this.state.options)
-    console.log(this.state.selectedCentreName)
-    console.log(this.state.selectedCentreAddress)
   };
 
   handleHealthcareCreate = (inputValue) => {
@@ -73,9 +71,6 @@ class Register extends Component {
         selectedCentreName: newOption,
         selectedCentreAddress: undefined,
       });
-      console.log(newOption);
-      console.log(this.state.selectedCentreName)
-      console.log(this.state.selectedCentreAddress)
   };
 
   render(){

@@ -1,16 +1,18 @@
-export default (app) => {
-    const batches = require("../controllers/batch.controller.js");
-  
-    // Create a new Vaccination
-    app.post("/batches", batches.create);
-  
-    // Retrieve all Vaccination
-    app.get("/batches", batches.findAll);
-  
-    // Retrieve a single Vaccination with batchNo
-    app.get("/customers/:batchNo", batches.findOne);
-  
-    // Update a Vaccination with batchNo
-    app.put("/customers/:batchNo", batches.update);
-  };
-  
+var express = require('express');
+var router = express.Router();
+
+const batches = require("../controllers/batch.controller.js");
+
+// Create a new Vaccination
+router.post("/batches", batches.create);
+
+// Retrieve all Vaccination
+router.get("/batches", batches.findAll);
+
+// Retrieve a single Vaccination with batchNo
+router.get("/batches/:batchNo", batches.findOne);
+
+// Update a Vaccination with batchNo
+router.put("/batches/:batchNo", batches.update);
+
+module.exports = router;

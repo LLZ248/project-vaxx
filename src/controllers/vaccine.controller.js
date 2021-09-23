@@ -1,4 +1,4 @@
-import Vaccine from "../models/vaccine.model.js";
+var Vaccine = require("../models/vaccine.model.js");
 
 // // Create and Save a new Vaccine
 // export function create(req, res) {
@@ -28,7 +28,7 @@ import Vaccine from "../models/vaccine.model.js";
 // }
 
 // Retrieve all Vaccine from the database.
-export const findAll = (req, res) => {
+exports.findAll = (req, res) => {
   Vaccine.getAll((err, data) => {
     if (err)
       res.status(500).send({
@@ -40,7 +40,7 @@ export const findAll = (req, res) => {
 }
 
 // Retrieve one Vaccine from the database based on vaccineID.
-export const findOne = (req, res) => {
+exports.findOne = (req, res) => {
   Vaccine.findById(req.params.vaccineID, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {

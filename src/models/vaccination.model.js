@@ -1,4 +1,4 @@
-import sql from "../database.js";
+const sql = require("../database.js");
 
 // constructor
 const Vaccination = (vaccination) => {
@@ -23,7 +23,7 @@ Vaccination.create = (newVaccination, result) => {
 };
 
 Vaccination.findById = (vaccinationId, result) => {
-  sql.query(`SELECT * FROM vaccination WHERE vaccinationID = ${vaccinationId}`, (err, res) => {
+  sql.query(`SELECT * FROM vaccination WHERE vaccinationID = \'${vaccinationId}\'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -96,4 +96,4 @@ Vaccination.updateById = (vaccinationID, vaccination, result) => {
 //   });
 // };
 
-export default Vaccination;
+module.exports = Vaccination;

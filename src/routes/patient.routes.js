@@ -1,16 +1,18 @@
-module.exports = app => {
-    const patients = require("../controllers/patient.controller.js");
-  
-    // Create a new Patient
-    app.post("/patients", patients.create);
-  
-    // Retrieve all Patients
-    app.get("/patients", patients.findAll);
-  
-    // Retrieve a single Patient with username
-    app.get("/patients/:patientUsername", patients.findOne);
+var express = require('express');
+var router = express.Router();
 
-    // Retrieve a single Patient with the correct combination username and password
-    app.post("/patients/verifyPatient", patients.verifyPatient);
+const patients = require("../controllers/patient.controller.js");
 
-};
+// Create a new Patient
+router.post("/patients", patients.create);
+
+// Retrieve all Patients
+router.get("/patients", patients.findAll);
+
+// Retrieve a single Patient with username
+router.get("/patients/findPatient", patients.findOne);
+
+// Retrieve a single Patient with the correct combination username and password
+router.post("/patients/verifyPatient", patients.verifyPatient);
+
+module.exports = router;

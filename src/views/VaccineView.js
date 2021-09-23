@@ -16,12 +16,15 @@ import { useState, useEffect } from "react";
 import ProjectVaxx from "../models/ProjectVaxx.js";
 
 const onRowSelected = (selectedVaccine) => {
+
   alert(selectedVaccine.manufacturer);
 };
+
 
 const VaccineView = () => {
   const projectVaxx = new ProjectVaxx();
   const [vaccines, setVaccines] = useState([]);
+  
   useEffect(() => {
     async function fetchVaccineData() {
       const vaccines = await projectVaxx.fetchVaccines();
@@ -29,6 +32,7 @@ const VaccineView = () => {
     }
     fetchVaccineData();
   });
+
 
   return (
     <>

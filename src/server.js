@@ -14,6 +14,10 @@ password: '',
 database: 'project_vaxx'
 });
 
+var tokens = [
+  {"token":"fasdf","role":"admin","expireDatetime":"2021-9-29 : 15-05-50"}
+]
+
 app.use(express.json());
 app.use(session({
 	secret: 'secret',
@@ -73,5 +77,7 @@ app.post('/verifyPatient', function(request, response) {
 		response.end();
 	}
 });
+
+require("./app/routes/patient.routes.js")(app);
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

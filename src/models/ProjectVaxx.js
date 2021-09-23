@@ -7,7 +7,6 @@ class ProjectVaxx {
     }
 
     fetchVaccines = async() => await this.fetchDB('vaccines');
-
       
     findVaccine = async(vaccineID) => await this.fetchDB('vaccines/?vaccineID=' + vaccineID);
 }

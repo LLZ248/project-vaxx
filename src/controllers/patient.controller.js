@@ -1,4 +1,4 @@
-const Patient = require("../models/patient.model.js");
+var Patient = require('../models/patient.model.js');
 
 // Create and Save a new Patient
 exports.create = (req, res) => {
@@ -43,24 +43,24 @@ exports.findAll = (req, res) => {
 
 // Find a single Patient with the username
 exports.findOne = (req, res) => {
-    Patient.findById(req.params.username, (err, data) => {
+    Patient.findById(req.query.username, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Customer with username ${req.params.username}.`
+            message: `Not found Customer with username ${req.query.username}.`
           });
         } else {
           res.status(500).send({
-            message: "Error retrieving Customer with username " + req.params.username
+            message: "Error retrieving Customer with username " + req.query.username
           });
         }
       } else res.send(data);
     });
 };
 
-// Find a single Patient with a username
+// Find a single Patient with the combination of password and username
 exports.verifyPatient = (req, res) => {
-    Patient.findById(req.params.username, (err, data) => {
+    Patient.findById(req.body.username, req.body.password, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({

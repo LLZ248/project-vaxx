@@ -1,7 +1,7 @@
-import Vaccination from "../models/vaccination.model.js";
+var Vaccination =  require("../models/vaccination.model.js");
 
 // Create and Save a new Vaccination
-export function create(req, res) {
+exports.create=(req, res) =>{
   // Validate request
   if (!req.body) {
     res.status(400).send({
@@ -30,7 +30,7 @@ export function create(req, res) {
 }
 
 // Retrieve all Vaccination from the database.
-export const findAll = (req, res) => {
+exports.findAll = (req, res) => {
   Vaccination.getAll((err, data) => {
     if (err)
       res.status(500).send({
@@ -42,7 +42,7 @@ export const findAll = (req, res) => {
 }
 
 // Retrieve one Vaccination from the database based on vaccinationID.
-export const findOne = (req, res) => {
+exports.findOne = (req, res) => {
   Vaccination.findById(req.params.vaccinationID, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -61,7 +61,7 @@ export const findOne = (req, res) => {
 }
 
 // update Vaccination from the database based on vaccinationID.
-export const update = (req, res) => {
+exports.update = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({

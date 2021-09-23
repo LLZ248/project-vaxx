@@ -8,5 +8,4 @@ database: 'project_vaxx'
 });
 
 connection.connect(err => console.log(err ? err : '**connected to db**'));
-
-export default connection;
+module.exports = connection;

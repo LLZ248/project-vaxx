@@ -1,4 +1,4 @@
-import sql from "../database.js";
+const sql = require("../database.js");
 
 // constructor
 const Batch = (batch) => {
@@ -24,7 +24,7 @@ Batch.create = (newBatch, result) => {
 };
 
 Batch.findById = (batchNo, result) => {
-    sql.query(`SELECT * FROM customers WHERE id = ${batchNo}`, (err, res) => {
+    sql.query(`SELECT * FROM batch WHERE batchNo = \'${batchNo}\'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -42,7 +42,7 @@ Batch.findById = (batchNo, result) => {
 };
 
 Batch.getAll = result => {
-  query("SELECT * FROM Batch", (err, res) => {
+  sql.query("SELECT * FROM batch", (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -96,7 +96,7 @@ Batch.updateById = (batchNo, batch, result) => {
 //   });
 // };
 
-export default Batch;
+module.exports = Batch;
 
 // class Batch {
 //     //accept a normal js object

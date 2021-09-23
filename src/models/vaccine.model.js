@@ -1,4 +1,4 @@
-import sql from "../database.js";
+const sql = require("../database.js");
 
 // constructor
 const Vaccine = function(vaccine) {
@@ -8,7 +8,7 @@ const Vaccine = function(vaccine) {
 };
 
 Vaccine.findById = (vaccineID, result) => {
-    sql.query(`SELECT * FROM vaccines WHERE id = ${vaccineID}`, (err, res) => {
+    sql.query(`SELECT * FROM vaccine WHERE vaccineID = \'${vaccineID}\'`, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -27,7 +27,7 @@ Vaccine.findById = (vaccineID, result) => {
   };
   
   Vaccine.getAll = result => {
-    sql.query("SELECT * FROM vaccines", (err, res) => {
+    sql.query("SELECT * FROM vaccine", (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);
@@ -40,5 +40,5 @@ Vaccine.findById = (vaccineID, result) => {
 
 }
 
-export default Vaccine
+module.exports = Vaccine
     

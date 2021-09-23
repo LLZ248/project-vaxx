@@ -1,6 +1,6 @@
-const sql = require("./db.js");
+const sql = require("../database.js");
 
-const Patient = function(patient) {
+const Patient = (patient)=> {
     this.username = patient.username;
     this.password = patient.password;
     this.email = patient.email;
@@ -22,7 +22,7 @@ Patient.create = (newPatient, result) => {
 };
 
 Patient.findById = (patientUsername, result) => {
-    sql.query(`SELECT * FROM patient WHERE username = ${patientUsername}`, (err, res) => {
+    sql.query(`SELECT * FROM patient WHERE username = \'${patientUsername}\'`, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -66,33 +66,13 @@ Patient.verifyPatient = (username, password, result) => {
         result(err, null);
         return;
       }
-
       if (res.length) {
         console.log("Valid Patient : ", res[0]);
         result(null, res[0]);
         return;
       }
-
       // not found Patient with the username nad password combination
       result({ kind: "not_found" }, null);			
-    });
-
-
-    sql.query(`SELECT * FROM patient WHERE username = ${patientUsername}`, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-  
-      if (res.length) {
-        console.log("found patient: ", res[0]);
-        result(null, res[0]);
-        return;
-      }
-  
-      // not found Patient with the username
-      result({ kind: "not_found" }, null);
     });
 };
 

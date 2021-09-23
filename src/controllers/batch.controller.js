@@ -1,7 +1,7 @@
-import Batch from "../models/batch.model.js";
+var Batch =require("../models/batch.model.js");
 
 // Create and Save a new Patient
-export const create = (req, res) => {
+exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
@@ -31,7 +31,7 @@ export const create = (req, res) => {
 }
 
 // Retrieve all Batches from the database.
-export const findAll = (req, res) => {
+exports.findAll = (req, res) => {
   Batch.getAll((err, data) => {
     if (err)
       res.status(500).send({
@@ -43,7 +43,7 @@ export const findAll = (req, res) => {
 }
 
 // Retrieve one Batch from the database based on batchNo.
-export const findOne = (req, res) => {
+exports.findOne = (req, res) => {
   Batch.findById(req.params.batchNo, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -61,7 +61,7 @@ export const findOne = (req, res) => {
   });
 }
 
-export const update = (req, res) => {
+exports.update = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({

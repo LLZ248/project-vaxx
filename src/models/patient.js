@@ -6,7 +6,7 @@ class Patient{
         this.email = email;
         this.fullName = fullName;
         this.ICPassport = ICPassport;
-        this.setPassword;
+        this.setPassword(password);
     }
     constructor(username, password){
         this.username = username;

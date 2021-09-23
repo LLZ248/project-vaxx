@@ -19,12 +19,6 @@ const onRowSelected = (selectedVaccine) => {
   alert(selectedVaccine.manufacturer)
 }
 
-// const fetchVaccines = async() => {
-//   const res =  await fetch('http://localhost:5000/vaccines');
-//   const data = await res.json();
-//   return data;
-// }
-
 const VaccineView = () => {
   const projectVaxx = new ProjectVaxx();
   const [vaccines, setVaccines] = useState([]);
@@ -34,7 +28,7 @@ const VaccineView = () => {
         setVaccines(vaccines);
       }
       fetchVaccineData()
-    }, []);
+    });
 
   return (
     <>

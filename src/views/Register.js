@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import CreatableSelect from 'react-select/creatable';
+
+
 // reactstrap components
 import {
   Button,
@@ -15,6 +17,7 @@ import {
   Col,
 } from "reactstrap";
 
+
 function HealthcareCentreAddressInput(props){
   return (
     <FormGroup>
@@ -25,28 +28,22 @@ function HealthcareCentreAddressInput(props){
 
 const createOption = (label) => ({
   label,
-  value: label.toLowerCase().replace(/\W/g, ''),
+  value: label,
 });
-
-const healthcareCentres = [
-    {centreName:"Healthcare Centre 1", centreAddress:"No XX, XX ,XXXX"},
-    {centreName:"Healthcare Centre 2", centreAddress:"No 121, XX ,XXXX"},
-    {centreName:"Healthcare Centre 3", centreAddress:"No 213, XX ,XXXX"},
-    {centreName:"Healthcare Centre 4", centreAddress:"No 854, XX ,XXXX"},
-];
+const fetch = require('sync-fetch')
+const healthcareCentres = fetch('http://localhost:5000/healthcare-centres', {}).json();
 
 const defaultOptions = healthcareCentres.map((healthcareCentre)=>
   createOption(healthcareCentre.centreName)
 );
 
+
 class Register extends Component {
   state = {
-    isLoading: false,
     options: defaultOptions,
     selectedCentreName: undefined,
-    selectedCentreAddress:undefined,
+    selectedCentreAddress: undefined,
   };
-
 
   roleChange = (event) => {
     this.setState({
@@ -55,14 +52,17 @@ class Register extends Component {
   }
 
   handleHealthcareChange = (newValue) => {
-    const theCentreName = newValue.label;
-    const theCentreAddress = healthcareCentres.find((healthcareCentres)=>{
-      return healthcareCentres.centreName === theCentreName;
-    }).centreAddress;
+    var theCentreName = newValue.label;
+    const theCentreAddress = healthcareCentres.find((healthcareCentres)=>{return healthcareCentres.centreName === theCentreName;}).address;
+    theCentreName = theCentreName;
+
     this.setState({
-      selectedCentreName: theCentreName.value ,
+      selectedCentreName: theCentreName,
       selectedCentreAddress: theCentreAddress,
     });
+    console.log(this.state.options)
+    console.log(this.state.selectedCentreName)
+    console.log(this.state.selectedCentreAddress)
   };
 
   handleHealthcareCreate = (inputValue) => {
@@ -74,6 +74,8 @@ class Register extends Component {
         selectedCentreAddress: undefined,
       });
       console.log(newOption);
+      console.log(this.state.selectedCentreName)
+      console.log(this.state.selectedCentreAddress)
   };
 
   render(){
@@ -130,6 +132,7 @@ class Register extends Component {
                         onCreateOption={this.handleHealthcareCreate}
                         options={this.state.options}
                         value={this.state.selectedCentreName}
+                        placeholder={this.state.selectedCentreName}
                       />
                     </FormGroup>
                     {

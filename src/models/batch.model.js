@@ -54,7 +54,7 @@ Batch.getAll = result => {
   });
 };
 
-Customer.updateById = (batchNo, batch, result) => {
+Batch.updateById = (batchNo, batch, result) => {
   query(
     "UPDATE batch SET expiryDate = ?, quantityAvailble = ?, quantityAdministered = ? WHERE batchNo = ?",
     [batch.expiryDate, batch.quantityAvailble, batch.quantityAdministered, batch.batchNo],
@@ -66,7 +66,7 @@ Customer.updateById = (batchNo, batch, result) => {
       }
 
       if (res.affectedRows == 0) {
-        // not found Customer with the id
+        // not found Batch with the id
         result({ kind: "not_found" }, null);
         return;
       }
@@ -77,24 +77,24 @@ Customer.updateById = (batchNo, batch, result) => {
   );
 };
 
-Customer.removeById = (batchNo, result) => {
-  query("DELETE FROM batch WHERE batchNo = ?", batchNo, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
+// Customer.removeById = (batchNo, result) => {
+//   query("DELETE FROM batch WHERE batchNo = ?", batchNo, (err, res) => {
+//     if (err) {
+//       console.log("error: ", err);
+//       result(null, err);
+//       return;
+//     }
 
-    if (res.affectedRows == 0) {
-      // not found Customer with the id
-      result({ kind: "not_found" }, null);
-      return;
-    }
+//     if (res.affectedRows == 0) {
+//       // not found Customer with the id
+//       result({ kind: "not_found" }, null);
+//       return;
+//     }
 
-    console.log("deleted batch with batchNo: ", batchNo);
-    result(null, res);
-  });
-};
+//     console.log("deleted batch with batchNo: ", batchNo);
+//     result(null, res);
+//   });
+// };
 
 export default Batch;
 

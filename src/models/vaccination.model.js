@@ -1,10 +1,10 @@
 import sql from "../database.js";
 
 // constructor
-const Vaccination = function(vaccination) {
-  this.vaccinationID = vaccination.email;
-  this.appoinemtn = vaccination.name;
-  this.active = vaccination.active;
+const Vaccination = (vaccination) => {
+  this.vaccinationID = vaccination.vaccinationID;
+  this.appointmentDate = vaccination.appointmentDate;
+  this.status = vaccination.status;
   this.username = vaccination.username; //patient username
   this.batchNo = vaccination.batchNo;
 };
@@ -77,23 +77,23 @@ Vaccination.updateById = (vaccinationID, vaccination, result) => {
   );
 };
 
-Vaccination.remove = (vaccinationID, result) => {
-  sql.query("DELETE FROM vaccination WHERE vaccinationID = ?", vaccinationID, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
+// Vaccination.remove = (vaccinationID, result) => {
+//   sql.query("DELETE FROM vaccination WHERE vaccinationID = ?", vaccinationID, (err, res) => {
+//     if (err) {
+//       console.log("error: ", err);
+//       result(null, err);
+//       return;
+//     }
 
-    if (res.affectedRows == 0) {
-      // not found Vaccination with the vaccinationID
-      result({ kind: "not_found" }, null);
-      return;
-    }
+//     if (res.affectedRows == 0) {
+//       // not found Vaccination with the vaccinationID
+//       result({ kind: "not_found" }, null);
+//       return;
+//     }
 
-    console.log("deleted vaccination with vaccinationID: ", vaccinationID);
-    result(null, res);
-  });
-};
+//     console.log("deleted vaccination with vaccinationID: ", vaccinationID);
+//     result(null, res);
+//   });
+// };
 
 export default Vaccination;

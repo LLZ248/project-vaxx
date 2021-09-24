@@ -1,30 +1,31 @@
 const express = require('express');
 var session = require('express-session');
-var bodyParser = require('body-parser');
+var flash = require('connect-flash');
+const bodyParser = require('body-parser');//require to read POST data
 var patientRoute = require('./routes/patient.routes.js');
 var vaccineRoute = require('./routes/vaccine.routes.js');
 var vaccinationRoute = require('./routes/vaccination.routes.js');
 var batchRoute = require('./routes/batch.routes.js');
-const { Session } = require('express-session');
+var centreRoute = require('./routes/centre.routes.js');
 
 const app = express();
 const PORT = 5000;
 
 app.set('json spaces', 2) //pretty print json when requested
-
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));//require to read POST data
 app.use(session({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true
 }));
-app.use(bodyParser.urlencoded({extended : true}));
-app.use(bodyParser.json());
+app.use(flash());
 
 app.use(patientRoute)
 app.use(vaccineRoute)
 app.use(vaccinationRoute)
 app.use(batchRoute)
+app.use(centreRoute)
+
 
 //Verify the session token stored in client browser and determine the username and role
 app.get("/verify", (req, res)=>{

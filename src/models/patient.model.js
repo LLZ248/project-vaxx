@@ -1,23 +1,30 @@
 const sql = require("../database.js");
 
-const Patient = (patient)=> {
-    this.username = patient.username;
-    this.password = patient.password;
-    this.email = patient.email;
-    this.fullName = patient.fullName;
-    this.ICPassport = patient.ICPassport;
-};
+const Patient = ()=> {};
 
-Patient.create = (newPatient, result) => {
-    sql.query("INSERT INTO patient SET ?", newPatient, (err, res) => {
+Patient.create = (username, password, fullName, email, ICPassport, result) => {
+    var crypto = require('crypto')
+    var hash = crypto.createHash('sha256');
+    data = hash.update(password);
+    password= data.digest('hex');
+    password = (""+password).toUpperCase()
+
+    sql.query("INSERT INTO patient (`username`, `password`, `email`, `fullName`, `ICPassport`) VALUES (?,?,?,?,?)", [username, password, fullName,email,ICPassport], (err, res) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
-        return;
+        if (err.code === "ER_DUP_ENTRY"){
+          //Failed: Duplicate Username
+          result(null, { message: "duplicate username" })
+          return
+        }else{
+          //Failed when inserting into sql database
+          result(err, null);
+          return;
+        }
       }
   
-      console.log("created patient: ", { id: res.insertId, ...newPatient });
-      result(null, { id: res.insertId, ...newPatient });
+      console.log("created patient: ",username);
+      result(null, { message: "success" });
     });
 };
 

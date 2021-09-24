@@ -31,20 +31,29 @@ const createOption = (label) => ({
   value: label,
 });
 
-const fetch = require('sync-fetch')
-const healthcareCentres = fetch('http://localhost:5000/healthcare-centres', {}).json();
-
-const defaultOptions = healthcareCentres.map((healthcareCentre)=>
-  createOption(healthcareCentre.centreName)
-);
-
+var healthcareCentres = []
 
 class Register extends Component {
   state = {
-    options: defaultOptions,
+    options: healthcareCentres,
     selectedCentreName: undefined,
     selectedCentreAddress: undefined,
   };
+
+  healthcareCentres = fetch('\\healthcare-centre').then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(myBlob => {
+    healthcareCentres = myBlob;
+    var newOptions = myBlob.map((healthcareCentre) => createOption(healthcareCentre.centreName));
+    this.setState({options : newOptions}) ;
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
 
   roleChange = (event) => {
     this.setState({
@@ -55,7 +64,6 @@ class Register extends Component {
   handleHealthcareChange = (newValue) => {
     var theCentreName = newValue.label;
     const theCentreAddress = healthcareCentres.find((healthcareCentres)=>{return healthcareCentres.centreName === theCentreName;}).address;
-    theCentreName = theCentreName;
 
     this.setState({
       selectedCentreName: theCentreName,
@@ -82,17 +90,16 @@ class Register extends Component {
               <div className="text-center mb-4">
                 <h1>Sign Up</h1>
               </div>
-              <Form role="form">
+              <Form id="register-form" method="post" role="form" action={this.state.role==="admin"?"admin-register":"/patients"}>
                 <FormGroup>
                   <Row className="my-4">
                   <div className="custom-control custom-radio mx-auto">
                     <input
                       className="custom-control-input"
                       id="adminstratorRadio"
-                      name="role-radio"
+                      name="role"
                       type="radio"
                       value="administrator"
-                      checked={this.state.role === "administrator"}
                       onChange={this.roleChange}
                     />
                     <label className="custom-control-label" htmlFor="adminstratorRadio">
@@ -104,10 +111,9 @@ class Register extends Component {
                       className="custom-control-input"
                       defaultChecked
                       id="patientRadio"
-                      name="role-radio"
+                      name="role"
                       type="radio"
                       value="patient"
-                      checked={this.state.role === "patient"}
                       onChange={this.roleChange}
                     />
                     <label className="custom-control-label" htmlFor="patientRadio">
@@ -149,6 +155,7 @@ class Register extends Component {
                     </InputGroupAddon>
                     <Input
                       id="form-control-username"
+                      name = "username"
                       placeholder="Username"
                       type="text"
                     />
@@ -164,6 +171,7 @@ class Register extends Component {
                     </InputGroupAddon>
                     <Input
                       id="form-control-password"
+                      name = "password"
                       placeholder="Pasword"
                       type="password"
                     />
@@ -179,6 +187,7 @@ class Register extends Component {
                     </InputGroupAddon>
                     <Input
                       id="form-control-fullname"
+                      name = "fullName"
                       placeholder="Full Name"
                       type="text"
                     />
@@ -194,6 +203,7 @@ class Register extends Component {
                     </InputGroupAddon>
                     <Input
                       id="form-control-email"
+                      name = "email"
                       placeholder="Email"
                       type="email"
                     />
@@ -212,6 +222,7 @@ class Register extends Component {
                         </InputGroupAddon>
                         <Input
                           id="form-control-staffid"
+                          name = "staffID"
                           placeholder="Staff ID"
                           type="text"
                         />
@@ -228,6 +239,7 @@ class Register extends Component {
                           </InputGroupAddon>
                           <Input
                             id="form-control-icpassport"
+                            name = "ICPassport"
                             placeholder="IC/Passport No"
                             type="text"
                           />
@@ -237,7 +249,7 @@ class Register extends Component {
                 }
                 
                 <div className="text-center">
-                  <Button className="mt-4" color="primary" type="button">
+                  <Button className="mt-4" color="primary" type="submit">
                     Sign Up
                   </Button>
                 </div>

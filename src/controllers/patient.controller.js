@@ -9,23 +9,14 @@ exports.create = (req, res) => {
     });
   }
 
-  // Create a Patient
-  const patient = new Patient({
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
-    fullName: req.body.fullName,
-    ICPassport : req.body.ICPassport
-  });
-
   // Save Patient in the database
-  Patient.create(patient, (err, data) => {
+  Patient.create(req.body.username, req.body.password, req.body.fullName,req.body.email,req.body.ICPassport, (err, data) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Customer."
+          err.message || "Some error occurred while creating the Patient."
       });
-    else res.send(data);
+    else {req.flash("register","success");res.redirect('/index')};
   });
 };
 
@@ -35,7 +26,7 @@ exports.findAll = (req, res) => {
         if (err)
             res.status(500).send({
             message:
-                err.message || "Some error occurred while retrieving customers."
+                err.message || "Some error occurred while retrieving patients."
             });
         else res.send(data);
     });
@@ -47,11 +38,11 @@ exports.findOne = (req, res) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Customer with username ${req.query.username}.`
+            message: `Not found Patient with username ${req.query.username}.`
           });
         } else {
           res.status(500).send({
-            message: "Error retrieving Customer with username " + req.query.username
+            message: "Error retrieving Patient with username " + req.query.username
           });
         }
       } else res.send(data);
@@ -68,13 +59,14 @@ exports.verifyPatient = (req, res) => {
           });
         } else {
           res.status(500).send({
-            message: "Error retrieving Customer with username " + req.params.username
+            message: "Error retrieving Patient with username " + req.params.username
           });
         }
       } else {
         session = req.session;
         session.username = req.body.username;
         session.role = "patient";
+
         res.send(data);
       };
     });

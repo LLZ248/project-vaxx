@@ -54,21 +54,21 @@ Patient.getAll = result => {
 };
 
 Patient.verifyPatient = (username, password, result) => {
-
+    var crypto = require('crypto')
     var hash = crypto.createHash('sha256');
     data = hash.update(password);
     newPassword= data.digest('hex');
     newPasswordTxt = (""+newPassword).toUpperCase();
 
-    connection.query('SELECT * FROM patient WHERE username = \''+username+'\' AND password = \''+newPasswordTxt+'\'', (err, rows) =>{
+    sql.query('SELECT * FROM patient WHERE username = \''+username+'\' AND password = \''+newPasswordTxt+'\'', (err, res) =>{
       if(err){
         console.log("error: ", err);
         result(err, null);
         return;
       }
       if (res.length) {
-        console.log("Valid Patient : ", res[0]);
-        result(null, res[0]);
+        console.log("Valid Patient : ", {"username":res[0].username, "full_name":res[0].fullName});
+        result(null, {"username":res[0].username, "full_name":res[0].fullName});
         return;
       }
       // not found Patient with the username nad password combination

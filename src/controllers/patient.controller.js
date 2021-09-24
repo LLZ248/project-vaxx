@@ -60,18 +60,23 @@ exports.findOne = (req, res) => {
 
 // Find a single Patient with the combination of password and username
 exports.verifyPatient = (req, res) => {
-    Patient.findById(req.body.username, req.body.password, (err, data) => {
+    Patient.verifyPatient(req.body.username, req.body.password, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Customer with username ${req.params.username}.`
+            message: `Wrong username/password`
           });
         } else {
           res.status(500).send({
             message: "Error retrieving Customer with username " + req.params.username
           });
         }
-      } else res.send(data);
+      } else {
+        session = req.session;
+        session.username = req.body.username;
+        session.role = "patient";
+        res.send(data);
+      };
     });
 };
 

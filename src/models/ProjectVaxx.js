@@ -1,4 +1,4 @@
-import Batch from './Batch';
+// import Batch from './Batch';
 
 class ProjectVaxx {
 
@@ -12,11 +12,11 @@ class ProjectVaxx {
 
     findVaccine = async(vaccineID) => await this.fetchDB('vaccines/?vaccineID=' + vaccineID);
 
-    getBatches = async() => {
-       const batchData = await this.fetchDB('batches');
-       const batches = batchData.map(data => new Batch(data)); //convert to actual batch object
-       return batches;
-    }
+    // getBatches = async() => {
+    //    const batchData = await this.fetchDB('batches');
+    //    const batches = batchData.map(data => new Batch(data)); //convert to actual batch object
+    //    return batches;
+    // }
 
     // fetchVaccinationOfBatch(batch) = () => {
     //     fetchVaccination

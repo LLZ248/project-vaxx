@@ -1,7 +1,7 @@
-var Vaccination =  require("../models/vaccination.model.js");
+var Vaccination = require("../models/vaccination.model.js");
 
 // Create and Save a new Vaccination
-exports.create=(req, res) =>{
+exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
@@ -27,7 +27,7 @@ exports.create=(req, res) =>{
       });
     else res.send(data);
   });
-}
+};
 
 // Retrieve all Vaccination from the database.
 exports.findAll = (req, res) => {
@@ -39,7 +39,7 @@ exports.findAll = (req, res) => {
       });
     else res.send(data);
   });
-}
+};
 
 // Retrieve one Vaccination from the database based on vaccinationID.
 exports.findOne = (req, res) => {
@@ -58,7 +58,7 @@ exports.findOne = (req, res) => {
       }
     } else res.send(data);
   });
-}
+};
 
 // update Vaccination from the database based on vaccinationID.
 exports.update = (req, res) => {

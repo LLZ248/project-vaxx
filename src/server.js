@@ -1,10 +1,10 @@
 const express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var patientRoute = require('./routes/patient.routes.js');
-var vaccineRoute = require('./routes/vaccine.routes.js');
-var vaccinationRoute = require('./routes/vaccination.routes.js');
-var batchRoute = require('./routes/batch.routes.js');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const patientRoute = require('./routes/patient.routes.js');
+const vaccineRoute = require('./routes/vaccine.routes.js');
+const vaccinationRoute = require('./routes/vaccination.routes.js');
+const batchRoute = require('./routes/batch.routes.js');
 const app = express();
 const PORT = 5000;
 

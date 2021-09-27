@@ -21,7 +21,7 @@ exports.create = (req, res) => {
         res.send(data);
       }else{
         req.flash("register","success");
-        res.redirect('/index');
+        res.redirect('/auth/login');
       }};
   });
 };

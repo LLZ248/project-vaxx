@@ -77,6 +77,7 @@ class Register extends Component {
         options: [...options, newOption],
         selectedCentreName: newOption,
         selectedCentreAddress: undefined,
+        isNewCentre: true,
       });
   };
 
@@ -94,31 +95,35 @@ class Register extends Component {
   handleForm = (event) =>{
     event.preventDefault();
     let formData;
-    let formDataTxt = ""
     if(this.state.role === "administrator"){
+      //Check if creating a new healthcare centre
+      if(this.state.isNewCentre){
+        console.log("Creating New Healthcare Centre");
+        const centreFormData = `centreName=${this.state.selectedCentreName}&address=${this.state.selectedCentreAddress}`;
+        fetch('/healthcare-centre', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: centreFormData
+          })
+          .then(res => console.log(res));
+      }
       //Create a new administrator
-      formData = {
-        centreName : this.state.selectedCentreName,
-        centreAddress : this.state.selectedCentreAddress === undefined?"NULL":this.state.selectedCentreAddress,
-        username : this.state.username,
-        password : this.state.password,
-        fullName : this.state.fullName,
-        email : this.state.email,
-        redirect: null
-      };
-      fetch('/admins', {
+      formData = `username=${this.state.username}&password=${this.state.username}&fullName=${this.state.fullName}&email=${this.state.email}&staffID=${this.state.staffID}&centreName=${this.state.selectedCentreName}`
+      fetch('/administrators', {
         method: 'POST',
-        body: JSON.stringify(formData)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData
         })
-        .then(res => console.log(res));
+        .then(res => res.redirected?this.setState({redirect:'/'}):this.setState({errMsg:"Duplicate Username"}));
+
     }else{
       //Create a new patient
-      formDataTxt = `username=${this.state.username}&password=${this.state.username}&fullName=${this.state.fullName}&email=${this.state.email}&ICPassport=${this.state.ICPassport}`
-      console.log(formDataTxt)
+      formData = `username=${this.state.username}&password=${this.state.username}&fullName=${this.state.fullName}&email=${this.state.email}&ICPassport=${this.state.ICPassport}`
+      console.log(formData)
       fetch('/patients', {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formDataTxt
+        body: formData
       })
       .then(res => res.redirected?this.setState({redirect:'/'}):this.setState({errMsg:"Duplicate Username"}));
     }

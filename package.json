@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/LLZ248/project-vaxx/issues"
   },
-  "homepage": "https://github.com/LLZ248/project-vaxx",
+  "homepage": "",
   "scripts": {
     "start": "react-scripts start",
     "starti": "cross-env BROWSER=chrome BROWSER_ARGS=--incognito react-scripts start",

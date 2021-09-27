@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { Redirect } from "react-router-dom";
 import CreatableSelect from 'react-select/creatable';
-
 
 // reactstrap components
 import {
@@ -16,7 +16,6 @@ import {
   Row,
   Col,
 } from "reactstrap";
-
 
 function HealthcareCentreAddressInput(props){
   return (
@@ -81,7 +80,54 @@ class Register extends Component {
       });
   };
 
+  handleChange = (event) =>{
+    const target = event.target;
+    const value =  target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+  
+  handleForm = (event) =>{
+    event.preventDefault();
+    let formData;
+    let formDataTxt = ""
+    if(this.state.role === "administrator"){
+      //Create a new administrator
+      formData = {
+        centreName : this.state.selectedCentreName,
+        centreAddress : this.state.selectedCentreAddress === undefined?"NULL":this.state.selectedCentreAddress,
+        username : this.state.username,
+        password : this.state.password,
+        fullName : this.state.fullName,
+        email : this.state.email,
+        redirect: null
+      };
+      fetch('/admins', {
+        method: 'POST',
+        body: JSON.stringify(formData)
+        })
+        .then(res => console.log(res));
+    }else{
+      //Create a new patient
+      formDataTxt = `username=${this.state.username}&password=${this.state.username}&fullName=${this.state.fullName}&email=${this.state.email}&ICPassport=${this.state.ICPassport}`
+      console.log(formDataTxt)
+      fetch('/patients', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formDataTxt
+      })
+      .then(res => res.redirected?this.setState({redirect:'/'}):this.setState({errMsg:"Duplicate Username"}));
+    }
+  }
+
   render(){
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+    }
     return (
       <>
         <Col lg="6" md="8">
@@ -89,8 +135,11 @@ class Register extends Component {
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center mb-4">
                 <h1>Sign Up</h1>
+                {this.state.errMsg?
+                <small className="text-danger">{this.state.errMsg}</small>:
+                <></>}
               </div>
-              <Form id="register-form" method="post" role="form" action={this.state.role==="admin"?"admin-register":"/patients"}>
+              <Form id="register-form" role="form" onSubmit={this.handleForm} >
                 <FormGroup>
                   <Row className="my-4">
                   <div className="custom-control custom-radio mx-auto">
@@ -138,7 +187,7 @@ class Register extends Component {
                     </FormGroup>
                     {
                       this.state.selectedCentreAddress === undefined?
-                      <HealthcareCentreAddressInput isDisabled={false}  value={"Healthcare Centre Name"} required/>:
+                      <HealthcareCentreAddressInput isDisabled={false}  value={"Healthcare Centre Name"}/>:
                       <HealthcareCentreAddressInput isDisabled={true} id="form-control-centreaddress" value={this.state.selectedCentreAddress}/>
                     }
                     
@@ -147,7 +196,7 @@ class Register extends Component {
                 <label>Your Personal Information</label>
 
                 <FormGroup>
-                  <InputGroup className="input-group-alternative mb-3">
+                  <InputGroup className={this.state.errMsg==="Duplicate Username"?"input-group-alternative mb-3 has-danger":"input-group-alternative mb-3"} >
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
                         <i className="ni ni-single-02" />
@@ -158,7 +207,7 @@ class Register extends Component {
                       name = "username"
                       placeholder="Username"
                       type="text"
-                      required
+                      onChange = {this.handleChange}
                     />
                   </InputGroup>
                 </FormGroup>
@@ -175,7 +224,7 @@ class Register extends Component {
                       name = "password"
                       placeholder="Pasword"
                       type="password"
-                      required
+                      onChange = {this.handleChange}
                     />
                   </InputGroup>
                 </FormGroup>
@@ -192,7 +241,7 @@ class Register extends Component {
                       name = "fullName"
                       placeholder="Full Name"
                       type="text"
-                      required
+                      onChange = {this.handleChange}
                     />
                   </InputGroup>
                 </FormGroup>
@@ -209,7 +258,7 @@ class Register extends Component {
                       name = "email"
                       placeholder="Email"
                       type="email"
-                      required
+                      onChange = {this.handleChange}
                     />
                   </InputGroup>
                 </FormGroup>
@@ -229,7 +278,7 @@ class Register extends Component {
                           name = "staffID"
                           placeholder="Staff ID"
                           type="text"
-                          required
+                          onChange = {this.handleChange}
                         />
                       </InputGroup>
                   </FormGroup>
@@ -247,26 +296,18 @@ class Register extends Component {
                             name = "ICPassport"
                             placeholder="IC/Passport No"
                             type="text"
-                            required
+                            onChange = {this.handleChange}
                           />
                         </InputGroup>
                       </FormGroup>
                   </div>
                 }
-                {
-                  this.state.role === "administrator" && this.state.selectedCentreName === undefined?
-                  <div className="text-center">
-                    <small className="text-danger">Please select a healthcare centre<br></br></small>
-                    <Button className="mt-4" color="primary" type="submit" disabled>
-                      Sign Up
-                    </Button>
-                  </div>:
-                  <div className="text-center">
-                    <Button className="mt-4" color="primary" type="submit">
-                      Sign Up
-                    </Button>
-                  </div>
-                }
+                
+                <div className="text-center">
+                  <Button className="mt-4" color="primary" type="submit">
+                    Sign Up
+                  </Button>
+                </div>
               </Form>
             </CardBody>
           </Card>

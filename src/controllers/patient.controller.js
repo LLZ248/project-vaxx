@@ -16,7 +16,13 @@ exports.create = (req, res) => {
         message:
           err.message || "Some error occurred while creating the Patient."
       });
-    else {req.flash("register","success");res.redirect('/index')};
+    else {
+      if(data.message ==="duplicate username"){
+        res.send(data);
+      }else{
+        req.flash("register","success");
+        res.redirect('/index');
+      }};
   });
 };
 

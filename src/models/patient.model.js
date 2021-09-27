@@ -9,7 +9,7 @@ Patient.create = (username, password, fullName, email, ICPassport, result) => {
     password= data.digest('hex');
     password = (""+password).toUpperCase()
 
-    sql.query("INSERT INTO patient (`username`, `password`, `fullName`, `email`, `ICPassport`) VALUES (?,?,?,?,?)", [username, password, fullName,email,ICPassport], (err, res) => {
+    sql.query("INSERT INTO patient (username, password, fullName, email, ICPassport) VALUES (?,?,?,?,?)", [username, password, fullName,email,ICPassport], (err, res) => {
       if (err) {
         console.log("error: ", err);
         if (err.code === "ER_DUP_ENTRY"){

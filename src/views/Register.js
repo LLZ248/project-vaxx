@@ -138,7 +138,7 @@ class Register extends Component {
                     </FormGroup>
                     {
                       this.state.selectedCentreAddress === undefined?
-                      <HealthcareCentreAddressInput isDisabled={false}  value={"Healthcare Centre Name"}/>:
+                      <HealthcareCentreAddressInput isDisabled={false}  value={"Healthcare Centre Name"} required/>:
                       <HealthcareCentreAddressInput isDisabled={true} id="form-control-centreaddress" value={this.state.selectedCentreAddress}/>
                     }
                     
@@ -158,6 +158,7 @@ class Register extends Component {
                       name = "username"
                       placeholder="Username"
                       type="text"
+                      required
                     />
                   </InputGroup>
                 </FormGroup>
@@ -174,6 +175,7 @@ class Register extends Component {
                       name = "password"
                       placeholder="Pasword"
                       type="password"
+                      required
                     />
                   </InputGroup>
                 </FormGroup>
@@ -190,6 +192,7 @@ class Register extends Component {
                       name = "fullName"
                       placeholder="Full Name"
                       type="text"
+                      required
                     />
                   </InputGroup>
                 </FormGroup>
@@ -206,6 +209,7 @@ class Register extends Component {
                       name = "email"
                       placeholder="Email"
                       type="email"
+                      required
                     />
                   </InputGroup>
                 </FormGroup>
@@ -225,6 +229,7 @@ class Register extends Component {
                           name = "staffID"
                           placeholder="Staff ID"
                           type="text"
+                          required
                         />
                       </InputGroup>
                   </FormGroup>
@@ -242,17 +247,26 @@ class Register extends Component {
                             name = "ICPassport"
                             placeholder="IC/Passport No"
                             type="text"
+                            required
                           />
                         </InputGroup>
                       </FormGroup>
                   </div>
                 }
-                
-                <div className="text-center">
-                  <Button className="mt-4" color="primary" type="submit">
-                    Sign Up
-                  </Button>
-                </div>
+                {
+                  this.state.role === "administrator" && this.state.selectedCentreName === undefined?
+                  <div className="text-center">
+                    <small className="text-danger">Please select a healthcare centre<br></br></small>
+                    <Button className="mt-4" color="primary" type="submit" disabled>
+                      Sign Up
+                    </Button>
+                  </div>:
+                  <div className="text-center">
+                    <Button className="mt-4" color="primary" type="submit">
+                      Sign Up
+                    </Button>
+                  </div>
+                }
               </Form>
             </CardBody>
           </Card>

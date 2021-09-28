@@ -1,4 +1,4 @@
-var Vaccine = require("../models/vaccine.model.js");
+const Vaccine = require("../models/vaccine.model.js");
 
 // // Create and Save a new Vaccine
 // export function create(req, res) {
@@ -41,7 +41,6 @@ exports.findAll = (req, res) => {
 
 // Retrieve one Vaccine from the database based on vaccineID.
 exports.findOne = (req, res) => {
-  console.log(req.params.vaccineID);
   Vaccine.findById(req.params.vaccineID, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {

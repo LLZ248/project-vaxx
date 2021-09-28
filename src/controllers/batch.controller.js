@@ -1,4 +1,4 @@
-var Batch =require("../models/batch.model.js");
+const Batch = require("../models/batch.model.js");
 
 // Create and Save a new Patient
 exports.create = (req, res) => {
@@ -14,7 +14,7 @@ exports.create = (req, res) => {
     batchNo: req.body.batchNo,
     expiryDate: req.body.batchNo,
     quantityAvailble: req.body.quantityAvailble,
-    quantityAdministered: req.body.quantityAdministered,
+    quantityAdministered: 0,
     vaccineID: req.body.vaccineID,
     centreName: req.body.centreName
   });

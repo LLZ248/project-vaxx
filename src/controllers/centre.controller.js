@@ -1,4 +1,4 @@
-var Centre = require('../models/centre.model.js');
+const Centre = require('../models/centre.model.js');
 
 // Create and Save a new Healthcare Centre
 exports.create = (req, res) => {

@@ -1,4 +1,4 @@
-var Patient = require('../models/patient.model.js');
+const Patient = require('../models/patient.model.js');
 
 // Create and Save a new Patient
 exports.create = (req, res) => {

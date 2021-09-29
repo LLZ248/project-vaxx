@@ -30,10 +30,11 @@ const AdminDashboard = () => {
 
     useEffect(() => {
 
-      // async function fetchBatch() {
-      //   const batches = await pv.query('Select * From Batch');
-      //   setBatches(batches);
-      // }
+      async function fetchBatch() {
+        const data = await fetch('/batches');
+        const batches = await data.json();
+        setBatches(batches);
+      }
 
       async function fetchCentre() {
         const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
@@ -42,6 +43,7 @@ const AdminDashboard = () => {
       }
 
       fetchCentre();
+      fetchBatch();
     }, []);
 
     return (
@@ -49,7 +51,7 @@ const AdminDashboard = () => {
       <AdminHeader healthcareCentre={centre}/>
       <Container className="mt--8">
       <BatchTable batches={batches}/>
-      <AddBatchModal centerName={centre}/>
+      <AddBatchModal centreName={centre.centreName}/> {/*pass centreName because batch must have it*/}
       </Container>
       {/* <div className="modal fade" id="addBatchModal" tabIndex="-1" role="dialog" aria-labelledby="addBatchLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">

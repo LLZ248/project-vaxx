@@ -1,25 +1,36 @@
 const sql = require("../database.js");
 
 // constructor
-const Batch = (batch) => {
-    this.batchNo = batch.batchNo;
-    this.expiryDate = batch.batchNo;
-    this.quantityAvailble = batch.quantityAvailble;
-    this.quantityAdministered = batch.quantityAdministered;
+// const Batch = (batch) => {
+//     this.batchNo = batch.vaccineID + batch.batchNo;
+//     this.expiryDate = batch.expiryDate;
+//     this.quantityAvailable = batch.quantityAvailable;
+//     this.quantityAdministered = 0;
+//     this.vaccineID = batch.vaccineID;
+//     this.centreName = batch.centreName;
+// };
+
+class Batch {
+  constructor(batch) {
+    this.batchNo = batch.vaccineID + batch.batchNo;
+    this.expiryDate = batch.expiryDate;
+    this.quantityAvailable = batch.quantityAvailable;
+    this.quantityAdministered = 0;
     this.vaccineID = batch.vaccineID;
     this.centreName = batch.centreName;
-};
+  }
+}
 
 Batch.create = (newBatch, result) => {
-    sql.query("INSERT INTO batch SET ?", newBatch, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
+  sql.query("INSERT INTO batch SET ?", newBatch, (err, res) => {
+  if (err) {
+    console.log("error: ", err);
+    result(err, null);
+    return;
+  }
 
-    console.log("created batch: ", { id: res.insertId, ...newBatch });
-    result(null, { id: res.insertId, ...newBatch });
+  console.log("created batch: ", { id: res.insertId, ...newBatch });
+  result(null, { id: res.insertId, ...newBatch });
   });
 };
 
@@ -55,9 +66,9 @@ Batch.getAll = result => {
 };
 
 Batch.updateById = (batchNo, batch, result) => {
-  query(
-    "UPDATE batch SET expiryDate = ?, quantityAvailble = ?, quantityAdministered = ? WHERE batchNo = ?",
-    [batch.expiryDate, batch.quantityAvailble, batch.quantityAdministered, batch.batchNo],
+  sql.query(
+    "UPDATE batch SET expiryDate = ?, quantityAvailable = ?, quantityAdministered = ? WHERE batchNo = ?",
+    [batch.expiryDate, batch.quantityAvailable, batch.quantityAdministered, batch.batchNo],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -103,7 +114,7 @@ module.exports = Batch;
 //     constructor(batch) {
 //         this.batchNo = batch.batchNo;
 //         this.expiryDate = batch.batchNo;
-//         this.quantityAvailble = batch.quantityAvailble;
+//         this.quantityAvailable = batch.quantityAvailable;
 //         this.quantityAdministered = batch.quantityAdministered;
 //         this.vaccineID = batch.vaccineID;
 //         this.centreName = batch.centreName;

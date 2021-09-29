@@ -11,7 +11,7 @@ const centreRoute = require('./routes/centre.routes.js');
 const app = express();
 const PORT = 5000;
 
-app.set('json spaces', 2) //pretty print json when requested
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));//require to read POST data
 app.use(session({
 	secret: 'secret',
@@ -25,6 +25,18 @@ app.use(vaccineRoute)
 app.use(vaccinationRoute)
 app.use(batchRoute)
 app.use(centreRoute)
+
+//changing global wise json formating
+app.set('json spaces', 2) //pretty print json when requested
+
+app.set('json replacer', function (key, value) { //DO NOT use arrow function here because 'this' keyword is used
+	if (this[key] instanceof Date) {
+		value = this[key].toLocaleDateString(); //changing date format
+	}
+
+return value;
+});
+
 
 
 //Verify the session token stored in client browser and determine the username and role

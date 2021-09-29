@@ -12,21 +12,21 @@ exports.create = (req, res) => {
   // Create a Batch
   const batch = new Batch({
     batchNo: req.body.batchNo,
-    expiryDate: req.body.batchNo,
-    quantityAvailble: req.body.quantityAvailble,
+    expiryDate: req.body.expiryDate,
+    quantityAvailable: req.body.quantityAvailable,
     quantityAdministered: 0,
     vaccineID: req.body.vaccineID,
     centreName: req.body.centreName
   });
 
   // Save Batch in the database
-  batch.create(batch, (err, data) => {
+  Batch.create(batch, (err, data) => {
     if (err)
       res.status(500).send({
         message:
           err.message || "Some error occurred while creating the Batch.",
       });
-    else res.send(data);
+    else res.render('form', {req: req.body});
   });
 }
 

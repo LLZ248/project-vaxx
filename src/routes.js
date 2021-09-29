@@ -74,7 +74,7 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/admin/dashboard",
+    path: "/AdminDashboard",
     name: "Admin Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: AdminDashboard,

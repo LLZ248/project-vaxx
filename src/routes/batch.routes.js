@@ -3,17 +3,19 @@ const router = express.Router();
 
 const batches = require("../controllers/batch.controller.js");
 
-// Create a new Vaccination
+// Create a new Batch
 router.post("/batches", batches.create);
 
-// Retrieve all Vaccination
+// Retrieve all Batch
 router.get("/batches", batches.findAll);
 
-// Retrieve a single Vaccination with batchNo
+// Retrieve a single Batch with batchNo
 router.get("/batches/:batchNo", batches.findOne);
 
-// Update a Vaccination with batchNo
+// Update a Batch with batchNo
 router.put("/batches/:batchNo", batches.update);
+
+// router.get("/batches/:batchNo/vaccinations", batches.findAllVaccinations);
 
 
 module.exports = router;

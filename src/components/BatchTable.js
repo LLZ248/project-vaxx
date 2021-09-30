@@ -4,14 +4,12 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
   require("../assets/css/hoverableTable.css");
 
   return (
-    <Container className="mt--8" fluid>
-      <Row className="mt-5">
-        <Col className="mb-5 mb-xl-0 mx-auto" xl="10">
+        <Col className="mb-3" xl="13">
           <Card className="shadow">
             <CardHeader className="border-0">
               <Row className="align-items-center">
                 <div className="col">
-                  <h3 className="mb-0">{title}</h3>
+                  <h3 className="mb-0">Batch List</h3>
                 </div>
                 <div className="col">
                   <h6 className="text-right m-0">
@@ -25,6 +23,7 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
           <tr>
             <th scope="col">Batch No</th>
             <th scope="col">Vaccine</th>
+            <th scope="col">Expiry Date</th>
             <th scope="col">No. of Pending Appointments</th>
             <th scope="col">Administered Completion</th>
             <th scope="col" />
@@ -39,83 +38,21 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
             onClick={() => onRowSelect(batch)} //callback function
             >
               <td>{batch.batchNo}</td>
-              {/* <td>{batch.vaccine.vaccineName}</td> */}
-              <td>{batch.quantityAvailable}</td>
+              <td>{batch.vaccineName ?? ''}</td>
+              <td>{batch.expiryDate}</td>
+              <td>{batch.vaccinations?.length ?? ''}</td>
 
               <td>
               <div className="d-flex align-items-center">
-                <span className="mr-2">{batch.quantityAdministered}</span>
                 <div>
-                  <Progress max="100" value={batch.quantityAvailable - batch.quantityAdministered} barClassName="bg-success" />
+                  <Progress max="100" value={batch.administeredCompletion} barClassName="bg-success" />
                 </div>
+                <span className="ml-2">{batch.administeredCompletion}%</span>
               </div>
             </td>
             </tr>
             )}
        
-          <tr className="hoverable-row">
-            <th scope="row">
-              <Media className="align-items-center">
-                <a
-                  className="avatar rounded-circle mr-3"
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <img
-                    alt="..."
-                    src={require("../assets/img/theme/bootstrap.jpg").default}
-                  />
-                </a>
-                <Media>
-                  <span className="mb-0 text-sm">Argon Design System</span>
-                </Media>
-              </Media>
-            </th>
-            <td>$2,500 USD</td>
-            <td>Pending</td>
-            <td>
-              <div className="d-flex align-items-center">
-                <span className="mr-2">60%</span>
-                <div>
-                  <Progress max="100" value="60" barClassName="bg-danger" />
-                </div>
-              </div>
-            </td>
-            <td className="text-right">
-              <UncontrolledDropdown>
-                <DropdownToggle
-                  className="btn-icon-only text-light"
-                  href="#pablo"
-                  role="button"
-                  size="sm"
-                  color=""
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <i className="fas fa-ellipsis-v" />
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-menu-arrow" right>
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    Action
-                  </DropdownItem>
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    Another action
-                  </DropdownItem>
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    Something else here
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </td>
-          </tr>
           <tr>
             <th scope="row">
               <Media className="align-items-center">
@@ -209,8 +146,6 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
         </Table>
           </Card>
         </Col>
-      </Row>
-    </Container>
   );
 };
 

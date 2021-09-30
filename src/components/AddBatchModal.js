@@ -16,7 +16,7 @@ import {
   InputGroup,
 } from "reactstrap"; 
 
-const AddBatchModal = ({centreName}) => {
+const AddBatchModal = ({centreName, onAdded}) => {
   const [vaccines, setVaccines] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,11 +33,37 @@ const AddBatchModal = ({centreName}) => {
 
   const toggleModal = () => setIsOpen(!isOpen);
 
-  const formSubmit = (e) => {
+  const formSubmit = async(e) => {
     e.preventDefault();
-    const form = document.getElementById('batch-form');
-    form.reportValidity();
-    //expiry-date-input
+
+    const formData = new FormData(e.currentTarget);
+    const body = {};
+
+    for(const [key, value] of formData.entries()){
+      body[key] = value;
+    }
+
+    const rawRes = await fetch('/batches', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    const res = await rawRes.json();
+
+    const errorMsg = res.message;
+
+    if(errorMsg) { //have error message
+      alert(errorMsg.startsWith('ER_DUP_ENTRY') ? 
+      `Batch Number "${body['vaccineID'] + body['batchNo']}" already exists.` : errorMsg);
+    }
+    else {
+      onAdded(res); //res is will be the new batch object
+      toggleModal();
+    }
   }
 
   const onVaccineSelectionChanged = (vaccine) => { //update the batchNo Prefix
@@ -52,7 +78,6 @@ const AddBatchModal = ({centreName}) => {
   const onExpiryDateChanged = () => {
     document.getElementById('date-validator').value = 'accepted';
   }
-
     return (
       <>
         <Button color="primary" onClick={toggleModal}>
@@ -63,7 +88,7 @@ const AddBatchModal = ({centreName}) => {
           isOpen={isOpen}
           toggle={toggleModal}>
          <div className="modal-body p-0">
-          <Form role="form" method='POST' action='/batches' id="batch-form">
+          <Form role="form" id="batch-form" onSubmit={formSubmit}> {/* method='POST' action='/batches'*/}
             <Card className="bg-secondary shadow border-0">
               <CardHeader className="bg-transparent pb-3">
                 <div className="text-muted text-center mt-2 mb-3">
@@ -128,7 +153,7 @@ const AddBatchModal = ({centreName}) => {
                         style: { padding :'0', background:'white', cursor:'pointer '}, 
                         name: "expiryDate",
                         readOnly: 'true'}}
-                      dateFormat='DD/MM/YYYY'
+                      dateFormat='YYYY-MM-DD'
                       timeFormat={false} 
                       closeOnSelect={true} 
                       isValidDate={date => date.isAfter(Date.now())}

@@ -28,30 +28,43 @@ const AdminDashboard = () => {
   const [batches, setBatches] = useState([]);
   const [centre, setCentre] = useState([]);
 
-    useEffect(() => {
+  async function fetchBatch() {
+    const data = await fetch('/batches');
+    const batches = await data.json();
 
-      async function fetchBatch() {
-        const data = await fetch('/batches');
-        const batches = await data.json();
-        setBatches(batches);
-      }
+    batches.forEach(batch => 
+      batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100);
 
-      async function fetchCentre() {
-        const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
-        const centre = await data.json();
-        setCentre(centre);
-      }
+    // for (const batch of batches) {
+    //   const vaccineData = await fetch('/vaccines/' + batch.vaccineID);
+    //   const vaccine = await vaccineData.json();
+    //   batch.vaccineName = vaccine.vaccineName; //because javascript is dynamic typed
+      
+    //   const vaccinationsData = await fetch('/vaccinations');
+    //   const vaccinations = await vaccinationsData.json();
+    //   batch.vaccinations = vaccinations;
+    // }
 
-      fetchCentre();
-      fetchBatch();
-    }, []);
+    setBatches(batches);
+  }
+
+  async function fetchCentre() {
+    const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
+    const centre = await data.json();
+    setCentre(centre);
+  }
+
+  useEffect(() => {
+    fetchCentre();
+    fetchBatch();
+  }, []);
 
     return (
       <>
       <AdminHeader healthcareCentre={centre}/>
       <Container className="mt--8">
-      <BatchTable batches={batches}/>
-      <AddBatchModal centreName={centre.centreName}/> {/*pass centreName because batch must have it*/}
+      <BatchTable batches={batches} onRowSelect={(x) => alert(x.batchNo)}/>
+      <AddBatchModal centreName={centre.centreName} onAdded={newBatch => fetchBatch()}/> {/*pass centreName because batch must have it*/}
       </Container>
       {/* <div className="modal fade" id="addBatchModal" tabIndex="-1" role="dialog" aria-labelledby="addBatchLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">

@@ -9,6 +9,11 @@ exports.create = (req, res) => {
     });
   }
 
+  // parsedDate = new Date(req.body.expiryDate)
+  //   .toISOString()
+  //   .slice(0, 10)
+  //   .replace('T', ' '); //convert to mysql format
+
   // Create a Batch
   const batch = new Batch({
     batchNo: req.body.batchNo,
@@ -26,7 +31,7 @@ exports.create = (req, res) => {
         message:
           err.message || "Some error occurred while creating the Batch.",
       });
-    else res.render('form', {req: req.body});
+    else res.send(data);
   });
 }
 

@@ -88,24 +88,24 @@ Batch.updateById = (batchNo, batch, result) => {
   );
 };
 
-// Customer.removeById = (batchNo, result) => {
-//   query("DELETE FROM batch WHERE batchNo = ?", batchNo, (err, res) => {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//       return;
-//     }
+Batch.findById = (batchNo, result) => {
+  sql.query(`SELECT * FROM batch WHERE batchNo = \'${batchNo}\'`, (err, res) => {
+  if (err) {
+    console.log("error: ", err);
+    result(err, null);
+    return;
+  }
 
-//     if (res.affectedRows == 0) {
-//       // not found Customer with the id
-//       result({ kind: "not_found" }, null);
-//       return;
-//     }
+  if (res.length) {
+    console.log("found customer: ", res[0]);
+    result(null, res[0]);
+    return;
+  }
 
-//     console.log("deleted batch with batchNo: ", batchNo);
-//     result(null, res);
-//   });
-// };
+  result({ kind: "not_found" }, null);
+});
+};
+
 
 module.exports = Batch;
 

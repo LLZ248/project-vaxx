@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const administrators = require("../controllers/patient.controller.js");
+const administrators = require("../controllers/administrator.controller.js");
 
 // Create a new Administrator
 router.post("/administrators", administrators.create);
@@ -13,6 +13,6 @@ router.get("/administrators", administrators.findAll);
 router.get("/administrators/findAdministrator", administrators.findOne);
 
 // Retrieve a single Administrator with the correct combination username and password
-router.post("/administrators/verifyAdministrator", administrators.verifyPatient);
+router.post("/administrators/verifyAdministrator", administrators.verifyAdministrator);
 
 module.exports = router;

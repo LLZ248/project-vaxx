@@ -1,9 +1,11 @@
 const sql = require("../database.js");
 
-const HealthcareCentre = (HealthcareCentre)=> {
-    this.centreName = HealthcareCentre.centreName;
-    this.address = HealthcareCentre.address;
-};
+class HealthcareCentre {
+  constructor(healthcareCentre){
+    this.centreName = healthcareCentre.centreName;
+    this.address = healthcareCentre.address;
+  }
+}
 
 HealthcareCentre.create = (newCentre, result) => {
     sql.query("INSERT INTO healthcarecentre SET ?", newCentre, (err, res) => {

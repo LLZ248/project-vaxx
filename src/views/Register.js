@@ -20,7 +20,7 @@ import {
 function HealthcareCentreAddressInput(props){
   return (
     <FormGroup>
-      <Input disabled={props.isDisabled} placeholder={props.value} type="text" />
+      <Input name={props.name} disabled={props.isDisabled} placeholder={props.value} type="text" onChange={props.onChange} />
     </FormGroup>
   );
 }
@@ -75,7 +75,7 @@ class Register extends Component {
       const newOption = createOption(inputValue);
       this.setState({
         options: [...options, newOption],
-        selectedCentreName: newOption,
+        selectedCentreName: newOption.value,
         selectedCentreAddress: undefined,
         isNewCentre: true,
       });
@@ -85,10 +85,16 @@ class Register extends Component {
     const target = event.target;
     const value =  target.value;
     const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
+    if (name === "username"){
+      //username is not case sensitive
+      this.setState({
+        username : value.toLowerCase()
+      });
+    }else{
+      this.setState({
+        [name]: value
+      });
+    }
   }
 
   
@@ -96,10 +102,12 @@ class Register extends Component {
     event.preventDefault();
     let formData;
     if(this.state.role === "administrator"){
+      //console.log("Admin")
       //Check if creating a new healthcare centre
       if(this.state.isNewCentre){
-        console.log("Creating New Healthcare Centre");
-        const centreFormData = `centreName=${this.state.selectedCentreName}&address=${this.state.selectedCentreAddress}`;
+        //console.log("Creating New Healthcare Centre");
+        const centreFormData = `centreName=${this.state.selectedCentreName}&address=${this.state.centreAddress}`;
+        //console.log(centreFormData)
         fetch('/healthcare-centre', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -119,7 +127,7 @@ class Register extends Component {
     }else{
       //Create a new patient
       formData = `username=${this.state.username}&password=${this.state.username}&fullName=${this.state.fullName}&email=${this.state.email}&ICPassport=${this.state.ICPassport}`
-      console.log(formData)
+      //console.log(formData)
       fetch('/patients', {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -192,7 +200,7 @@ class Register extends Component {
                     </FormGroup>
                     {
                       this.state.selectedCentreAddress === undefined?
-                      <HealthcareCentreAddressInput isDisabled={false}  value={"Healthcare Centre Name"}/>:
+                      <HealthcareCentreAddressInput isDisabled={false} name="centreAddress" value={"Healthcare Centre Address"} onChange = {this.handleChange}/>:
                       <HealthcareCentreAddressInput isDisabled={true} id="form-control-centreaddress" value={this.state.selectedCentreAddress}/>
                     }
                     
@@ -210,9 +218,10 @@ class Register extends Component {
                     <Input
                       id="form-control-username"
                       name = "username"
-                      placeholder="Username"
+                      placeholder="Username (Lowercase letter, symbol, numbers)"
                       type="text"
                       onChange = {this.handleChange}
+                      value= {this.state.username}
                     />
                   </InputGroup>
                 </FormGroup>

@@ -148,9 +148,8 @@ class Register extends Component {
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center mb-4">
                 <h1>Sign Up</h1>
-                {this.state.errMsg?
-                <small className="text-danger">{this.state.errMsg}</small>:
-                <></>}
+                {this.state.errMsg &&
+                <small className="text-danger">{this.state.errMsg}</small>}
               </div>
               <Form id="register-form" role="form" onSubmit={this.handleForm} >
                 <FormGroup>
@@ -220,6 +219,7 @@ class Register extends Component {
                       name = "username"
                       placeholder="Username (Lowercase letter, symbol, numbers)"
                       type="text"
+                      required
                       onChange = {this.handleChange}
                       value= {this.state.username}
                     />
@@ -238,6 +238,7 @@ class Register extends Component {
                       name = "password"
                       placeholder="Pasword"
                       type="password"
+                      required
                       onChange = {this.handleChange}
                     />
                   </InputGroup>
@@ -255,6 +256,7 @@ class Register extends Component {
                       name = "fullName"
                       placeholder="Full Name"
                       type="text"
+                      required
                       onChange = {this.handleChange}
                     />
                   </InputGroup>
@@ -272,6 +274,7 @@ class Register extends Component {
                       name = "email"
                       placeholder="Email"
                       type="email"
+                      required
                       onChange = {this.handleChange}
                     />
                   </InputGroup>
@@ -292,6 +295,7 @@ class Register extends Component {
                           name = "staffID"
                           placeholder="Staff ID"
                           type="text"
+                          required
                           onChange = {this.handleChange}
                         />
                       </InputGroup>
@@ -310,18 +314,26 @@ class Register extends Component {
                             name = "ICPassport"
                             placeholder="IC/Passport No"
                             type="text"
+                            required
                             onChange = {this.handleChange}
                           />
                         </InputGroup>
                       </FormGroup>
                   </div>
                 }
-                
-                <div className="text-center">
-                  <Button className="mt-4" color="primary" type="submit">
-                    Sign Up
-                  </Button>
-                </div>
+                {
+                  (this.state.role === "administrator" && this.state.selectedCentreName === undefined || this.state.isNewCentre && this.state.centreAddress === undefined)?
+                  <div className="text-center">
+                    <Button className="mt-4" color="primary" type="submit" disabled>
+                      Sign Up
+                    </Button>
+                  </div>:
+                  <div className="text-center">
+                    <Button className="mt-4" color="primary" type="submit">
+                      Sign Up
+                    </Button>
+                  </div>
+                }
               </Form>
             </CardBody>
           </Card>

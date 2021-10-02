@@ -22,7 +22,8 @@ exports.create = (req, res) => {
       }else{
         req.flash("register","success");
         res.redirect('/index');
-      }};
+      }
+    };
   });
 };
 

@@ -42,7 +42,6 @@ app.get("/verify", (req, res)=>{
 			username: session.username,
 			role: "admin"
 		});
-		res.send(session.username + " is admin")
     }else{
 		if(session.username && session.role==="patient"){
 			res.send({

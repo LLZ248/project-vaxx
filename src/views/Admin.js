@@ -26,10 +26,18 @@ const AdminDashboard = () => {
     // const pv = new ProjectVaxx();
 
   const [batches, setBatches] = useState([]);
-  const [centre, setCentre] = useState([]);
+  const [centre, setCentre] = useState('');
 
-  async function fetchBatch() {
-    const data = await fetch('/batches');
+  async function fetchCentre() {
+    const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
+    const centre = await data.json();
+    fetchBatch(centre.centreName);
+    setCentre(centre);
+  }
+
+  async function fetchBatch(centreName) {
+    // alert(centre)
+    const data = await fetch('/batches/ofCentre/' + centreName);
     const batches = await data.json();
 
     batches.forEach(batch => 
@@ -48,23 +56,20 @@ const AdminDashboard = () => {
     setBatches(batches);
   }
 
-  async function fetchCentre() {
-    const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
-    const centre = await data.json();
-    setCentre(centre);
-  }
-
   useEffect(() => {
     fetchCentre();
-    fetchBatch();
+    // fetchBatch();
   }, []);
 
+  function onBatchAdded(newBatch) {
+    setBatches(newBatch, ...batches);
+  }
     return (
       <>
       <AdminHeader healthcareCentre={centre}/>
       <Container className="mt--8">
       <BatchTable batches={batches} onRowSelect={(x) => alert(x.batchNo)}/>
-      <AddBatchModal centreName={centre.centreName} onAdded={newBatch => fetchBatch()}/> {/*pass centreName because batch must have it*/}
+      <AddBatchModal centreName={centre.centreName} onAdded={newBatch => onBatchAdded(newBatch)}/> {/*pass centreName because batch must have it*/}
       </Container>
       {/* <div className="modal fade" id="addBatchModal" tabIndex="-1" role="dialog" aria-labelledby="addBatchLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">

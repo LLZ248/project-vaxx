@@ -43,7 +43,7 @@ Batch.findById = (batchNo, result) => {
     }
 
     if (res.length) {
-      console.log("found customer: ", res[0]);
+      console.log("found batch: ", res[0]);
       result(null, res[0]);
       return;
     }
@@ -82,7 +82,7 @@ Batch.updateById = (batchNo, batch, result) => {
         return;
       }
 
-      console.log("updated customer: ", { batchNo: batchNo, ...batch });
+      console.log("updated batch: ", { batchNo: batchNo, ...batch });
       result(null, { batchNo: batchNo, ...batch });
     }
   );
@@ -97,13 +97,38 @@ Batch.findById = (batchNo, result) => {
   }
 
   if (res.length) {
-    console.log("found customer: ", res[0]);
+    console.log("found batch: ", res[0]);
     result(null, res[0]);
     return;
   }
 
   result({ kind: "not_found" }, null);
 });
+};
+
+Batch.viewByCenter = (centreName, result) => {
+  sql.query(`SELECT batch.batchNo, expiryDate, vaccineName, quantityAvailable, quantityAdministered, 
+  COUNT(vaccinationID) AS noOfPendingVaccination FROM Batch 
+  JOIN Vaccine ON Batch.vaccineID = Vaccine.vaccineID 
+  LEFT JOIN 
+  (SELECT batchNo, vaccinationID FROM Vaccination WHERE status = 'pending') AS PendingVaccination 
+  ON Batch.batchNo = PendingVaccination.batchNo 
+  WHERE centreName = \'${centreName}\'
+  GROUP BY Batch.batchNo`, (err, res) => {
+    //LEFT JOIN is used because all batches must be returned 
+    //even if it does not has any pending vaccination
+
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length)
+      result(null, res);
+    else
+      result({ kind: "not_found" }, null);
+  });
 };
 
 

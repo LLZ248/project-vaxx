@@ -16,6 +16,6 @@ router.get("/batches/:batchNo", batches.findOne);
 router.put("/batches/:batchNo", batches.update);
 
 // router.get("/batches/:batchNo/vaccinations", batches.findAllVaccinations);
-
+router.get("/batches/ofCentre/:centreName", batches.viewByCenter)
 
 module.exports = router;

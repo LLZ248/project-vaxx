@@ -93,3 +93,30 @@ exports.update = (req, res) => {
     }
   );
 };
+
+exports.viewByCenter = (req, res) => {
+
+  if(!req.params.centreName) {
+    res.status(400).send({
+      message:
+        "Centre name not found in the request" //bad request
+    });
+    return;
+  }
+
+  Batch.viewByCenter(req.params.centreName, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Batch with centreName ${req.params.centreName}.`,
+        });
+      } else {
+        res.status(500).send({
+          message:
+            "Error retrieving Batch with centreName " +
+            req.params.centreName
+        });
+      }
+    } else res.send(data);
+  });
+}

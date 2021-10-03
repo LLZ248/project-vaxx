@@ -40,7 +40,7 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
               <td>{batch.batchNo}</td>
               <td>{batch.vaccineName ?? ''}</td>
               <td>{batch.expiryDate}</td>
-              <td>{batch.vaccinations?.length ?? ''}</td>
+              <td>{batch.noOfPendingVaccination}</td>
 
               <td>
               <div className="d-flex align-items-center">
@@ -98,16 +98,6 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
                   Ryan Tompson
                 </UncontrolledTooltip>
               </div>
-            </td>
-            <td>
-              <div className="d-flex align-items-center">
-                <span className="mr-2">100%</span>
-                <div>
-                  <Progress max="100" value="100" barClassName="bg-success" />
-                </div>
-              </div>
-            </td>
-            <td className="text-right">
               <UncontrolledDropdown>
                 <DropdownToggle
                   className="btn-icon-only text-light"
@@ -140,6 +130,14 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
+            </td>
+            <td>
+              <div className="d-flex align-items-center">
+                <span className="mr-2">100%</span>
+                <div>
+                  <Progress max="100" value="100" barClassName="bg-success" />
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>

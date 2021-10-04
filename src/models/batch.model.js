@@ -65,6 +65,19 @@ Batch.getAll = result => {
   });
 };
 
+// Batch.viewAll = result => {
+//   sql.query("SELECT * FROM batch JOIN vaccination ON batch.batchNo = vaccination.batchNo", (err, res) => {
+//     if (err) {
+//       console.log("error: ", err);
+//       result(null, err);
+//       return;
+//     }
+
+//     console.log("Batch: ", res);
+//     result(null, res);
+//   });
+// };
+
 Batch.updateById = (batchNo, batch, result) => {
   sql.query(
     "UPDATE batch SET expiryDate = ?, quantityAvailable = ?, quantityAdministered = ? WHERE batchNo = ?",

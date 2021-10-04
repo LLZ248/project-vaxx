@@ -1,24 +1,16 @@
-import { Col, Card, CardHeader, Table, Container, Row , DropdownItem, Media, Badge, UncontrolledTooltip, DropdownToggle, Progress, UncontrolledDropdown, DropdownMenu} from "reactstrap";
+import { Col, Card, CardHeader, Table, Progress } from "reactstrap";
 
-const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
+const BatchTable = ({ batches, onRowSelect }) => {
   require("../assets/css/hoverableTable.css");
 
   return (
-        <Col className="mb-3" xl="13">
-          <Card className="shadow">
-            <CardHeader className="border-0">
-              <Row className="align-items-center">
-                <div className="col">
-                  <h3 className="mb-0">Batch List</h3>
-                </div>
-                <div className="col">
-                  <h6 className="text-right m-0">
-                    {message}
-                  </h6>
-                </div>
-              </Row>
-            </CardHeader>
-            <Table className="align-items-center table-flush" responsive>
+    <Col className="mb-3" xl='13'>
+      <Card className="shadow overflow-hidden">
+        <CardHeader className="border-0 d-flex align-items-baseline justify-content-between">
+          <h3 className="mb-0">Batch List</h3>
+          <h5 className="mb-0 text-muted">Click on a row to view batch</h5>
+        </CardHeader>
+        <Table className="align-items-center table-flush" responsive>
         <thead className="thead-light">
           <tr>
             <th scope="col">Batch No</th>
@@ -26,7 +18,6 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
             <th scope="col">Expiry Date</th>
             <th scope="col">No. of Pending Appointments</th>
             <th scope="col">Administered Completion</th>
-            <th scope="col" />
           </tr>
         </thead>
         <tbody>
@@ -38,7 +29,7 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
             onClick={() => onRowSelect(batch)} //callback function
             >
               <td>{batch.batchNo}</td>
-              <td>{batch.vaccineName ?? ''}</td>
+              <td>{batch.vaccineName}</td>
               <td>{batch.expiryDate}</td>
               <td>{batch.noOfPendingVaccination}</td>
 
@@ -53,7 +44,7 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
             </tr>
             )}
        
-          <tr>
+          {/* <tr>
             <th scope="row">
               <Media className="align-items-center">
                 <a
@@ -139,8 +130,8 @@ const BatchTable = ({ batches, onRowSelect, title, message, hideColumn }) => {
                 </div>
               </div>
             </td>
-          </tr>
-        </tbody>
+          </tr>*/}
+        </tbody> 
         </Table>
           </Card>
         </Col>

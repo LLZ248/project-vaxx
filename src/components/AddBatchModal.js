@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Select from 'react-select';
 import ReactDatetime from "react-datetime";
 
@@ -57,11 +57,17 @@ const AddBatchModal = ({centreName, onAdded}) => {
     const errorMsg = res.message;
 
     if(errorMsg) { //have error message
-      alert(errorMsg.startsWith('ER_DUP_ENTRY') ? 
+      let alertMsg = (errorMsg.startsWith('ER_DUP_ENTRY') ? 
       `Batch Number "${body['vaccineID'] + body['batchNo']}" already exists.` : errorMsg);
+
+      const alertHolder = document.getElementById('alert-placeholder');
+      const errorAlert = document.createElement('div');
+      errorAlert.className = 'alert alert-danger';
+      errorAlert.innerHTML = alertMsg;
+      alertHolder.replaceChildren(errorAlert);
     }
     else {
-      onAdded(res); //res is will be the new batch object
+      onAdded(res); //respond is will be the new batch object
       toggleModal();
     }
   }
@@ -78,9 +84,10 @@ const AddBatchModal = ({centreName, onAdded}) => {
   const onExpiryDateChanged = () => {
     document.getElementById('date-validator').value = 'accepted';
   }
+
     return (
       <>
-        <Button color="primary" onClick={toggleModal}>
+        <Button color="primary" id='add-batch-button' onClick={toggleModal}>
           <span className='fa fa-plus'/> Batch 
         </Button>
         <Modal
@@ -88,7 +95,7 @@ const AddBatchModal = ({centreName, onAdded}) => {
           isOpen={isOpen}
           toggle={toggleModal}>
          <div className="modal-body p-0">
-          <Form role="form" id="batch-form" onSubmit={formSubmit}> {/* method='POST' action='/batches'*/}
+          <Form role="form" id="batch-form" onSubmit={formSubmit}>
             <Card className="bg-secondary shadow border-0">
               <CardHeader className="bg-transparent pb-3">
                 <div className="text-muted text-center mt-2 mb-3">
@@ -113,10 +120,12 @@ const AddBatchModal = ({centreName, onAdded}) => {
                 <Input disabled placeholder="Manufacturer" type="text" className='my-3' id='vaccine-manufacturer'/>
                 </div>
               </CardHeader>
+
               <CardBody className="px-lg-5 py-lg-4">
                 <div className="text-center text-muted mb-4">
                   <small>Enter Batch Information</small>
                 </div>
+                
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
@@ -128,6 +137,8 @@ const AddBatchModal = ({centreName, onAdded}) => {
                   </InputGroup>
                 </FormGroup>
 
+                <div id='alert-placeholder'></div>
+
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
@@ -135,7 +146,7 @@ const AddBatchModal = ({centreName, onAdded}) => {
                         <i className="ni ni-app" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Quantity Available" type="number" pattern="[0-9]+" name="quantityAvailable" required/>
+                    <Input placeholder="Quantity Available" type="number" pattern="[0-9]+" min="1" name="quantityAvailable" required/>
                   </InputGroup>
                 </FormGroup>
 
@@ -150,7 +161,7 @@ const AddBatchModal = ({centreName, onAdded}) => {
                       inputProps={{ 
                         id: 'expiry-date-input',
                         placeholder: "Expiry Date", 
-                        style: { padding :'0', background:'white', cursor:'pointer '}, 
+                        style: { padding :'0', background:'white', cursor:'pointer'}, 
                         name: "expiryDate",
                         readOnly: 'true'}}
                       dateFormat='YYYY-MM-DD'
@@ -168,7 +179,7 @@ const AddBatchModal = ({centreName, onAdded}) => {
                   </InputGroup>
                 </FormGroup>      
 
-                <input type="hidden" value={centreName} name="centreName"/>
+                <input type="hidden" value={centreName} name="centreName" id='submit-button'/>
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit">
                     Submit

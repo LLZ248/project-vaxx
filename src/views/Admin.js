@@ -1,7 +1,7 @@
 import {
 Container,
-Button,
-Modal,
+Row,
+Col,
   // Badge,
   // DropdownMenu,
   // DropdownItem,
@@ -23,10 +23,10 @@ import AdminHeader from "components/Headers/AdminHeader.js";
 
 const AdminDashboard = () => {
 
-    // const pv = new ProjectVaxx();
 
   const [batches, setBatches] = useState([]);
   const [centre, setCentre] = useState('');
+  const [message, setMessage] = useState('');
 
   async function fetchCentre() {
     const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
@@ -58,18 +58,23 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchCentre();
-    // fetchBatch();
   }, []);
 
   function onBatchAdded(newBatch) {
-    setBatches(newBatch, ...batches);
+    fetchBatch(centre.centreName);
+    setMessage(`Added "${newBatch.batchNo}"`)
+    setTimeout(() => {
+      setMessage('');
+    }, 3000);
   }
+
     return (
       <>
       <AdminHeader healthcareCentre={centre}/>
       <Container className="mt--8">
-      <BatchTable batches={batches} onRowSelect={(x) => alert(x.batchNo)}/>
+      <BatchTable batches={batches} onRowSelect={(selectedBatch) => alert(selectedBatch.batchNo)}/>
       <AddBatchModal centreName={centre.centreName} onAdded={newBatch => onBatchAdded(newBatch)}/> {/*pass centreName because batch must have it*/}
+      {message ? <span className="alert alert-success py-2" id='success-message'>{message}</span> : null}
       </Container>
       {/* <div className="modal fade" id="addBatchModal" tabIndex="-1" role="dialog" aria-labelledby="addBatchLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">

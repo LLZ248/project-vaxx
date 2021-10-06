@@ -82,7 +82,7 @@ class LoginForm extends React.Component{
                         </InputGroupText>
                         </InputGroupAddon>
                         <Input
-                        placeholder="username"
+                        placeholder={this.state.role + " username"}
                         name = "username"
                         type="text"
                         onChange = {this.handleChange}

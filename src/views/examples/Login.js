@@ -1,14 +1,5 @@
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
   Col
 } from "reactstrap";
 import { Link } from 'react-router-dom';
@@ -18,7 +9,7 @@ const Login = () => {
   return (
     <>
       <Col lg="5" md="7">
-        <LoginForm role="patient"/>
+        <LoginForm role="administrator"/>
         <div className="text-center mt-2">
             <Link
               className="text-light"

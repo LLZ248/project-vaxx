@@ -322,7 +322,7 @@ class Register extends Component {
                   </div>
                 }
                 {
-                  (this.state.role === "administrator" && this.state.selectedCentreName === undefined || this.state.isNewCentre && this.state.centreAddress === undefined)?
+                  ((this.state.role === "administrator" && this.state.selectedCentreName === undefined) || (this.state.isNewCentre && this.state.centreAddress === undefined))?
                   <div className="text-center">
                     <Button className="mt-4" color="primary" type="submit" disabled>
                       Sign Up

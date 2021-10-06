@@ -45,9 +45,16 @@ class Index extends React.Component {
       <>
         <Header />
         {/* Page content */}
-        <Container className="mt--7" fluid>
-          <Row className="mt-5">
-            <Col className="mb-5 mb-xl-0">
+        
+        <Container className="mt--8" fluid>
+          <Row>
+            <Col>
+                  <h1 className="text-center mb-2">Sign Up For Vaccination in 4 Simple Step</h1>
+                  <h2 className="text-center mb-2">Step 1: Select A Vaccine</h2>
+              </Col>
+          </Row >
+          <Row>
+            <Col className="mt-2 mb-5 mb-xl-0">
               <Card className="shadow">
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">

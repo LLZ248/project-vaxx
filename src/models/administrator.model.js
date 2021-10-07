@@ -68,7 +68,7 @@ Administrator.verifyAdmin = (username, password, result) => {
     newPassword= data.digest('hex');
     newPasswordTxt = (""+newPassword).toUpperCase();
 
-    sql.query('SELECT * FROM administrator WHERE administrator = \''+username+'\' AND password = \''+newPasswordTxt+'\'', (err, res) =>{
+    sql.query('SELECT * FROM administrator WHERE username = \''+username+'\' AND password = \''+newPasswordTxt+'\'', (err, res) =>{
       if(err){
         console.log("error: ", err);
         result(err, null);

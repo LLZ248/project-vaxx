@@ -46,7 +46,7 @@ class Index extends React.Component {
         <Header />
         {/* Page content */}
         
-        <Container className="mt--8" fluid>
+        <Container className="mt--9" fluid>
           <Row>
             <Col>
                   <h1 className="text-center mb-2">Sign Up For Vaccination in 4 Simple Step</h1>

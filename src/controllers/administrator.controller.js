@@ -57,7 +57,7 @@ exports.findOne = (req, res) => {
 
 // Find a single Administrator with the combination of password and username
 exports.verifyAdministrator = (req, res) => {
-  Administrator.verifyAdministrator(req.body.username, req.body.password, (err, data) => {
+  Administrator.verifyAdmin(req.body.username, req.body.password, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({

@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
-  Row,
-  Col,
   Container,
 } from "reactstrap";
 
@@ -13,7 +11,7 @@ const PatientNavbar = (props) => {
           
           <Link
             className="h4 mb-0 text-white text-uppercase"
-            to="/admin/index"
+            to="/auth/login"
           >
             {props.brandText}
           </Link>

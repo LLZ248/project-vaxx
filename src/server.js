@@ -32,11 +32,12 @@ app.use(batchRoute);
 app.use(centreRoute);
 app.use(administratorRoute);
 
-
 //Verify the session token stored in client browser and determine the username and role
 app.get("/verify", (req, res)=>{
+	
 	session = req.session;
-	if(session.username && session.role==="admin"){
+	console.log(session)
+	if(session.username && session.role==="administrator"){
 		res.send({
 			message: `success`,
 			username: session.username,

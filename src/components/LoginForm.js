@@ -43,7 +43,7 @@ class LoginForm extends React.Component{
                     this.setState({errMsg:"Wrong username/password"})
                 }else{
                     //valid login
-                    this.setState({redirect:'/'})
+                    this.setState({redirect:'/admin/index'})
                 }
             })
     

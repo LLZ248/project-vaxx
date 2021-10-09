@@ -220,6 +220,7 @@ class Register extends Component {
                       placeholder="Username (Lowercase letter, symbol, numbers)"
                       type="text"
                       required
+                      minlength="8"
                       onChange = {this.handleChange}
                       value= {this.state.username}
                     />
@@ -238,6 +239,7 @@ class Register extends Component {
                       name = "password"
                       placeholder="Pasword"
                       type="password"
+                      minlength="8"
                       required
                       onChange = {this.handleChange}
                     />
@@ -255,6 +257,7 @@ class Register extends Component {
                       id="form-control-fullname"
                       name = "fullName"
                       placeholder="Full Name"
+                      minlength="5"
                       type="text"
                       required
                       onChange = {this.handleChange}
@@ -314,6 +317,7 @@ class Register extends Component {
                             name = "ICPassport"
                             placeholder="IC/Passport No"
                             type="text"
+                            minlength="6"
                             required
                             onChange = {this.handleChange}
                           />

@@ -11,7 +11,7 @@ import AuthLayout from "layouts/Auth.js";
 import PatientLayout from "layouts/Patient.js";
 
 
-class AppWrapper extends Component{
+class AdminRoute extends Component{
   //Check if the user is logined admin
   render(){
     const fetch = require('sync-fetch')
@@ -27,11 +27,27 @@ class AppWrapper extends Component{
   }
 }
 
+class AuthRoute extends Component{
+  //Check if the user is logined admin
+  render(){
+    const fetch = require('sync-fetch')
+    const metadata = fetch('/verify').json()
+    const role = metadata.role;
+
+    if(role === "admin"){
+      //Not login or is patient
+      return <Redirect to="/admin/index"/>
+    }else{
+      return <AuthLayout {...this.props}/>
+    }
+  }
+}
+
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route path="/admin" component={AppWrapper} />
-      <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+      <Route path="/admin" component={AdminRoute} />
+      <Route path="/auth" component={AuthRoute} />
       <Route path="/patient" render={(props) => <PatientLayout {...props} />} />
       <Redirect from="/" to="/patient/dashboard" />
     </Switch>

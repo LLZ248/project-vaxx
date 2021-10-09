@@ -5,23 +5,45 @@ import Chart from "chart.js";
 // reactstrap components
 import {
   Card,
-  Table,
   Container,
   Row,
   Col,
+  CardBody,
+  CardTitle,
 } from "reactstrap";
-
+import VaccineTable from 'components/VaccineTable'
 // core components
 import {
   chartOptions,
   parseOptions
 } from "variables/charts.js";
-
 import Header from "components/Headers/Header.js";
 import React from "react";
 
+var vaccines = []
+
 class Index extends React.Component {
-  state = {}
+  state = {vaccines : vaccines}
+
+  vaccines = fetch('/vaccines').then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(vaccines => {
+    this.setState({vaccines : vaccines}) ;
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
+
+  OnRowSelected = (selectedVaccine) => {
+    // return <Redirect to={'/AddBatches?vaccineID' + selectedVaccine.vaccineID}/>;
+    const path = '/admin/addBatches';
+    alert(selectedVaccine.vaccineID)
+  };
+  
 
   render(){
     if (window.Chart) {
@@ -48,41 +70,44 @@ class Index extends React.Component {
         
         <Container className="mt--9" fluid>
           <Row>
+          
             <Col>
-                  <h1 className="text-center mb-2">Sign Up For Vaccination in 4 Simple Step</h1>
-                  <h2 className="text-center mb-2">Step 1: Select A Vaccine</h2>
-              </Col>
-          </Row >
-          <Row>
-            <Col className="mt-2 mb-5 mb-xl-0">
-              <Card className="shadow">
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Vaccine Name</th>
-                      <th scope="col">Manufacturer</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">Pfizer</th>
-                      <td>Pfizer Inc</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Sinovac</th>
-                      <td>Sinovac Biotech Ltd</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">AstraZeneca</th>
-                      <td>Oxford University</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Card>
+                  <h1 className="text-center">Sign Up For Vaccination in 4 Simple Step</h1>
             </Col>
-            
+          </Row >
+          <Row className="justify-content-md-center">
+          <div style={{ width: "30rem" }}>
+            <Card className="card-stats mb-4 mb-lg-0">
+              <CardBody>
+                <Row>
+                  <div className="col">
+                    <CardTitle className="text-uppercase text-muted mb-0">
+                      Step 1
+                    </CardTitle>
+                    <span className="h2 font-weight-bold mb-0">Select A Vaccine</span>
+                  </div>
+                  <Col className="col-auto">
+                    <div className="icon icon-shape bg-primary text-white rounded-circle shadow">
+                      <i className="fas fa-syringe" />
+                    </div>
+                  </Col>
+                </Row>
+                
+              </CardBody>
+            </Card>
+          </div>
           </Row>
+            
         </Container>
+        <br/> <br/> <br/> <br/> 
+        
+            <VaccineTable 
+                vaccines={this.state.vaccines}
+                onRowSelect={this.OnRowSelected} 
+                title="Vaccine Available"
+                message="Click on a row to select vaccine"
+              />
+        
       </>
     );
   }

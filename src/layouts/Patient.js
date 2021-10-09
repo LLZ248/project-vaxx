@@ -39,7 +39,6 @@ const Admin = (props) => {
       <div className="main-content" ref={mainContent}>
         <PatientNavbar
           {...props}
-          brandText="Administrator Portal"
         />
         <Switch>
           {getRoutes(routes)}

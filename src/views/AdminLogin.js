@@ -5,7 +5,7 @@ import {
 import { Link } from 'react-router-dom';
 import LoginForm from 'components/LoginForm.js'
 
-const Login = () => {
+const AdminLogin = () => {
   return (
     <>
       <Col lg="5" md="7">
@@ -26,4 +26,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

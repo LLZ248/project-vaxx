@@ -3,6 +3,7 @@ import Profile from "views/examples/Profile.js";
 import Maps from "views/examples/Maps.js";
 import Register from "views/Register.js";
 import AdminLogin from "views/AdminLogin.js";
+import PatientLogin from "views/PatientLogin.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js"
 import VaccineView from "views/VaccineView.js";
@@ -51,6 +52,13 @@ var routes = [
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: AdminLogin,
+    layout: "/auth",
+  },
+  {
+    path: "/patient-login",
+    name: "Login",
+    icon: "ni ni-key-25 text-info",
+    component: PatientLogin,
     layout: "/auth",
   },
   {

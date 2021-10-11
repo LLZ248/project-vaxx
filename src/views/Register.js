@@ -122,7 +122,7 @@ class Register extends Component {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData
         })
-        .then(res => res.redirected?this.setState({redirect:'/'}):this.setState({errMsg:"Duplicate Username"}));
+        .then(res => res.redirected?this.setState({redirect:'/auth/login'}):this.setState({errMsg:"Duplicate Username"}));
 
     }else{
       //Create a new patient
@@ -149,7 +149,7 @@ class Register extends Component {
               <div className="text-center mb-4">
                 <h1>Sign Up</h1>
                 {this.state.errMsg &&
-                <small className="text-danger">{this.state.errMsg}</small>}
+                <small id="err-warning" className="text-danger">{this.state.errMsg}</small>}
               </div>
               <Form id="register-form" role="form" onSubmit={this.handleForm} >
                 <FormGroup>

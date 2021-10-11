@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/LLZ248/project-vaxx/issues"
   },
-  "homepage": "https://github.com/LLZ248/project-vaxx",
+  "homepage": "",
   "scripts": {
     "start": "react-scripts start",
     "starti": "cross-env BROWSER=chrome BROWSER_ARGS=--incognito react-scripts start",
@@ -66,7 +66,8 @@
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
     "reactstrap": "8.9.0",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "sync-fetch": "^0.3.0"
   },
   "optionalDependencies": {
     "eslint-plugin-flowtype": "5.8.0",

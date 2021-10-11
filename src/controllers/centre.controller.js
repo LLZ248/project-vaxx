@@ -1,4 +1,4 @@
-var Centre = require('../models/centre.model.js');
+const HealthcareCentre = require('../models/centre.model.js');
 
 // Create and Save a new Healthcare Centre
 exports.create = (req, res) => {
@@ -8,15 +8,15 @@ exports.create = (req, res) => {
       message: "Content can not be empty!"
     });
   }
-
+  
   // Create a Healthcare Centre
-  const centre = new Centre({
+  const centre = new HealthcareCentre({
     centreName: req.body.centreName,
     address: req.body.address,
   });
-
+  
   // Save Healthcare Centre in the database
-  Centre.create(centre, (err, data) => {
+  HealthcareCentre.create(centre, (err, data) => {
     if (err)
       res.status(500).send({
         message:
@@ -28,7 +28,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Healthcare Centres from the database.
 exports.findAll = (req, res) => {
-    Centre.getAll((err, data) => {
+  HealthcareCentre.getAll((err, data) => {
         if (err)
             res.status(500).send({
             message:
@@ -40,7 +40,7 @@ exports.findAll = (req, res) => {
 
 // Find a single Healthcare Centre with the username
 exports.findOne = (req, res) => {
-  Centre.findByCenterName(req.query.centreName, (err, data) => {
+  HealthcareCentre.findByCenterName(req.query.centreName, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({

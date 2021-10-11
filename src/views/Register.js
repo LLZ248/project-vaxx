@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { Redirect } from "react-router-dom";
 import CreatableSelect from 'react-select/creatable';
-
 
 // reactstrap components
 import {
@@ -17,11 +17,10 @@ import {
   Col,
 } from "reactstrap";
 
-
 function HealthcareCentreAddressInput(props){
   return (
     <FormGroup>
-      <Input disabled={props.isDisabled} placeholder={props.value} type="text" />
+      <Input name={props.name} disabled={props.isDisabled} placeholder={props.value} type="text" onChange={props.onChange} />
     </FormGroup>
   );
 }
@@ -76,12 +75,72 @@ class Register extends Component {
       const newOption = createOption(inputValue);
       this.setState({
         options: [...options, newOption],
-        selectedCentreName: newOption,
+        selectedCentreName: newOption.value,
         selectedCentreAddress: undefined,
+        isNewCentre: true,
       });
   };
 
+  handleChange = (event) =>{
+    const target = event.target;
+    const value =  target.value;
+    const name = target.name;
+    if (name === "username"){
+      //username is not case sensitive
+      this.setState({
+        username : value.toLowerCase()
+      });
+    }else{
+      this.setState({
+        [name]: value
+      });
+    }
+  }
+
+  
+  handleForm = (event) =>{
+    event.preventDefault();
+    let formData;
+    if(this.state.role === "administrator"){
+      //console.log("Admin")
+      //Check if creating a new healthcare centre
+      if(this.state.isNewCentre){
+        //console.log("Creating New Healthcare Centre");
+        const centreFormData = `centreName=${this.state.selectedCentreName}&address=${this.state.centreAddress}`;
+        //console.log(centreFormData)
+        fetch('/healthcare-centre', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: centreFormData
+          })
+          .then(res => console.log(res));
+      }
+      //Create a new administrator
+      formData = `username=${this.state.username}&password=${this.state.username}&fullName=${this.state.fullName}&email=${this.state.email}&staffID=${this.state.staffID}&centreName=${this.state.selectedCentreName}`
+      fetch('/administrators', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData
+        })
+        .then(res => res.redirected?this.setState({redirect:'/auth/login'}):this.setState({errMsg:"Duplicate Username"}));
+
+    }else{
+      //Create a new patient
+      formData = `username=${this.state.username}&password=${this.state.username}&fullName=${this.state.fullName}&email=${this.state.email}&ICPassport=${this.state.ICPassport}`
+      //console.log(formData)
+      fetch('/patients', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData
+      })
+      .then(res => res.redirected?this.setState({redirect:'/'}):this.setState({errMsg:"Duplicate Username"}));
+    }
+  }
+
   render(){
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+    }
     return (
       <>
         <Col lg="6" md="8">
@@ -89,8 +148,10 @@ class Register extends Component {
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center mb-4">
                 <h1>Sign Up</h1>
+                {this.state.errMsg &&
+                <small id="err-warning" className="text-danger">{this.state.errMsg}</small>}
               </div>
-              <Form id="register-form" method="post" role="form" action={this.state.role==="admin"?"admin-register":"/patients"}>
+              <Form id="register-form" role="form" onSubmit={this.handleForm} >
                 <FormGroup>
                   <Row className="my-4">
                   <div className="custom-control custom-radio mx-auto">
@@ -138,7 +199,7 @@ class Register extends Component {
                     </FormGroup>
                     {
                       this.state.selectedCentreAddress === undefined?
-                      <HealthcareCentreAddressInput isDisabled={false}  value={"Healthcare Centre Name"} required/>:
+                      <HealthcareCentreAddressInput isDisabled={false} name="centreAddress" value={"Healthcare Centre Address"} onChange = {this.handleChange}/>:
                       <HealthcareCentreAddressInput isDisabled={true} id="form-control-centreaddress" value={this.state.selectedCentreAddress}/>
                     }
                     
@@ -147,7 +208,7 @@ class Register extends Component {
                 <label>Your Personal Information</label>
 
                 <FormGroup>
-                  <InputGroup className="input-group-alternative mb-3">
+                  <InputGroup className={this.state.errMsg==="Duplicate Username"?"input-group-alternative mb-3 has-danger":"input-group-alternative mb-3"} >
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
                         <i className="ni ni-single-02" />
@@ -156,9 +217,12 @@ class Register extends Component {
                     <Input
                       id="form-control-username"
                       name = "username"
-                      placeholder="Username"
+                      placeholder="Username (Lowercase letter, symbol, numbers)"
                       type="text"
                       required
+                      minlength="8"
+                      onChange = {this.handleChange}
+                      value= {this.state.username}
                     />
                   </InputGroup>
                 </FormGroup>
@@ -175,7 +239,9 @@ class Register extends Component {
                       name = "password"
                       placeholder="Pasword"
                       type="password"
+                      minlength="8"
                       required
+                      onChange = {this.handleChange}
                     />
                   </InputGroup>
                 </FormGroup>
@@ -191,8 +257,10 @@ class Register extends Component {
                       id="form-control-fullname"
                       name = "fullName"
                       placeholder="Full Name"
+                      minlength="5"
                       type="text"
                       required
+                      onChange = {this.handleChange}
                     />
                   </InputGroup>
                 </FormGroup>
@@ -210,6 +278,7 @@ class Register extends Component {
                       placeholder="Email"
                       type="email"
                       required
+                      onChange = {this.handleChange}
                     />
                   </InputGroup>
                 </FormGroup>
@@ -230,6 +299,7 @@ class Register extends Component {
                           placeholder="Staff ID"
                           type="text"
                           required
+                          onChange = {this.handleChange}
                         />
                       </InputGroup>
                   </FormGroup>
@@ -247,16 +317,17 @@ class Register extends Component {
                             name = "ICPassport"
                             placeholder="IC/Passport No"
                             type="text"
+                            minlength="6"
                             required
+                            onChange = {this.handleChange}
                           />
                         </InputGroup>
                       </FormGroup>
                   </div>
                 }
                 {
-                  this.state.role === "administrator" && this.state.selectedCentreName === undefined?
+                  ((this.state.role === "administrator" && this.state.selectedCentreName === undefined) || (this.state.isNewCentre && this.state.centreAddress === undefined))?
                   <div className="text-center">
-                    <small className="text-danger">Please select a healthcare centre<br></br></small>
                     <Button className="mt-4" color="primary" type="submit" disabled>
                       Sign Up
                     </Button>

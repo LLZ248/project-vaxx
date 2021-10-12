@@ -9,24 +9,42 @@ Administrator.create = (username, password, fullName, email, staffID, centreName
     password= data.digest('hex');
     password = (""+password).toUpperCase()
 
-    sql.query("INSERT INTO administrator (`username`, `password`, `fullName`, `email`, `staffID`,`centreName`) VALUES (?,?,?,?,?,?)",
-    [username, password, fullName, email, staffID, centreName], (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        if (err.code === "ER_DUP_ENTRY"){
-          //Failed: Duplicate Username
-          result(null, { message: "duplicate username" })
-          return
-        }else{
-          //Failed when inserting into sql database
-          result(err, null);
-          return;
-        }
+    const sqlQuery = `
+    SELECT sum(tbl.EachTableCount)
+    from
+    (
+    select count(*) as EachTableCount from administrator where username = '${username}'
+    UNION ALL
+    select count(*) as EachTableCount from patient where username = '${username}'
+    ) tbl;
+    `
+
+    sql.query(sqlQuery,(err, res)=>{
+      if(res[0]['sum(tbl.EachTableCount)'] !== 0){
+        //Failed: Duplicate Username
+        result(null, { message: "duplicate username" });
+        return;
       }
-  
-      console.log("created administrator: ",username);
-      result(null, { message: "success" });
-    });
+      sql.query("INSERT INTO administrator (`username`, `password`, `fullName`, `email`, `staffID`,`centreName`) VALUES (?,?,?,?,?,?)",
+      [username, password, fullName, email, staffID, centreName], (err, res) => {
+        if (err) {
+          console.log("error: ", err);
+          if (err.code === "ER_DUP_ENTRY"){
+            //Failed: Duplicate Email
+            result(null, { message: "duplicate username" })
+            return
+          }else{
+            //Failed when inserting into sql database
+            result(err, null);
+            return;
+          }
+        }
+    
+        console.log("created administrator: ",username);
+        result(null, { message: "success" });
+      });
+    })
+    
 };
 
 Administrator.findById = (username, result) => {

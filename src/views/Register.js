@@ -4,6 +4,7 @@ import CreatableSelect from 'react-select/creatable';
 
 // reactstrap components
 import {
+  Alert,
   Button,
   Card,
   CardBody,
@@ -148,8 +149,6 @@ class Register extends Component {
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center mb-4">
                 <h1>Sign Up</h1>
-                {this.state.errMsg &&
-                <small id="err-warning" className="text-danger">{this.state.errMsg}</small>}
               </div>
               <Form id="register-form" role="form" onSubmit={this.handleForm} >
                 <FormGroup>
@@ -325,6 +324,10 @@ class Register extends Component {
                       </FormGroup>
                   </div>
                 }
+                {this.state.errMsg &&
+                    <div>
+                    <Alert id="err-warning" color="danger">{this.state.errMsg}</Alert>
+                    </div>}
                 {
                   ((this.state.role === "administrator" && this.state.selectedCentreName === undefined) || (this.state.isNewCentre && this.state.centreAddress === undefined))?
                   <div className="text-center">

@@ -25,6 +25,10 @@ Batch.create = (newBatch, result) => {
   sql.query("INSERT INTO batch SET ?", newBatch, (err, res) => {
   if (err) {
     console.log("error: ", err);
+
+    if(err.code === 'ER_DUP_ENTRY') //then overwrite with custom message
+      err.message = `Batch Number "${newBatch.batchNo}" already exists.` 
+      
     result(err, null);
     return;
   }

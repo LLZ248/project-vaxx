@@ -54,21 +54,16 @@ const AddBatchModal = ({centreName, onAdded}) => {
 
     const res = await rawRes.json();
 
-    const errorMsg = res.message;
-
-    if(errorMsg) { //have error message
-      let alertMsg = (errorMsg.startsWith('ER_DUP_ENTRY') ? 
-      `Batch Number "${body['vaccineID'] + body['batchNo']}" already exists.` : errorMsg);
-
+    if(res.message) { //have error message
       const alertHolder = document.getElementById('alert-placeholder');
       const errorAlert = document.createElement('div');
       errorAlert.className = 'alert alert-danger';
-      errorAlert.innerHTML = alertMsg;
+      errorAlert.innerHTML = res.message;
       alertHolder.replaceChildren(errorAlert);
     }
-    else {
-      onAdded(res); //respond is will be the new batch object
-      toggleModal();
+    else { //res object will be the new batch object
+      onAdded(res); //this callback method will update the batch list
+      toggleModal(); //close the modal
     }
   }
 

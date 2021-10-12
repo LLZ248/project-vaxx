@@ -1,4 +1,4 @@
-var Batch =require("../models/batch.model.js");
+const Batch = require("../models/batch.model.js");
 
 // Create and Save a new Patient
 exports.create = (req, res) => {
@@ -9,18 +9,23 @@ exports.create = (req, res) => {
     });
   }
 
+  // parsedDate = new Date(req.body.expiryDate)
+  //   .toISOString()
+  //   .slice(0, 10)
+  //   .replace('T', ' '); //convert to mysql format
+
   // Create a Batch
   const batch = new Batch({
     batchNo: req.body.batchNo,
-    expiryDate: req.body.batchNo,
-    quantityAvailble: req.body.quantityAvailble,
-    quantityAdministered: req.body.quantityAdministered,
+    expiryDate: req.body.expiryDate,
+    quantityAvailable: req.body.quantityAvailable,
+    quantityAdministered: 0,
     vaccineID: req.body.vaccineID,
     centreName: req.body.centreName
   });
 
   // Save Batch in the database
-  batch.create(batch, (err, data) => {
+  Batch.create(batch, (err, data) => {
     if (err)
       res.status(500).send({
         message:
@@ -88,3 +93,30 @@ exports.update = (req, res) => {
     }
   );
 };
+
+exports.viewByCenter = (req, res) => {
+
+  if(!req.params.centreName) {
+    res.status(400).send({
+      message:
+        "Centre name not found in the request" //bad request
+    });
+    return;
+  }
+
+  Batch.viewByCenter(req.params.centreName, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Batch with centreName ${req.params.centreName}.`,
+        });
+      } else {
+        res.status(500).send({
+          message:
+            "Error retrieving Batch with centreName " +
+            req.params.centreName
+        });
+      }
+    } else res.send(data);
+  });
+}

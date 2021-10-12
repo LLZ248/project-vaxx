@@ -3,7 +3,7 @@
 class ProjectVaxx {
 
     fetchDB = async(path) => {
-        const res =  await fetch('http://localhost:5000/' + path);
+        const res =  await fetch('/' + path);
         const data = await res.json();
         return data;
     }

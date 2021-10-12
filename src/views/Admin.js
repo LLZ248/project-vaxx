@@ -1,37 +1,102 @@
-// reactstrap components
 import {
-    Badge,
-    DropdownMenu,
-    DropdownItem,
-    UncontrolledDropdown,
-    DropdownToggle,
-    Media,
-    Progress,
-    Table,
-    UncontrolledTooltip,
-  } from "reactstrap";
-  import Header from "components/Headers/Header.js";
-  import { useState, useEffect } from "react";
-  import ProjectVaxx from "../models/ProjectVaxx.js";
-  import { useHistory } from "react-router";
+Container,
+Row,
+Col,
+  // Badge,
+  // DropdownMenu,
+  // DropdownItem,
+  // UncontrolledDropdown,
+  // DropdownToggle,
+  // Media,
+  // Button,
+  // Progress,
+  // Table,
+  // UncontrolledTooltip,
+} from "reactstrap";
+import Header from "components/Headers/Header.js";
+import { useState, useEffect } from "react";
+import ProjectVaxx from "../models/ProjectVaxx.js";
+import { useHistory } from "react-router";
 import BatchTable from "components/BatchTable.js";
-  
-  const AdminDashboard = () => {
-      const pv = new ProjectVaxx();
+import AddBatchModal from "components/AddBatchModal.js";
+import AdminHeader from "components/Headers/AdminHeader.js";
 
-      const [batches, setBatches] = useState([]);
+const AdminDashboard = () => {
 
-      useEffect(async() => {
-          const batches = await pv.query('Select * From Batch');
-          setBatches(batches);
-      });
-      
-      return (
-          <>
-          <Header/>
-          <BatchTable batches={batches}/>
-          </>
-      )
+
+  const [batches, setBatches] = useState([]);
+  const [centre, setCentre] = useState('');
+  const [message, setMessage] = useState('');
+
+  async function fetchCentre() {
+    const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
+    const centre = await data.json();
+    fetchBatch(centre.centreName);
+    setCentre(centre);
   }
+
+  async function fetchBatch(centreName) {
+    // alert(centre)
+    const data = await fetch('/batches/ofCentre/' + centreName);
+    const batches = await data.json();
+
+    batches.forEach(batch => 
+      batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100);
+
+    // for (const batch of batches) {
+    //   const vaccineData = await fetch('/vaccines/' + batch.vaccineID);
+    //   const vaccine = await vaccineData.json();
+    //   batch.vaccineName = vaccine.vaccineName; //because javascript is dynamic typed
+      
+    //   const vaccinationsData = await fetch('/vaccinations');
+    //   const vaccinations = await vaccinationsData.json();
+    //   batch.vaccinations = vaccinations;
+    // }
+
+    setBatches(batches);
+  }
+
+  useEffect(() => {
+    fetchCentre();
+  }, []);
+
+  function onBatchAdded(newBatch) {
+    fetchBatch(centre.centreName);
+    setMessage(`Added "${newBatch.batchNo}"`)
+    setTimeout(() => {
+      setMessage('');
+    }, 3000);
+  }
+
+    return (
+      <>
+      <AdminHeader healthcareCentre={centre}/>
+      <Container className="mt--8">
+      <BatchTable batches={batches} onRowSelect={(selectedBatch) => alert(selectedBatch.batchNo)}/>
+      <AddBatchModal centreName={centre.centreName} onAdded={newBatch => onBatchAdded(newBatch)}/> {/*pass centreName because batch must have it*/}
+      {message ? <span className="alert alert-success py-2" id='success-message'>{message}</span> : null}
+      </Container>
+      {/* <div className="modal fade" id="addBatchModal" tabIndex="-1" role="dialog" aria-labelledby="addBatchLabel" aria-hidden="true">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="addBatchLabel">Modal title</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              ...
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div> */}
+      </>
+    )
+}
 
 export default AdminDashboard;

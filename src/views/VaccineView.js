@@ -1,7 +1,6 @@
 import Header from "components/Headers/Header.js";
 import VaccineTable from "components/VaccineTable.js";
 import { useState, useEffect } from "react";
-import ProjectVaxx from "../models/ProjectVaxx.js";
 import { useHistory } from "react-router";
 
 
@@ -14,16 +13,15 @@ const VaccineView = () => {
     const path = '/admin/addBatches';
     history.push(path);
   };
-  const projectVaxx = new ProjectVaxx();
+  // const projectVaxx = new ProjectVaxx();
   const [vaccines, setVaccines] = useState([]);
   
-  useEffect(() => {
-    async function fetchVaccineData() {
-      const vaccines = await projectVaxx.getVaccines();
+  useEffect(async () => {
+      console.log('attempt');
+      const data =  await fetch('/vaccines');
+      const vaccines = await data.json();
       setVaccines(vaccines);
-    }
-    fetchVaccineData();
-  });
+    }, []);
 
 
   return (

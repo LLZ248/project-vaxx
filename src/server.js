@@ -1,6 +1,6 @@
 const express = require('express');
-var session = require('express-session');
-var flash = require('connect-flash');
+const session = require('express-session');
+const flash = require('connect-flash');
 const bodyParser = require('body-parser');//require to read POST data
 
 //Import Routes
@@ -31,6 +31,19 @@ app.use(vaccinationRoute);
 app.use(batchRoute);
 app.use(centreRoute);
 app.use(administratorRoute);
+
+//changing global wise json formating
+app.set('json spaces', 2) //pretty print json when requested
+
+app.set('json replacer', function (key, value) { //DO NOT use arrow function here because 'this' keyword is used
+	if (this[key] instanceof Date) {
+		value = this[key].toLocaleDateString(); //changing date format
+	}
+
+return value;
+});
+
+
 
 //Verify the session token stored in client browser and determine the username and role
 app.get("/verify", (req, res)=>{

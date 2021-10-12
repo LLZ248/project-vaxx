@@ -1,4 +1,4 @@
-var Vaccine = require("../models/vaccine.model.js");
+const Vaccine = require("../models/vaccine.model.js");
 
 // // Create and Save a new Vaccine
 // export function create(req, res) {

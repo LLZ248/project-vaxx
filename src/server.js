@@ -1,21 +1,22 @@
 const express = require('express');
-const session = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');//require to read POST data
 
 //Import Routes
-var patientRoute = require('./routes/patient.routes.js');
-var vaccineRoute = require('./routes/vaccine.routes.js');
-var vaccinationRoute = require('./routes/vaccination.routes.js');
-var batchRoute = require('./routes/batch.routes.js');
-var centreRoute = require('./routes/centre.routes.js');
-var administratorRoute = require('./routes/administrator.route.js');
+const patientRoute = require('./routes/patient.routes.js');
+const vaccineRoute = require('./routes/vaccine.routes.js');
+const vaccinationRoute = require('./routes/vaccination.routes.js');
+const batchRoute = require('./routes/batch.routes.js');
+const centreRoute = require('./routes/centre.routes.js');
+const administratorRoute = require('./routes/administrator.route.js');
 
 const app = express();
 const PORT = 5000;
 
+let session = require('express-session');
+
 //setting for extension
-app.set('json spaces', 2) //pretty print json when requested
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));//require to read POST data
 app.use(session({
 	secret: 'secret',
@@ -23,6 +24,7 @@ app.use(session({
 	saveUninitialized: true
 }));
 app.use(flash());
+
 
 //Use the imported Routes
 app.use(patientRoute);
@@ -34,7 +36,6 @@ app.use(administratorRoute);
 
 //changing global wise json formating
 app.set('json spaces', 2) //pretty print json when requested
-
 app.set('json replacer', function (key, value) { //DO NOT use arrow function here because 'this' keyword is used
 	if (this[key] instanceof Date) {
 		value = this[key].toLocaleDateString(); //changing date format
@@ -43,10 +44,8 @@ app.set('json replacer', function (key, value) { //DO NOT use arrow function her
 return value;
 });
 
-
-
 //Verify the session token stored in client browser and determine the username and role
-app.get("/verify", (req, res)=>{
+app.get("/verify", (req, res) => {
 	
 	session = req.session;
 	console.log(session)

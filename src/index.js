@@ -35,8 +35,7 @@ class AuthRoute extends Component{
     const role = metadata.role;
 
     if(role === "admin"){
-      //Not login or is patient
-      return <Redirect to="/admin/index"/>
+      return <Redirect to="/admin/dashboard"/>
     }else{
       return <AuthLayout {...this.props}/>
     }

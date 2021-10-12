@@ -13,10 +13,10 @@ import PatientDashboard from "views/Patient.js";
 
 var routes = [
   {
-    path: "/index",
+    path: "/dashboard",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
-    component: Index,
+    component: AdminDashboard,
     layout: "/admin",
   },
   {
@@ -80,13 +80,6 @@ var routes = [
     name: "Add Batches",
     icon: "fa fa-plus text-info",
     component: BatchView,
-    layout: "/admin",
-  },
-  {
-    path: "/AdminDashboard",
-    name: "Admin Dashboard",
-    icon: "ni ni-tv-2 text-primary",
-    component: AdminDashboard,
     layout: "/admin",
   },
   {

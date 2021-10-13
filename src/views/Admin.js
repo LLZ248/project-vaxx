@@ -1,7 +1,6 @@
 import {
 Container,
-Row,
-Col,
+
   // Badge,
   // DropdownMenu,
   // DropdownItem,
@@ -13,10 +12,7 @@ Col,
   // Table,
   // UncontrolledTooltip,
 } from "reactstrap";
-import Header from "components/Headers/Header.js";
 import { useState, useEffect } from "react";
-import ProjectVaxx from "../models/ProjectVaxx.js";
-import { useHistory } from "react-router";
 import BatchTable from "components/BatchTable.js";
 import AddBatchModal from "components/AddBatchModal.js";
 import AdminHeader from "components/Headers/AdminHeader.js";

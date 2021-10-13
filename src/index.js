@@ -42,11 +42,19 @@ class AuthRoute extends Component{
   }
 }
 
+class LogOut extends Component{
+  render(){
+    fetch("/log-out")
+    return <Redirect to="/"/>
+  }
+}
+
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Route path="/admin" component={AdminRoute} />
       <Route path="/auth" component={AuthRoute} />
+      <Route path="/logout" component = {LogOut}/>
       <Route path="/patient" render={(props) => <PatientLayout {...props} />} />
       <Redirect from="/" to="/patient/dashboard" />
     </Switch>

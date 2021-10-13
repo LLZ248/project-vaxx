@@ -70,4 +70,11 @@ app.get("/verify", (req, res) => {
 	}
 });
 
+app.get("log-out", (req, res)=>{
+	console.log("destory session")
+	req.session.destroy();
+	res.send("Logged Out")
+}
+);
+
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

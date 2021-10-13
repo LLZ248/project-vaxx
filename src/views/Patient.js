@@ -39,29 +39,13 @@ class Index extends React.Component {
   });
 
   OnRowSelected = (selectedVaccine) => {
-    // return <Redirect to={'/AddBatches?vaccineID' + selectedVaccine.vaccineID}/>;
-    const path = '/admin/addBatches';
     alert(selectedVaccine.vaccineID)
   };
   
-
   render(){
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
-
-  fetch('/verify')
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-  })
-  .then(myBlob => {
-    if (myBlob !== undefined){
-      console.log(myBlob.username)
-      this.setState({username : myBlob.username})
-    }
-  })
   
     return (
       <>

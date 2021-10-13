@@ -14,6 +14,7 @@ const app = express();
 const PORT = 5000;
 
 let session = require('express-session');
+const { data } = require('jquery');
 
 //setting for extension
 app.use(express.json());
@@ -46,21 +47,30 @@ return value;
 
 //Verify the session token stored in client browser and determine the username and role
 app.get("/verify", (req, res) => {
-	
+	const Administrator = require('./models/administrator.model.js');
+	const Patient = require('./models/patient.model.js');
 	session = req.session;
 	console.log(session)
+
 	if(session.username && session.role==="administrator"){
-		res.send({
-			message: `success`,
-			username: session.username,
-			role: "admin"
-		});
-    }else{
-		if(session.username && session.role==="patient"){
+		Administrator.findById(session.username, (err, data) => {
 			res.send({
 				message: `success`,
 				username: session.username,
-				role: "patient"
+				userObj: data,
+				role: "admin"
+			});
+		});
+		
+    }else{
+		if(session.username && session.role==="patient"){
+			Patient.findById(session.username, (err, data) => {
+				res.send({
+					message: `success`,
+					username: session.username,
+					userObj: data,
+					role: "patient"
+				});
 			});
 		}else{
 			res.status(404).send({
@@ -70,11 +80,11 @@ app.get("/verify", (req, res) => {
 	}
 });
 
-app.get("log-out", (req, res)=>{
+app.get("/log-out", (req, res)=>{
 	console.log("destory session")
 	req.session.destroy();
 	res.send("Logged Out")
-}
+	}
 );
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

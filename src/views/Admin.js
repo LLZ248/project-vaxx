@@ -24,13 +24,6 @@ const AdminDashboard = () => {
   const [centre, setCentre] = useState('');
   const [message, setMessage] = useState('');
 
-  async function fetchCentre() {
-    const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
-    const centre = await data.json();
-    fetchBatch(centre.centreName);
-    setCentre(centre);
-  }
-
   async function fetchBatch(centreName) {
     // alert(centre)
     const data = await fetch('/batches/ofCentre/' + centreName);
@@ -53,6 +46,12 @@ const AdminDashboard = () => {
   }
 
   useEffect(() => {
+    async function fetchCentre() {
+      const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
+      const centre = await data.json();
+      fetchBatch(centre.centreName);
+      setCentre(centre);
+    }
     fetchCentre();
   }, []);
 

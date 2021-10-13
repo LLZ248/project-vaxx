@@ -16,11 +16,14 @@ const VaccineView = () => {
   // const projectVaxx = new ProjectVaxx();
   const [vaccines, setVaccines] = useState([]);
   
-  useEffect(async () => {
+  useEffect(() => {
+    async function fetchVaccine(){
       console.log('attempt');
       const data =  await fetch('/vaccines');
       const vaccines = await data.json();
       setVaccines(vaccines);
+    }
+    fetchVaccine()
     }, []);
 
 

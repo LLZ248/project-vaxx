@@ -66,7 +66,7 @@ const Admin = (props) => {
           {getRoutes(routes)}
           <Redirect from="*" to="/admin/dashboard"/>
         </Switch>
-        <Container fluid>
+        <Container>
           <AdminFooter />
         </Container>
       </div>

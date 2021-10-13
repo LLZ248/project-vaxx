@@ -141,7 +141,7 @@ const AddBatchModal = ({centreName, onAdded}) => {
                         <i className="ni ni-app" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Quantity Available" type="number" pattern="[0-9]+" min="1" name="quantityAvailable" required/>
+                    <Input placeholder="Quantity Available" type="number" min="1" name="quantityAvailable" required/>
                   </InputGroup>
                 </FormGroup>
 

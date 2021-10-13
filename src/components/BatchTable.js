@@ -21,27 +21,27 @@ const BatchTable = ({ batches, onRowSelect }) => {
           </tr>
         </thead>
         <tbody>
-          {batches.map(batch =>
-            <tr
-            className="hoverable-row"
-            key={batch.batchNo}
-            role="button" //this change the cursor when mouse over
-            onClick={() => onRowSelect(batch)} //callback function
-            >
-              <td>{batch.batchNo}</td>
-              <td>{batch.vaccineName}</td>
-              <td>{batch.expiryDate}</td>
-              <td>{batch.noOfPendingVaccination}</td>
-
-              <td>
-              <div className="d-flex align-items-center">
-                <div>
-                  <Progress max="100" value={batch.administeredCompletion} barClassName="bg-success" />
+          {batches === null ? <tr><td colSpan='5'> There are no batches available currently </td></tr> :
+            batches.map(batch =>
+              <tr
+              className="hoverable-row"
+              key={batch.batchNo}
+              role="button" //this change the cursor when mouse over
+              onClick={() => onRowSelect(batch)} //callback function
+              >
+                <td>{batch.batchNo}</td>
+                <td>{batch.vaccineName}</td>
+                <td>{batch.expiryDate}</td>
+                <td>{batch.noOfPendingVaccination}</td>
+                <td>
+                <div className="d-flex align-items-center">
+                  <div>
+                    <Progress max="100" value={batch.administeredCompletion} barClassName="bg-success" />
+                  </div>
+                  <span className="ml-2">{batch.administeredCompletion}%</span>
                 </div>
-                <span className="ml-2">{batch.administeredCompletion}%</span>
-              </div>
-            </td>
-            </tr>
+              </td>
+              </tr>
             )}
        
           {/* <tr>

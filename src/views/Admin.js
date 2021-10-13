@@ -1,16 +1,5 @@
 import {
 Container,
-
-  // Badge,
-  // DropdownMenu,
-  // DropdownItem,
-  // UncontrolledDropdown,
-  // DropdownToggle,
-  // Media,
-  // Button,
-  // Progress,
-  // Table,
-  // UncontrolledTooltip,
 } from "reactstrap";
 import { useState, useEffect } from "react";
 import BatchTable from "components/BatchTable.js";
@@ -19,18 +8,34 @@ import AdminHeader from "components/Headers/AdminHeader.js";
 
 const AdminDashboard = () => {
 
-
   const [batches, setBatches] = useState([]);
   const [centre, setCentre] = useState('');
   const [message, setMessage] = useState('');
+
+  async function fetchCentre() {
+
+    const authData = await fetch('/verify');
+    const auth = await authData.json();
+
+    const data = await fetch('/healthcare-centre/findCentre/?centreName=' + auth.userObj.centreName);
+    const centre = await data.json();
+    fetchBatch(centre.centreName);
+    setCentre(centre);
+  }
 
   async function fetchBatch(centreName) {
     // alert(centre)
     const data = await fetch('/batches/ofCentre/' + centreName);
     const batches = await data.json();
+    const hasError = batches.message; //contains an error message
 
-    batches.forEach(batch => 
-      batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100);
+    if(!hasError) {
+      batches.forEach(batch => {
+        batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100;
+      }); 
+    }
+  
+    setBatches(hasError ? null : batches);
 
     // for (const batch of batches) {
     //   const vaccineData = await fetch('/vaccines/' + batch.vaccineID);
@@ -41,17 +46,16 @@ const AdminDashboard = () => {
     //   const vaccinations = await vaccinationsData.json();
     //   batch.vaccinations = vaccinations;
     // }
-
-    setBatches(batches);
   }
 
   useEffect(() => {
-    async function fetchCentre() {
-      const data = await fetch('/healthcare-centre/findCentre/?centreName=Beacon%20Hospital');
-      const centre = await data.json();
-      fetchBatch(centre.centreName);
-      setCentre(centre);
-    }
+    // async function fetchCentre() {
+    //   const data = await fetch('/healthcare-centre/findCentre/?');
+    //   const centre = await data.json();
+    //   fetchBatch(centre.centreName);
+    //   setCentre(centre);
+    // }
+
     fetchCentre();
   }, []);
 

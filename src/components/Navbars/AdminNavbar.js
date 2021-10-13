@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 // reactstrap components
 import {
   DropdownMenu,
@@ -12,10 +14,20 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+  
+  const [adminName, setAdminName] = useState('');
+ 
+
+  useEffect(async () => {
+    const authData = await fetch('/verify');
+    const auth = await authData.json();
+    setAdminName(auth.userObj.fullName)
+  },[])
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
-        <Container fluid>
+        <Container>
           <Link
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
@@ -50,7 +62,7 @@ const AdminNavbar = (props) => {
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Admin One
+                      {adminName}
                     </span>
                   </Media>
                 </Media>

@@ -18,10 +18,13 @@ const AdminNavbar = (props) => {
   const [adminName, setAdminName] = useState('');
  
 
-  useEffect(async () => {
-    const authData = await fetch('/verify');
-    const auth = await authData.json();
-    setAdminName(auth.userObj.fullName)
+  useEffect(() => {
+    async function authenticate(){
+      const authData = await fetch('/verify');
+      const auth = await authData.json();
+      setAdminName(auth.userObj.fullName)
+    }
+    authenticate();
   },[])
 
   return (

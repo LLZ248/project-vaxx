@@ -1,15 +1,5 @@
 const sql = require("../database.js");
 
-// constructor
-// const Batch = (batch) => {
-//     this.batchNo = batch.vaccineID + batch.batchNo;
-//     this.expiryDate = batch.expiryDate;
-//     this.quantityAvailable = batch.quantityAvailable;
-//     this.quantityAdministered = 0;
-//     this.vaccineID = batch.vaccineID;
-//     this.centreName = batch.centreName;
-// };
-
 class Batch {
   constructor(batch) {
     this.batchNo = batch.vaccineID + batch.batchNo;

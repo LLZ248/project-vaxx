@@ -38,7 +38,7 @@ const PatientNavbar = (props) => {
           id="navbar-main"
           >
           <Container fluid>
-            <NavbarBrand href="#" onClick={e => e.preventDefault()}>
+            <NavbarBrand href="#" onClick={e => e.preventDefault()} style={{"color":"rgb(255, 255, 255)","fontSize":"1.25rem","fontWeight":"bolder"}}>
               Project VAxx
             </NavbarBrand>
             <button

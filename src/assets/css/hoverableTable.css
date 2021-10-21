@@ -1,4 +1,7 @@
 tr.hoverable-row:hover {
     background-color: var(--info);
-    color: var(--white)
+    color: var(--white);
+    -webkit-transition: background-color 200ms ease-in-out;
+    -ms-transition: background-color 200ms ease-in-out;
+    transition: background-color 200ms ease-out;
 }

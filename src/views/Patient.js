@@ -25,6 +25,14 @@ var vaccines = []
 class Index extends React.Component {
   state = {vaccines : vaccines}
 
+  // Get the available vaccine sql statement
+  /*
+    SELECT batch.vaccineID FROM `batch` 
+    INNER JOIN vaccine 
+    ON batch.vaccineID=vaccine.vaccineID
+    GROUP BY batch.vaccineID;
+  */
+
   vaccines = fetch('/vaccines').then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -38,9 +46,50 @@ class Index extends React.Component {
     console.error('There has been a problem with your fetch operation:', error);
   });
 
-  OnRowSelected = (selectedVaccine) => {
-    alert(selectedVaccine.vaccineID)
+  OnVaccineRowSelected = (selectedVaccine) => {
+    alert(selectedVaccine.vaccineID);
+    //Continue to show healthcare centre
+    //sql
+    /*
+    SELECT batch.centreName FROM `batch` 
+    INNER JOIN healthcarecentre
+    ON batch.centreName=healthcarecentre.centreName
+    WHERE vaccineID = 'PF'
+    GROUP BY batch.centreName;
+    */
   };
+
+  OnCentreRowSelected = (selectedCentre)=>{
+    //ask to login
+  }
+
+  UponLogin = ()=>{
+    //show batch 
+    /** 
+      SELECT 
+      batch.batchNo,
+      batch.quantityAvailable,
+      count(vaccination.vaccinationID) as BatchQuantity
+      FROM `batch`
+      LEFT JOIN vaccination 
+      ON batch.batchNo = vaccination.batchNo 
+      WHERE vaccination.status IN ('pending','confirmed','administered')
+      AND centreName = 'Beacon Hospital' 
+      AND vaccineID = 'PF'
+      AND expiryDate > CURDATE()
+      GROUP BY vaccination.batchNo
+      HAVING BatchQuantity < batch.quantityAvailable;
+    */
+  }
+
+  OnBatchRowSelected = (selectedBatch)=>{
+    //continue to ask for upcoming date
+  }
+
+  OnSelectedUpcomingDate = (selectedDate)=>{
+    //Finished Appointment
+    //display the vaccination receipt
+  }
   
   render(){
     if (window.Chart) {
@@ -86,11 +135,11 @@ class Index extends React.Component {
         <br/> <br/> <br/> <br/> 
         
             <VaccineTable 
-                vaccines={this.state.vaccines}
-                onRowSelect={this.OnRowSelected} 
-                title="Vaccine Available"
-                message="Click on a row to select vaccine"
-              />
+              vaccines={this.state.vaccines}
+              onRowSelect={this.OnVaccineRowSelected} 
+              title="Vaccine Available"
+              message="Click on a row to select vaccine"
+            />
         
       </>
     );

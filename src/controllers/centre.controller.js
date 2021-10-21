@@ -54,3 +54,15 @@ exports.findOne = (req, res) => {
       } else res.send(data);
     });
 };
+
+// Retrieve all available Healthcare Centres from the database.
+exports.findAvailable = (req, res) => {
+  HealthcareCentre.getAvailable(req.query.vaccineID, (err, data) => {
+        if (err)
+            res.status(500).send({
+            message:
+                err.message || "Some error occurred while retrieving Healthcare Centres."
+            });
+        else res.send(data);
+    });
+};

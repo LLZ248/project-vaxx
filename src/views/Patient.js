@@ -8,10 +8,14 @@ import {
   Container,
   Row,
   Col,
-  CardBody,
   CardTitle,
+  Button,
+  CardBody,
+  Modal,
 } from "reactstrap";
+import LoginForm from 'components/LoginForm';
 import VaccineTable from 'components/VaccineTable'
+import CentreTable from 'components/CentreTable'
 // core components
 import {
   chartOptions,
@@ -25,13 +29,22 @@ class Index extends React.Component {
   state = {
     step : 1,
     vaccines : [],
+    centres : [],
+    vaccineID : undefined,
     vaccine : undefined,
     centreName : undefined,
     username : undefined,
     fullName : undefined,
     batchNo : undefined,
     upcomingDate : undefined,
+    defaultModal: false
   }
+
+  toggleModal = state => {
+    this.setState({
+      [state]: !this.state[state]
+    });
+  };
 
   // Get the available vaccine sql statement
   /*
@@ -54,22 +67,69 @@ class Index extends React.Component {
     console.error('There has been a problem with your fetch operation:', error);
   });
 
+  revertSelection = ()=>{
+
+  }
+
   OnVaccineRowSelected = (selectedVaccine) => {
-    this.setState({"vaccine":selectedVaccine.vaccineName})
-    this.setState({"step":2})
+    this.setState({
+    "vaccineID":selectedVaccine.vaccineID,
+    "vaccine":selectedVaccine.vaccineName,
+    "step":2})
     //Continue to show healthcare centre
-    //sql
-    /*
-    SELECT batch.centreName FROM `batch` 
-    INNER JOIN healthcarecentre
-    ON batch.centreName=healthcarecentre.centreName
-    WHERE vaccineID = 'PF'
-    GROUP BY batch.centreName;
-    */
+    fetch('/available-healthcare-centres?vaccineID='+selectedVaccine.vaccineID).then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(centres => {
+      this.setState({"centres" : centres}) ;
+    })
+    .catch(error => {
+      console.error('There has been a problem with your fetch operation:', error);
+    });
   };
 
+  successLogin = (patientUsername, patientFullName) =>{
+    //console.log("Success Login: username: " + patientUsername +"full name: " + patientFullName);
+    this.setState({"step":3});
+    this.toggleModal("formModal");
+  }
+
+  loginModal = () =>{
+    return <Modal
+    className="modal-dialog-centered"
+    size="sm"
+    isOpen={this.state.formModal}
+    toggle={() => this.toggleModal("formModal")}
+  >
+    <div className="modal-header">
+      <h1 className="modal-title" id="formModalLabel">
+        Log In To Continue
+      </h1>
+      <button
+        aria-label="Close"
+        className="close"
+        data-dismiss="modal"
+        type="button"
+        onClick={() => this.toggleModal("formModal")}
+      >
+        <span aria-hidden={true}>×</span>
+      </button>
+    </div>
+    <div className="modal-body p-0">
+      <LoginForm role="patient" onSuccessLogin={(patientUsername, patientFullName) => this.successLogin(patientUsername, patientFullName)}/>
+    </div>
+  </Modal>
+  }
+
   OnCentreRowSelected = (selectedCentre)=>{
+    this.setState({
+      "centreName":selectedCentre.centreName})
+    this.toggleModal("formModal")
     //ask to login
+    //this.setState({"step":3})
   }
 
   UponLogin = ()=>{
@@ -106,9 +166,12 @@ class Index extends React.Component {
       <CardTitle className="text-uppercase text-muted mb-0">
         Selected Info
       </CardTitle>
-      <span className="h4 font-weight-bold mb-0">
-        <ul style={{"list-style-type":"none","padding":"0"}}>
-          <li>Vaccine : {this.state.vaccine}</li>
+      <span className="h5 mb-0">
+        <ul style={{"listStyleType":"none","padding":"0"}}>
+          <li><b>Full Name</b> : {this.state.fullName}</li>
+          <li><b>Vaccine</b> : {this.state.vaccine}</li>
+          <li><b>Healthcare Centre</b> : {this.state.centreName}</li>
+          <li><b>BatchNo</b> : {this.state.batchNo}</li>
         </ul>
       </span>
     </CardBody>
@@ -118,8 +181,8 @@ class Index extends React.Component {
   stepDescriptionRow = ()=>{
     return <Container fluid>
     <Row className="justify-content-md-center">
-      <div class="col-lg-3"></div>
-      <div class="col-lg-3" style={{ width: "30rem" }}>
+      <div className="col-lg-2"></div>
+      <div className="col-lg-3" style={{ width: "30rem" }}>
         <Card className="card-stats mb-4 mb-lg-0">
           <CardBody>
             <Row>
@@ -165,10 +228,19 @@ class Index extends React.Component {
           </CardBody>
         </Card>
       </div>
-      <div class="col-lg-2" style={{ width: "30rem" }}>
+      <div className="col-lg-3" style={{ width: "30rem" }}>
         {this.selectedInfoCard()}
       </div>
-      <div class="col-lg-3"></div>
+      <div className="col-lg-1">
+        <Button className="btn-icon btn-3" color="danger" type="button" onClick={this.revertSelection()}>
+          <span className="icon">
+            <i className="ni ni-fat-remove"/>
+          </span>
+          <div className="text-center">Revert Selection</div>
+        </Button>
+      </div>
+      <div className="col-lg-3">
+      </div>
     </Row>
   </Container>
   }
@@ -183,7 +255,9 @@ class Index extends React.Component {
     return (
       <>
         <Header />
+        {this.loginModal()}
         <Container className="mt--9" fluid>
+        
           <Row>
             <Col>
                   <h1 className="text-center">Sign Up For Vaccination in 4 Simple Step</h1>
@@ -199,7 +273,7 @@ class Index extends React.Component {
               <VaccineTable 
                 vaccines={this.state.vaccines}
                 onRowSelect={this.OnVaccineRowSelected} 
-                title="Vaccine Available"
+                title=" Available Vaccine"
                 message="Click on a row to select vaccine"
               />
             </div>
@@ -207,16 +281,19 @@ class Index extends React.Component {
               return <div>
               <Container fluid>
                 {this.stepDescriptionRow()}
-                <VaccineTable 
-                vaccines={this.state.vaccines}
-                onRowSelect={this.OnVaccineRowSelected} 
-                title="Vaccine Available"
-                message="Click on a row to select vaccine"
+                <CentreTable 
+                centres={this.state.centres}
+                onRowSelect={this.OnCentreRowSelected} 
+                title="Available Healthcare Centre"
+                message="Click on a row to select healthcare centre"
                 />
               </Container>
             </div>
+            default:
+              return null
           }
         })()}
+        
       </>
     );
   }

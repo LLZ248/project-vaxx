@@ -41,7 +41,7 @@ Vaccine.getAll = result => {
 
 Vaccine.getAvailable = result => {
   sql.query(
-    `SELECT vaccine.vaccineName, vaccine.manufacturer FROM batch 
+    `SELECT vaccine.vaccineID, vaccine.vaccineName, vaccine.manufacturer FROM batch 
     INNER JOIN vaccine 
     ON batch.vaccineID=vaccine.vaccineID
     GROUP BY batch.vaccineID;`, (err, res) => {
@@ -50,7 +50,6 @@ Vaccine.getAvailable = result => {
       result(null, err);
       return;
     }
-
     console.log("vaccines: ", res);
     result(null, res);
   });

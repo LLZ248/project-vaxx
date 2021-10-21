@@ -42,8 +42,7 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
                   >
                     {
                     Object.keys(vaccine)
-                    .filter(key => !hideColumns || !hideColumns.includes(key)) //extract property that are NOT hided 
-                                                                               //if hideColumns is NOT undefined
+                    .filter(key => key !== "vaccineID")
                     .map(key => 
                       <td key={key}> {vaccine[key]} </td> //map the property value to <td>
                       )}

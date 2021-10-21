@@ -63,7 +63,9 @@ Batch.getAvailable = (centreName, vaccineID, result) => {
   sql.query(
     `SELECT 
     batch.batchNo,
+    batch.expiryDate,
     batch.quantityAvailable,
+    vaccineID as vaccineName,
     count(vaccination.vaccinationID) as BatchQuantity
     FROM batch
     LEFT JOIN vaccination 

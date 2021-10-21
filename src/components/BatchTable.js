@@ -12,7 +12,7 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
   }
 
   return (
-    <Col className="mb-3" xl='13'>
+    
       <Card className="shadow overflow-hidden">
         <CardHeader className="border-0 d-flex align-items-baseline justify-content-between">
           <h3 className="mb-0">Batch List</h3>
@@ -149,7 +149,7 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
         </tbody> 
         </Table>
           </Card>
-        </Col>
+        
   );
 };
 

@@ -9,6 +9,9 @@ router.post("/batches", batches.create);
 // Retrieve all Batch
 router.get("/batches", batches.findAll);
 
+// Retrieve all available Batches  by centreName and VaccineID
+router.get("/available-batches", batches.findAvailable);
+
 // Retrieve a single Batch with batchNo
 router.get("/batches/:batchNo", batches.findOne);
 

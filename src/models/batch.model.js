@@ -59,6 +59,32 @@ Batch.getAll = result => {
   });
 };
 
+Batch.getAvailable = (centreName, vaccineID, result) => {
+  sql.query(
+    `SELECT 
+    batch.batchNo,
+    batch.quantityAvailable,
+    count(vaccination.vaccinationID) as BatchQuantity
+    FROM batch
+    LEFT JOIN vaccination 
+    ON batch.batchNo = vaccination.batchNo 
+    WHERE vaccination.status IN ('pending','confirmed','administered')
+    AND centreName = '${centreName}' 
+    AND vaccineID = '${vaccineID}'
+    AND expiryDate > CURDATE()
+    GROUP BY vaccination.batchNo
+    HAVING BatchQuantity < batch.quantityAvailable;`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log(`Available Batch of ${centreName} and: ${vaccineID} :`, res);
+    result(null, res);
+  });
+};
+
 // Batch.viewAll = result => {
 //   sql.query("SELECT * FROM batch JOIN vaccination ON batch.batchNo = vaccination.batchNo", (err, res) => {
 //     if (err) {

@@ -1,6 +1,6 @@
 import { Col, Card, CardHeader, Table, Container, Row } from "reactstrap";
 
-const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) => {
+const CentreTable = ({ vaccines, onRowSelect, title, message, hideColumns }) => {
   require("../assets/css/hoverableTable.css");
 
   return (
@@ -27,7 +27,6 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
             >
               <thead className="thead-light">
                 <tr>
-                  {/* <th scope="col" className={ !hideColumns || hideColumns.includes('vaccineID') ? "d-none" : ""}>Vaccine ID</th> */}
                   <th scope="col" >Vaccine Name</th>
                   <th scope="col" >Manufacturer</th>
                 </tr>
@@ -42,8 +41,6 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
                   >
                     {
                     Object.keys(vaccine)
-                    .filter(key => !hideColumns || !hideColumns.includes(key)) //extract property that are NOT hided 
-                                                                               //if hideColumns is NOT undefined
                     .map(key => 
                       <td key={key}> {vaccine[key]} </td> //map the property value to <td>
                       )}
@@ -58,4 +55,4 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
   );
 };
 
-export default VaccineTable;
+export default CentreTable;

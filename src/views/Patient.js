@@ -161,7 +161,7 @@ class Index extends React.Component {
   }
 
   selectedInfoCard = ()=>{
-    return <Card className="card-stats mb-4 mb-lg-0">
+    return <Card className="card-stats mb-4 mb-lg-0" style={{"height":"100%"}}>
     <CardBody>
       <CardTitle className="text-uppercase text-muted mb-0">
         Selected Info
@@ -181,8 +181,8 @@ class Index extends React.Component {
   stepDescriptionRow = ()=>{
     return <Container fluid>
     <Row className="justify-content-md-center">
-      <div className="col-lg-2"></div>
-      <div className="col-lg-3" style={{ width: "30rem" }}>
+      <div className="col-lg-3"></div>
+      <div className="col-lg-2" style={{ width: "30rem" }}>
         <Card className="card-stats mb-4 mb-lg-0">
           <CardBody>
             <Row>
@@ -228,17 +228,20 @@ class Index extends React.Component {
           </CardBody>
         </Card>
       </div>
-      <div className="col-lg-3" style={{ width: "30rem" }}>
+      <Row className="col-lg-4">
+      <div className="col-8 pr-0" style={{ "width": "30rem"}}>
         {this.selectedInfoCard()}
       </div>
-      <div className="col-lg-1">
-        <Button className="btn-icon btn-3" color="danger" type="button" onClick={this.revertSelection()}>
+      <div className="col-4 pl-0">
+        <Button className="btn-icon btn-3" color="danger" style={{"height":"100%"}} type="button" onClick={this.revertSelection()}>
           <span className="icon">
             <i className="ni ni-fat-remove"/>
           </span>
           <div className="text-center">Revert Selection</div>
         </Button>
       </div>
+      </Row>
+      
       <div className="col-lg-3">
       </div>
     </Row>

@@ -14,6 +14,7 @@ const AdminDashboard = () => {
 
   async function fetchCentre() {
 
+    
     const authData = await fetch('/verify');
     const auth = await authData.json();
 
@@ -28,12 +29,6 @@ const AdminDashboard = () => {
     const data = await fetch('/batches/ofCentre/' + centreName);
     const batches = await data.json();
     const hasError = batches.message; //contains an error message
-
-    if(!hasError) {
-      batches.forEach(batch => {
-        batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100;
-      }); 
-    }
   
     setBatches(hasError ? null : batches);
 
@@ -71,7 +66,7 @@ const AdminDashboard = () => {
       <>
       <AdminHeader healthcareCentre={centre}/>
       <Container className="mt--8">
-      <BatchTable batches={batches} onRowSelect={(selectedBatch) => alert(selectedBatch.batchNo)}/>
+      <BatchTable batches={batches} role={"patient"} onRowSelect={(selectedBatch) => alert(selectedBatch.batchNo)}/>
       <AddBatchModal centreName={centre.centreName} onAdded={newBatch => onBatchAdded(newBatch)}/> {/*pass centreName because batch must have it*/}
       {message ? <span className="alert alert-success py-2" id='success-message'>{message}</span> : null}
       </Container>

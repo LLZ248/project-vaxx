@@ -1,7 +1,15 @@
 import { Col, Card, CardHeader, Table, Progress } from "reactstrap";
 
-const BatchTable = ({ batches, onRowSelect }) => {
+const BatchTable = ({ batches, role, onRowSelect }) => {
   require("../assets/css/hoverableTable.css");
+  
+  const viewByPatient = role === 'patient';
+
+  if(batches.batchNo) { //this check if the batch is actually a batch object 
+    batches.forEach(batch => {
+      batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100;
+    }); 
+  }
 
   return (
     <Col className="mb-3" xl='13'>
@@ -16,8 +24,8 @@ const BatchTable = ({ batches, onRowSelect }) => {
             <th scope="col">Batch No</th>
             <th scope="col">Vaccine</th>
             <th scope="col">Expiry Date</th>
-            <th scope="col">No. of Pending Appointments</th>
-            <th scope="col">Administered Completion</th>
+            <th className={viewByPatient && 'd-none'} scope="col">No. of Pending Appointments</th>
+            <th className={viewByPatient && 'd-none'} scope="col">Administered Completion</th>
           </tr>
         </thead>
         <tbody>
@@ -31,9 +39,9 @@ const BatchTable = ({ batches, onRowSelect }) => {
               >
                 <td>{batch.batchNo}</td>
                 <td>{batch.vaccineName}</td>
-                <td>{batch.expiryDate}</td>
-                <td>{batch.noOfPendingVaccination}</td>
-                <td>
+                <td>{batch.expiryDate}</td>                
+                <td className={viewByPatient && 'd-none'}> {batch.noOfPendingVaccination}</td>
+                <td className={viewByPatient && 'd-none'}>
                 <div className="d-flex align-items-center">
                   <div>
                     <Progress max="100" value={batch.administeredCompletion} barClassName="bg-success" />

@@ -6,7 +6,7 @@ import PatientLogin from "views/PatientLogin.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js"
 import VaccineView from "views/VaccineView.js";
-import BatchView from "views/BatchView.js";
+import BatchView from "views/Batch";
 import AdminDashboard from "views/Admin.js";
 import PatientDashboard from "views/Patient.js";
 

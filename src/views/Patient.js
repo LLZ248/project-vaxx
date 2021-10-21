@@ -96,8 +96,21 @@ class Index extends React.Component {
 
   successLogin = (patientUsername, patientFullName) =>{
     //console.log("Success Login: username: " + patientUsername +"full name: " + patientFullName);
-    this.setState({"step":3});
+    this.setState({"step":3,"username":patientUsername,"fullName":patientFullName});
     this.toggleModal("formModal");
+    //Continue to show healthcare centre
+    fetch('/available-batches?vaccineID='+this.state.vaccineID+'&centreName='+this.state.centreName).then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(batches => {
+      this.setState({"batches" : batches}) ;
+    })
+    .catch(error => {
+      console.error('There has been a problem with your fetch operation:', error);
+    });
   }
 
   loginModal = () =>{
@@ -132,29 +145,11 @@ class Index extends React.Component {
       "centreName":selectedCentre.centreName})
     this.toggleModal("formModal")
     //ask to login
-    //this.setState({"step":3})
-  }
-
-  UponLogin = ()=>{
-    //show batch 
-    /** 
-      SELECT 
-      batch.batchNo,
-      batch.quantityAvailable,
-      count(vaccination.vaccinationID) as BatchQuantity
-      FROM `batch`
-      LEFT JOIN vaccination 
-      ON batch.batchNo = vaccination.batchNo 
-      WHERE vaccination.status IN ('pending','confirmed','administered')
-      AND centreName = 'Beacon Hospital' 
-      AND vaccineID = 'PF'
-      AND expiryDate > CURDATE()
-      GROUP BY vaccination.batchNo
-      HAVING BatchQuantity < batch.quantityAvailable;
-    */
   }
 
   OnBatchRowSelected = (selectedBatch)=>{
+    this.setState({"batchNo":selectedBatch.batchNo,"step":4});
+    
     //continue to ask for upcoming date
   }
 
@@ -268,12 +263,13 @@ class Index extends React.Component {
             </Col>
           </Row >
         </Container>
-        {this.stepDescriptionRow()}
+        
         {/* Page content */}
         {(()=>{
           switch (this.state.step){
             case 1 :
               return <div>
+                {this.stepDescriptionRow()}
               <VaccineTable 
                 vaccines={this.state.vaccines}
                 onRowSelect={this.OnVaccineRowSelected} 
@@ -283,6 +279,7 @@ class Index extends React.Component {
             </div>
             case 2:
               return <div>
+                {this.stepDescriptionRow()}
                 <CentreTable 
                 centres={this.state.centres}
                 onRowSelect={this.OnCentreRowSelected} 
@@ -291,14 +288,42 @@ class Index extends React.Component {
                 /></div>
             case 3:
               return <div>
+                {this.stepDescriptionRow()}
                 <Container className="mt--1">
                   <Row className="mt-5">
                   <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
                     <BatchTable
                     batches={this.state.batches}
                     role={"patient"}
-                    onRowSelect={(selectedBatch) => alert(selectedBatch.batchNo)}
+                    onRowSelect={this.OnBatchRowSelected}
                     />
+                  </Col>
+                  </Row>
+                </Container>
+            </div>
+            case 4:
+              return <div>
+                <Container className="mt--1">
+                  <Row className="mt-5">
+                  <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
+                  <Card className="card-stats mb-4 mb-lg-0">
+                    <CardBody>
+                      <Row>
+                        <div className="col">
+                          <CardTitle className="text-uppercase text-muted mb-0">
+                            Your Selected Info
+                          </CardTitle>
+                        </div>
+                        
+                      </Row>
+                      <ul style={{"listStyleType":"none","padding":"0"}}>
+                        <li><b>Full Name</b> : {this.state.fullName}</li>
+                        <li><b>Vaccine</b> : {this.state.vaccine}</li>
+                        <li><b>Healthcare Centre</b> : {this.state.centreName}</li>
+                        <li><b>BatchNo</b> : {this.state.batchNo}</li>
+                      </ul>
+                    </CardBody>
+                  </Card>
                   </Col>
                   </Row>
                 </Container>

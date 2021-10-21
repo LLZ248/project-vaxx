@@ -5,8 +5,8 @@ import AdminLogin from "views/AdminLogin.js";
 import PatientLogin from "views/PatientLogin.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js"
-import VaccineView from "views/VaccineView.js";
-import BatchView from "views/Batch";
+import VaccineView from "views/VaccineView.js"; //[deprecated]
+import Batch from "views/Batch";
 import AdminDashboard from "views/Admin.js";
 import PatientDashboard from "views/Patient.js";
 
@@ -75,10 +75,10 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/addBatches",
-    name: "Add Batches",
+    path: "/batch",
+    name: "Batch",
     icon: "fa fa-plus text-info",
-    component: BatchView,
+    component: Batch,
     layout: "/admin",
   },
   {

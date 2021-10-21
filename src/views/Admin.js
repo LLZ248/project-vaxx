@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import BatchTable from "components/BatchTable.js";
 import AddBatchModal from "components/AddBatchModal.js";
 import AdminHeader from "components/Headers/AdminHeader.js";
+import { Redirect } from "react-router";
 
 const AdminDashboard = () => {
 
@@ -13,8 +14,6 @@ const AdminDashboard = () => {
   const [message, setMessage] = useState('');
 
   async function fetchCentre() {
-
-    
     const authData = await fetch('/verify');
     const auth = await authData.json();
 
@@ -52,7 +51,7 @@ const AdminDashboard = () => {
     // }
 
     fetchCentre();
-  }, []);
+  });
 
   function onBatchAdded(newBatch) {
     fetchBatch(centre.centreName);
@@ -62,11 +61,15 @@ const AdminDashboard = () => {
     }, 3000);
   }
 
+  function onBatchSelected(selectedBatch) {
+   return <Redirect to={"/batches/" + selectedBatch.batchNo}></Redirect>
+  }
+
     return (
       <>
       <AdminHeader healthcareCentre={centre}/>
       <Container className="mt--8">
-      <BatchTable batches={batches} onRowSelect={(selectedBatch) => alert(selectedBatch.batchNo)}/>
+      <BatchTable batches={batches} role={'patient'} onRowSelect={selectedBatch => onBatchSelected(selectedBatch)}/>
       <AddBatchModal centreName={centre.centreName} onAdded={newBatch => onBatchAdded(newBatch)}/> {/*pass centreName because batch must have it*/}
       {message ? <span className="alert alert-success py-2" id='success-message'>{message}</span> : null}
       </Container>

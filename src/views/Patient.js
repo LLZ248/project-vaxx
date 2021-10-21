@@ -16,6 +16,7 @@ import {
 import LoginForm from 'components/LoginForm';
 import VaccineTable from 'components/VaccineTable'
 import CentreTable from 'components/CentreTable'
+import BatchTable from "components/BatchTable";
 // core components
 import {
   chartOptions,
@@ -26,10 +27,12 @@ import React from "react";
 
 
 class Index extends React.Component {
+
   state = {
     step : 1,
     vaccines : [],
     centres : [],
+    batches : [],
     vaccineID : undefined,
     vaccine : undefined,
     centreName : undefined,
@@ -253,8 +256,6 @@ class Index extends React.Component {
       parseOptions(Chart, chartOptions());
     }
 
-    
-  
     return (
       <>
         <Header />
@@ -267,12 +268,12 @@ class Index extends React.Component {
             </Col>
           </Row >
         </Container>
+        {this.stepDescriptionRow()}
         {/* Page content */}
         {(()=>{
           switch (this.state.step){
             case 1 :
               return <div>
-              {this.stepDescriptionRow()}
               <VaccineTable 
                 vaccines={this.state.vaccines}
                 onRowSelect={this.OnVaccineRowSelected} 
@@ -282,21 +283,30 @@ class Index extends React.Component {
             </div>
             case 2:
               return <div>
-              <Container fluid>
-                {this.stepDescriptionRow()}
                 <CentreTable 
                 centres={this.state.centres}
                 onRowSelect={this.OnCentreRowSelected} 
                 title="Available Healthcare Centre"
                 message="Click on a row to select healthcare centre"
-                />
-              </Container>
+                /></div>
+            case 3:
+              return <div>
+                <Container className="mt--1">
+                  <Row className="mt-5">
+                  <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
+                    <BatchTable
+                    batches={this.state.batches}
+                    role={"patient"}
+                    onRowSelect={(selectedBatch) => alert(selectedBatch.batchNo)}
+                    />
+                  </Col>
+                  </Row>
+                </Container>
             </div>
             default:
               return null
           }
         })()}
-        
       </>
     );
   }

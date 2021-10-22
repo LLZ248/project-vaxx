@@ -47,6 +47,18 @@ exports.findAll = (req, res) => {
   });
 }
 
+// Retrieve all available Batches from the database by centreName and VaccineID.
+exports.findAvailable = (req, res) => {
+  Batch.getAvailable((req.query.centreName),(req.query.vaccineID),(err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Batch.",
+      });
+    else res.send(data);
+  });
+}
+
 // Retrieve one Batch from the database based on batchNo.
 exports.findOne = (req, res) => {
   Batch.findById(req.params.batchNo, (err, data) => {

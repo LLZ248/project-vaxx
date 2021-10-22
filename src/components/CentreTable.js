@@ -1,6 +1,6 @@
 import { Col, Card, CardHeader, Table, Container, Row } from "reactstrap";
 
-const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) => {
+const CentreTable = ({ centres, onRowSelect, title, message }) => {
   require("../assets/css/hoverableTable.css");
 
   return (
@@ -23,28 +23,26 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
             <Table
               className="align-items-center table-flush"
               responsive
-              id="vaccine-table"
+              id="centre-table"
             >
               <thead className="thead-light">
                 <tr>
-                  {/* <th scope="col" className={ !hideColumns || hideColumns.includes('vaccineID') ? "d-none" : ""}>Vaccine ID</th> */}
-                  <th scope="col" >Vaccine Name</th>
-                  <th scope="col" >Manufacturer</th>
+                    <th scope="col" >Healthcare Centre</th>
+                    <th scope="col" >Address</th>
                 </tr>
               </thead>
               <tbody>
-                {vaccines.map(vaccine => (
+                {centres.map(centre => (
                   <tr
                     className="hoverable-row"
-                    key={vaccine.vaccineID}
+                    key={centre.centreName}
                     role="button" //this change the cursor when mouse over
-                    onClick={() => onRowSelect(vaccine)} //callback function
+                    onClick={() => onRowSelect(centre)} //callback function
                   >
                     {
-                    Object.keys(vaccine)
-                    .filter(key => key !== "vaccineID")
+                    Object.keys(centre)
                     .map(key => 
-                      <td key={key}> {vaccine[key]} </td> //map the property value to <td>
+                      <td key={key}> {centre[key]} </td> //map the property value to <td>
                       )}
                   </tr>
                   ))}
@@ -57,4 +55,4 @@ const VaccineTable = ({ vaccines, onRowSelect, title, message, hideColumns }) =>
   );
 };
 
-export default VaccineTable;
+export default CentreTable;

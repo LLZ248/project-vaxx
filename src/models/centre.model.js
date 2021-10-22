@@ -52,4 +52,20 @@ HealthcareCentre.getAll = result => {
     });
 };
 
+HealthcareCentre.getAvailable = (vaccineID, result) => {
+  sql.query(`SELECT batch.centreName, healthcarecentre.address FROM batch
+  INNER JOIN healthcarecentre
+  ON batch.centreName=healthcarecentre.centreName
+  WHERE vaccineID = '${vaccineID}'
+  GROUP BY batch.centreName;`, (err, res) => {
+  if (err) {
+    console.log("error: ", err);
+    result(null, err);
+    return;
+  }
+  console.log("available-healthcare centres: ", res);
+  result(null, res);
+  });
+};
+
 module.exports = HealthcareCentre;

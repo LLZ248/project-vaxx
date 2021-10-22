@@ -58,10 +58,16 @@ class LoginForm extends React.Component{
             if(!response.ok){
                 //invalid login
                 this.setState({errMsg:"Wrong username/password"})
+                return undefined;
             }else{
                 //valid login
-                this.setState({redirect:'/'})
+                return response.json();
             }
+          }).then( auth =>{
+              if(auth !== undefined){
+                this.props.onSuccessLogin(auth.username,auth.full_name);
+                //console.log(auth.username,auth.full_name)
+              }
           })
         }
       }
@@ -71,7 +77,7 @@ class LoginForm extends React.Component{
             return <Redirect to={this.state.redirect}/>
         }
         return(
-            <Card className="bg-secondary shadow border-0 mt-5">
+            <Card className="bg-secondary shadow border-0 mt-0">
                 <CardBody className="px-lg-5 py-lg-5">
                 <Form role="form" onSubmit={this.handleForm}>
                     <FormGroup className="mb-3">

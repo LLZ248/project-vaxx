@@ -1,4 +1,4 @@
-import { Col, Card, CardHeader, Table, Progress } from "reactstrap";
+import { Card, CardHeader, Table, Progress } from "reactstrap";
 
 const BatchTable = ({ batches, role, onRowSelect }) => {
   require("../assets/css/hoverableTable.css");

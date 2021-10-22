@@ -3,8 +3,8 @@ const router = express.Router();
 
 const vaccinations = require("../controllers/vaccination.controller.js");
 
-//   // Create a new Vaccination
-//   app.post("/vaccinations", vaccinations.create);
+//Create a new Vaccination
+router.post("/vaccinations", vaccinations.create);
 
 // Retrieve all Vaccination
 router.get("/vaccinations", vaccinations.findAll);

@@ -12,4 +12,7 @@ router.get("/healthcare-centre", centres.findAll);
 // Retrieve a single Healthcare Centre with username
 router.get("/healthcare-centre/findCentre", centres.findOne);
 
+// Retrieve all available Healthcare Centres
+router.get("/available-healthcare-centres", centres.findAvailable);
+
 module.exports = router;

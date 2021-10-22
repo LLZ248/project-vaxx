@@ -96,7 +96,7 @@ Batch.updateById = (batchNo, batch, result) => {
 };
 
 Batch.findById = (batchNo, result) => {
-  sql.query(`SELECT * FROM batch WHERE batchNo = \'${batchNo}\'`, (err, res) => {
+  sql.query("SELECT * FROM batch WHERE batchNo = ?", [batchNo], (err, res) => {
   if (err) {
     console.log("error: ", err);
     result(err, null);
@@ -120,10 +120,10 @@ Batch.viewByCenter = (centreName, result) => {
   LEFT JOIN 
   (SELECT batchNo, vaccinationID FROM Vaccination WHERE status = 'pending') AS PendingVaccination 
   ON Batch.batchNo = PendingVaccination.batchNo 
-  WHERE centreName = \'${centreName}\'
-  GROUP BY Batch.batchNo`, (err, res) => {
-    //LEFT JOIN is used because all batches must be returned 
-    //even if it does not has any pending vaccination
+  WHERE centreName = ?
+  GROUP BY Batch.batchNo`, [centreName] , (err, res) => {
+  //LEFT JOIN is used because all batches must be returned 
+  //even if it does not has any pending vaccination
 
     if (err) {
       console.log("error: ", err);

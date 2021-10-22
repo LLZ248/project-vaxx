@@ -1,5 +1,5 @@
 import {
-Container,
+Container, Row, Col
 } from "reactstrap";
 import { useState, useEffect } from "react";
 import BatchTable from "components/BatchTable.js";
@@ -13,16 +13,6 @@ const AdminDashboard = () => {
   const [centre, setCentre] = useState('');
   const [message, setMessage] = useState('');
 
-  async function fetchCentre() {
-    const authData = await fetch('/verify');
-    const auth = await authData.json();
-
-    const data = await fetch('/healthcare-centre/findCentre/?centreName=' + auth.userObj.centreName);
-    const centre = await data.json();
-    fetchBatch(centre.centreName);
-    setCentre(centre);
-  }
-
   async function fetchBatch(centreName) {
     // alert(centre)
     const data = await fetch('/batches/ofCentre/' + centreName);
@@ -30,28 +20,7 @@ const AdminDashboard = () => {
     const hasError = batches.message; //contains an error message
   
     setBatches(hasError ? null : batches);
-
-    // for (const batch of batches) {
-    //   const vaccineData = await fetch('/vaccines/' + batch.vaccineID);
-    //   const vaccine = await vaccineData.json();
-    //   batch.vaccineName = vaccine.vaccineName; //because javascript is dynamic typed
-      
-    //   const vaccinationsData = await fetch('/vaccinations');
-    //   const vaccinations = await vaccinationsData.json();
-    //   batch.vaccinations = vaccinations;
-    // }
   }
-
-  useEffect(() => {
-    // async function fetchCentre() {
-    //   const data = await fetch('/healthcare-centre/findCentre/?');
-    //   const centre = await data.json();
-    //   fetchBatch(centre.centreName);
-    //   setCentre(centre);
-    // }
-
-    fetchCentre();
-  });
 
   function onBatchAdded(newBatch) {
     fetchBatch(centre.centreName);
@@ -64,16 +33,50 @@ const AdminDashboard = () => {
   function onBatchSelected(selectedBatch) {
    return <Redirect to={"/batches/" + selectedBatch.batchNo}></Redirect>
   }
+  
+  useEffect(() => {
 
-    return (
+    async function fetchCentre() {
+      const authData = await fetch('/verify');
+      const auth = await authData.json();
+  
+      const data = await fetch('/healthcare-centre/findCentre/?centreName=' + auth.userObj.centreName);
+      const centre = await data.json();
+      fetchBatch(centre.centreName);
+      setCentre(centre);
+    }
+    
+    fetchCentre();
+  }, []);
+
+  return (
       <>
-      <AdminHeader healthcareCentre={centre}/>
+      <AdminHeader/>
+      {/* Header container */}
+      <Container className="d-flex align-items-center">
+        <Row>
+          <Col md="10">
+            <h1 className="display-2 text-success">{centre.centreName}</h1>
+            <p className="text-white mt-0 mb-5">{centre.address}</p>
+          </Col>
+        </Row>
+      </Container>
+
       <Container className="mt--8">
       <BatchTable batches={batches} role={'patient'} onRowSelect={selectedBatch => onBatchSelected(selectedBatch)}/>
       <AddBatchModal centreName={centre.centreName} onAdded={newBatch => onBatchAdded(newBatch)}/> {/*pass centreName because batch must have it*/}
       {message ? <span className="alert alert-success py-2" id='success-message'>{message}</span> : null}
       </Container>
-      {/* <div className="modal fade" id="addBatchModal" tabIndex="-1" role="dialog" aria-labelledby="addBatchLabel" aria-hidden="true">
+
+    
+      </>
+    )
+}
+
+export default AdminDashboard;
+
+  /*
+   <div className="modal fade" id="addBatchModal" tabIndex="-1" role="dialog" aria-labelledby="addBatchLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -91,9 +94,25 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-      </div> */}
-      </>
-    )
-}
+      </div> 
 
-export default AdminDashboard;
+          // async function fetchCentre() {
+    //   const data = await fetch('/healthcare-centre/findCentre/?');
+    //   const centre = await data.json();
+    //   fetchBatch(centre.centreName);
+    //   setCentre(centre);
+    // }
+
+    
+    // for (const batch of batches) {
+    //   const vaccineData = await fetch('/vaccines/' + batch.vaccineID);
+    //   const vaccine = await vaccineData.json();
+    //   batch.vaccineName = vaccine.vaccineName; //because javascript is dynamic typed
+      
+    //   const vaccinationsData = await fetch('/vaccinations');
+    //   const vaccinations = await vaccinationsData.json();
+    //   batch.vaccinations = vaccinations;
+    // }
+  }
+
+  */

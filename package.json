@@ -18,6 +18,7 @@
     "start": "react-scripts start",
     "starti": "cross-env BROWSER=chrome BROWSER_ARGS=--incognito react-scripts start",
     "server": "nodemon src/server.js",
+    "devserver": "node src/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

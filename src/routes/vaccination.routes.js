@@ -12,4 +12,8 @@ router.get("/vaccinations", vaccinations.findAll);
 // Retrieve a single Vaccination with vaccinationID
 router.get("/vaccinations/:vaccinationID", vaccinations.findOne);
 
+// Retrieve all Vaccinations with specificed batchNo
+router.get("/vaccinations/ofBatch/:batchNo", vaccinations.findByBatch);
+
+
 module.exports = router;

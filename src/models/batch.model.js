@@ -70,7 +70,7 @@ Batch.getAvailable = (centreName, vaccineID, result) => {
     FROM batch
     LEFT JOIN vaccination 
     ON batch.batchNo = vaccination.batchNo 
-    WHERE vaccination.status IN ('pending','confirmed','administered')
+    WHERE (vaccination.status IN ('pending','confirmed','administered') OR vaccinationID IS NULL)
     AND centreName = '${centreName}' 
     AND vaccineID = '${vaccineID}'
     AND expiryDate > CURDATE()

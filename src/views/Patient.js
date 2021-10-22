@@ -12,7 +12,13 @@ import {
   Button,
   CardBody,
   Modal,
+  FormGroup,
+  InputGroupText,
+  InputGroupAddon,
+  InputGroup,
+  Form
 } from "reactstrap";
+import { WaveLoading } from 'react-loadingg';
 import LoginForm from 'components/LoginForm';
 import VaccineTable from 'components/VaccineTable'
 import CentreTable from 'components/CentreTable'
@@ -24,12 +30,15 @@ import {
 } from "variables/charts.js";
 import Header from "components/Headers/Header.js";
 import React from "react";
-
+import ReactDatetime from "react-datetime";
+import { Link } from "react-router-dom";
 
 class Index extends React.Component {
 
   state = {
     step : 1,
+    success : undefined,
+    isLoading : false,
     vaccines : [],
     centres : [],
     batches : [],
@@ -39,8 +48,10 @@ class Index extends React.Component {
     username : undefined,
     fullName : undefined,
     batchNo : undefined,
+    expiryDate : undefined,
+    defaultModal: false,
     upcomingDate : undefined,
-    defaultModal: false
+    vaccinationID : undefined,
   }
 
   toggleModal = state => {
@@ -71,7 +82,21 @@ class Index extends React.Component {
   });
 
   revertSelection = ()=>{
-
+    {(()=>{
+      switch(this.state.step){
+        case 2 :
+          this.setState({"vaccine":undefined,"centreName":undefined,"step":1});
+          return;
+        case 3:
+          this.setState({"fullName":undefined,"username":undefined,"centreName":undefined,"step":2});
+          return;
+        case 4:
+          this.setState({"batchNo":undefined,"step":3});
+          return;
+        default:
+          return null;
+      }
+    })()}
   }
 
   OnVaccineRowSelected = (selectedVaccine) => {
@@ -148,12 +173,49 @@ class Index extends React.Component {
   }
 
   OnBatchRowSelected = (selectedBatch)=>{
-    this.setState({"batchNo":selectedBatch.batchNo,"step":4});
+    this.setState({"batchNo":selectedBatch.batchNo,
+    "step":4});
+    console.log(selectedBatch.expiryDate)
+    console.log(typeof(selectedBatch.expiryDate))
+    var dateString = selectedBatch.expiryDate;
+    var dateParts = dateString.split("/");
+    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+    console.log(dateObject)
+    console.log(typeof(dateObject))
+    this.setState({"expiryDate":dateObject});
     
     //continue to ask for upcoming date
   }
 
-  OnSelectedUpcomingDate = (selectedDate)=>{
+  OnSelectedUpcomingDate = (event)=>{
+    event.preventDefault();
+    this.setState({"upcomingDate":document.getElementById('upcoming-date-input').value});
+    this.setState({"isLoading":true})
+    const formData = `batchNo=${this.state.batchNo}&appointmentDate=${document.getElementById('upcoming-date-input').value}&username=${this.state.username}`
+    //console.log(formData)
+    fetch('/vaccinations', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+    })
+    .then(res => {
+        if(res.ok){
+          return res.json();
+        }else{
+          return undefined;
+        }
+      }
+    ).then(resJson =>{
+      this.setState({"isLoading":false})
+      if(resJson !== undefined){
+        this.setState({"success" : true});
+        this.setState({"vaccinationID":resJson.vaccinationID})
+      }else{
+        this.setState({"success": false})
+      }
+      }
+    );
+      
     //Finished Appointment
     //display the vaccination receipt
   }
@@ -230,14 +292,18 @@ class Index extends React.Component {
       <div className="col-8 pr-0" style={{ "width": "30rem"}}>
         {this.selectedInfoCard()}
       </div>
-      <div className="col-4 pl-0">
-        <Button className="btn-icon btn-3" color="danger" style={{"height":"100%"}} type="button" onClick={this.revertSelection()}>
-          <span className="icon">
-            <i className="ni ni-fat-remove"/>
-          </span>
-          <div className="text-center">Revert Selection</div>
-        </Button>
-      </div>
+        {
+          this.state.step!==1 &&
+          <div className="col-4 pl-0">
+            <Button className="btn-icon btn-3" color="danger" style={{"height":"100%"}} type="button" onClick={this.revertSelection}>
+              <span className="icon">
+                <i className="ni ni-fat-remove"/>
+              </span>
+              <div className="text-center">Revert Selection</div>
+            </Button>
+          </div>
+        }
+      
       </Row>
       
       <div className="col-lg-3">
@@ -245,8 +311,13 @@ class Index extends React.Component {
     </Row>
   </Container>
   }
+
+  onUpcomingDateChanged = (event) => {
+    document.getElementById('date-validator').value = 'accepted';
+  }
   
   render(){
+
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
@@ -256,10 +327,9 @@ class Index extends React.Component {
         <Header />
         {this.loginModal()}
         <Container className="mt--9" fluid>
-        
           <Row>
             <Col>
-                  <h1 className="text-center">Sign Up For Vaccination in 4 Simple Step</h1>
+                  {this.state.success === undefined && <h1 className="text-center">Sign Up For Vaccination in 4 Simple Step</h1>}
             </Col>
           </Row >
         </Container>
@@ -302,32 +372,163 @@ class Index extends React.Component {
                 </Container>
             </div>
             case 4:
-              return <div>
-                <Container className="mt--1">
-                  <Row className="mt-5">
-                  <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
-                  <Card className="card-stats mb-4 mb-lg-0">
-                    <CardBody>
-                      <Row>
-                        <div className="col">
-                          <CardTitle className="text-uppercase text-muted mb-0">
-                            Your Selected Info
-                          </CardTitle>
-                        </div>
+              if(this.state.success === undefined)
+                return (<div>
+                  <Container className="mt--1">
+                    <Row className="mt-5">
+                    <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
+                    <Card className="card-stats mb-4 mb-lg-0">
+                      <CardBody>
+                        <Row>
+                          <div className="col">
+                            <CardTitle className="text-uppercase text-muted mb-0">
+                              Your Selected Info
+                            </CardTitle>
+                          </div>
+                          
+                        </Row>
+                        <ul style={{"listStyleType":"none","padding":"0"}}>
+                          <li><b>Full Name</b> : {this.state.fullName}</li>
+                          <li><b>Vaccine</b> : {this.state.vaccine}</li>
+                          <li><b>Healthcare Centre</b> : {this.state.centreName}</li>
+                          <li><b>BatchNo</b> : {this.state.batchNo}</li>
+                          <li className="text-center"><b>Select Your Upcoming Date :</b></li>
+                        </ul>
+                        <Container>
+                          <Form onSubmit={this.OnSelectedUpcomingDate}>
+                            <FormGroup className="mx-auto" style={{"width":"50%"}}>
+                              <InputGroup className="input-group-alternative">
+                                <InputGroupAddon addonType="prepend">
+                                  <InputGroupText>
+                                    <i className="ni ni-calendar-grid-58" />
+                                  </InputGroupText>
+                                </InputGroupAddon>
+                                <ReactDatetime 
+                                  inputProps={{ 
+                                    id: 'upcoming-date-input',
+                                    placeholder: "Upcoming Date", 
+                                    style: { padding :'0', background:'white', cursor:'pointer'}, 
+                                    name: "upcomingDate",
+                                    readOnly: '{true}'}}
+                                  dateFormat='YYYY-MM-DD'
+                                  timeFormat={false} 
+                                  closeOnSelect={true} 
+                                  isValidDate={date => date.isAfter(Date.now()) && date.isBefore(this.state.expiryDate)}
+                                  onChange={this.onUpcomingDateChanged}/>
+                                  {<input
+                                  id='date-validator'
+                                  tabIndex={-1}
+                                  autoComplete="off"
+                                  style={{ opacity: 0, height: 0, width: 0, position: "absolute", left: '30%', bottom:0, padding:0 }}
+                                  required={true}
+                                />}
+                              </InputGroup>
+                            </FormGroup>
+                            {this.state.isLoading?
+                            <div className="text-center">
+                              <FormGroup className="my-4">
+                                <WaveLoading color="#117CEF" size="large" style={{"position":"relative","margin":"auto"}}/>
+                              </FormGroup>
+                            </div>:
+                            <div className="text-center">
+                              <Button className="btn-icon btn-3" color="danger" type="button" onClick={this.revertSelection}>
+                                <span className="icon">
+                                  <i className="ni ni-fat-remove"/>
+                                </span>
+                                <div className="text-center">Revert Selection</div>
+                              </Button>
+                              <Button className="btn-icon btn-3" color="primary" type="submit">
+                                <span className="icon">
+                                  <i className="ni ni-check-bold"/>
+                                </span>
+                                <div className="text-center">Submit</div>
+                              </Button>
+                            </div>
+                            }
+                          </Form>
+                        </Container>
                         
-                      </Row>
-                      <ul style={{"listStyleType":"none","padding":"0"}}>
-                        <li><b>Full Name</b> : {this.state.fullName}</li>
-                        <li><b>Vaccine</b> : {this.state.vaccine}</li>
-                        <li><b>Healthcare Centre</b> : {this.state.centreName}</li>
-                        <li><b>BatchNo</b> : {this.state.batchNo}</li>
-                      </ul>
-                    </CardBody>
-                  </Card>
-                  </Col>
-                  </Row>
-                </Container>
-            </div>
+                      </CardBody>
+                    </Card>
+                    </Col>
+                    </Row>
+                    
+                  </Container>
+              </div>);
+              if (this.state.success){
+                return (
+                  <div>
+                  <Container className="mt--1">
+                    <Row className="mt-5">
+                    <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
+                    <Card className="card-stats mb-4 mb-lg-0">
+                      <CardBody>
+                        <Row>
+                          <div className="col">
+                            <CardTitle className="text-uppercase h1 text-center mb-4 card-title">
+                              Your Vaccination Receipt
+                            </CardTitle>
+                          </div>
+                        </Row>
+                        <ul style={{"listStyleType":"none","padding":"0"}}>
+                          <li><b>Vaccination ID</b> : {this.state.vaccinationID}</li>
+                          <li><b>Full Name</b> : {this.state.fullName}</li>
+                          <li><b>Vaccine</b> : {this.state.vaccine}</li>
+                          <li><b>Healthcare Centre</b> : {this.state.centreName}</li>
+                          <li><b>BatchNo</b> : {this.state.batchNo}</li>
+                          <li><b>Upcoming Date :</b>{this.state.upcomingDate}</li>
+                        </ul>
+                      </CardBody>
+                    </Card>
+                    </Col>
+                    </Row>
+                    <Row className="mt-5">
+                    <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
+                      <Link to="/">
+                        <Button block size="lg" color="success" >
+                            <p>Confirm</p>
+                        </Button> 
+                      </Link>
+                    </Col>
+                    </Row>
+                    
+                  </Container>
+                  </div>
+                );
+              }
+              else{
+                <div>
+                  <Container className="mt--1">
+                    <Row className="mt-5">
+                    <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
+                    <Card className="card-stats mb-4 mb-lg-0">
+                      <CardBody>
+                        <Row>
+                          <div className="col">
+                            <CardTitle className="text-uppercase h1 text-center mb-4 card-title">
+                              Something unexcepted happened
+                            </CardTitle>
+                          </div>
+                        </Row>
+                        Please Report To projectvaxx@gmail.com
+                      </CardBody>
+                    </Card>
+                    </Col>
+                    </Row>
+                    <Row className="mt-5">
+                    <Col className="mb-5 mb-xl-0 mx-auto" xl='10'>
+                      <Link to="/">
+                        <Button block size="lg" color="danger" >
+                            <p>Click here to go back homepage</p>
+                        </Button> 
+                      </Link>
+                    </Col>
+                    </Row>
+                    
+                  </Container>
+                  </div>
+              }
+              
             default:
               return null
           }

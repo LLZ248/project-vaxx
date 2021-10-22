@@ -9,17 +9,20 @@ exports.create = (req, res) => {
     });
   }
 
+  const randomString = Math.random().toString(36).substring(2,10).toUpperCase();
+  const newVaccinationID = req.body.batchNo + "-" + randomString;
+
   // Create a Vaccination
   const vaccination = new Vaccination({
-    vaccinationID: req.body.vaccinationID,
+    vaccinationID: newVaccinationID,
     appointmentDate: req.body.appointmentDate,
-    status: req.body.status,
+    status: "pending",
     username: req.body.username, //patient username
     batchNo: req.body.batchNo,
   });
 
   // Save Vaccination in the database
-  vaccination.create(vaccination, (err, data) => {
+  Vaccination.create(vaccination, (err, data) => {
     if (err)
       res.status(500).send({
         message:

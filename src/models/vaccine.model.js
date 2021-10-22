@@ -26,18 +26,33 @@ Vaccine.findById = (vaccineID, result) => {
     });
   };
   
-  Vaccine.getAll = result => {
-    sql.query("SELECT * FROM vaccine", (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(null, err);
-        return;
-      }
-  
-      console.log("vaccines: ", res);
-      result(null, res);
-    });
+Vaccine.getAll = result => {
+  sql.query("SELECT * FROM vaccine", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
 
+    console.log("vaccines: ", res);
+    result(null, res);
+  });
+}
+
+Vaccine.getAvailable = result => {
+  sql.query(
+    `SELECT vaccine.vaccineID, vaccine.vaccineName, vaccine.manufacturer FROM batch 
+    INNER JOIN vaccine 
+    ON batch.vaccineID=vaccine.vaccineID
+    GROUP BY batch.vaccineID;`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    console.log("vaccines: ", res);
+    result(null, res);
+  });
 }
 
 module.exports = Vaccine

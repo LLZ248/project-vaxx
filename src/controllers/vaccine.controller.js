@@ -57,3 +57,15 @@ exports.findOne = (req, res) => {
     } else res.send(data);
   });
 }
+
+// Retrieve all Vaccine from the database.
+exports.findAvailable = (req, res) => {
+  Vaccine.getAvailable((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Vaccine.",
+      });
+    else res.send(data);
+  });
+}

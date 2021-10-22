@@ -1,12 +1,14 @@
 const sql = require("../database.js");
 
 // constructor
-const Vaccination = (vaccination) => {
-  this.vaccinationID = vaccination.vaccinationID;
-  this.appointmentDate = vaccination.appointmentDate;
-  this.status = vaccination.status;
-  this.username = vaccination.username; //patient username
-  this.batchNo = vaccination.batchNo;
+class Vaccination {
+  constructor(vaccination){
+    this.vaccinationID = vaccination.vaccinationID;
+    this.appointmentDate = vaccination.appointmentDate;
+    this.status = vaccination.status;
+    this.username = vaccination.username; //patient username
+    this.batchNo = vaccination.batchNo;
+  }
 };
 
 Vaccination.create = (newVaccination, result) => {

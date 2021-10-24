@@ -5,7 +5,6 @@ const VaccinationTable = ({ vaccinations, role, onRowSelect }) => {
 
   const viewByPatient = role === "patient";
   
-  console.table(vaccinations);
   return (
     <Card className="shadow overflow-hidden">
       <CardHeader className="border-0 d-flex align-items-baseline justify-content-between">
@@ -33,10 +32,10 @@ const VaccinationTable = ({ vaccinations, role, onRowSelect }) => {
                     <td>{vaccination.appointmentDate}</td>
                     <td>
                       <Badge style={{fontSize : '12px'}}
-                        className={
-                        vaccination.status === 'pending' ? 'badge-dark' :
-                        vaccination.status === 'confirmed' ? 'badge-info' :
-                        /*administered*/ 'badge-success'}> 
+                        color={
+                          vaccination.status === 'pending' ? 'dark' :
+                          vaccination.status === 'confirmed' ? 'info' :
+                          /*administered*/ 'success'}> 
                         {vaccination.status}
                       </Badge>
                     </td>

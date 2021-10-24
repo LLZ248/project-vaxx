@@ -12,24 +12,41 @@
 // } from "reactstrap";
 import Header from "components/Headers/Header.js";
 import { useState, useEffect } from "react";
-import ProjectVaxx from "../models/ProjectVaxx.js";
 import { useHistory } from "react-router";
 import AdminHeader from "components/Headers/AdminHeader.js";
 import VaccinationTable from "components/VaccinationTable.js";
+import ManageVaccinationModal from "components/ManageVaccinationModal.js";
+import { Badge, Card, CardBody, CardHeader, Container, ListGroup, ListGroupItem } from "reactstrap";
 
 const Batch = () => {
+
+  const batchNo = window.location.pathname.split("/").pop(); //get last segment of url
+
   const [batch, setBatch] = useState([]);
-  const [vaccinations, setVaccinations] = useState([]);
   const [centre, setCentre] = useState("");
+  const [vaccine, setVaccine] = useState([]);
+  const [vaccinations, setVaccinations] = useState([]);
+
+  const [isModalOpen, setModalOpen] = useState(true);
+  const [selectedVaccination, setSelectedVaccination] = useState("");
+  
   const [message, setMessage] = useState("");
 
   async function fetchBatch() {
     const authData = await fetch("/verify");
     const auth = await authData.json();
 
-    const batchData = await fetch("/batches/PF01");
+    const batchData = await fetch("/batches/" + batchNo);
     const batch = await batchData.json();
     setBatch(batch);
+
+    const centreData = await fetch('/healthcare-centre/findCentre/?centreName=' + auth.userObj.centreName);
+    const centre = await centreData.json();
+    setCentre(centre);
+
+    const vaccineData = await fetch("/vaccines/" + batch.vaccineID);
+    const vaccinex = await vaccineData.json();
+    setVaccine(vaccinex);
 
     const authorized = auth.userObj.centreName === batch.centreName;
 
@@ -39,13 +56,13 @@ const Batch = () => {
 
   async function fetchVaccination() {
     const vaccinationsData = await fetch("/vaccinations/ofBatch/" + "PF01");
-    const vaccination = await vaccinationsData.json();
-    setVaccinations(vaccination);
+    const vaccinations = await vaccinationsData.json();
+    setVaccinations(vaccinations);
   }
 
   function onVaccinationSelected(vaccination) {
-    
-
+    setSelectedVaccination(vaccination);
+    setModalOpen(true);
   }
   
   useEffect(async () => {
@@ -56,9 +73,34 @@ const Batch = () => {
 
   return (
     <>
-      <AdminHeader healthcareCentre={centre} />
-      <VaccinationTable vaccinations={vaccinations} 
-        onRowSelected={vac => onVaccinationSelected(vac)}/>
+      <AdminHeader title={`Batch Number ${batch.batchNo}`} subtitle={`Expires on ${batch.expiryDate}`}/>
+      <Container className="mt--9">
+        <ListGroup horizontal={'md'} className="mb-4">
+          <ListGroupItem color='primary'> Quantity </ListGroupItem>
+          <ListGroupItem> Available 
+            <Badge pill color='primary' className='ml-2'>
+              {batch.quantityAvailable}
+            </Badge>
+          </ListGroupItem>
+          <ListGroupItem> Administered 
+            <Badge pill color='primary' className='ml-2'>
+              {batch.quantityAvailable}
+            </Badge>
+          </ListGroupItem>
+          <ListGroupItem> Pending 
+            <Badge pill color='primary' className='ml-2'>
+              {batch.quantityAvailable}
+            </Badge>
+          </ListGroupItem>
+        </ListGroup>`
+            
+        <VaccinationTable vaccinations={vaccinations} 
+        onRowSelect={vac => onVaccinationSelected(vac)}/>
+      </Container>
+
+      <ManageVaccinationModal batch={batch} vaccine={vaccine} 
+        vaccination={selectedVaccination} 
+        isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
     </>
   );
 };

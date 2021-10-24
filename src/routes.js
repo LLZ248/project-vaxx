@@ -68,7 +68,7 @@ var routes = [
   },
   {
     path: "/batch",
-    name: "Batch",
+    name: "Batch Information",
     icon: "fa fa-plus text-info",
     component: Batch,
     layout: "/admin",

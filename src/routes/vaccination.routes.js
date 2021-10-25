@@ -15,5 +15,6 @@ router.get("/vaccinations/:vaccinationID", vaccinations.findOne);
 // Retrieve all Vaccinations with specificed batchNo
 router.get("/vaccinations/ofBatch/:batchNo", vaccinations.findByBatch);
 
+router.post("/vaccinations/update-vaccination", vaccinations.update)
 
 module.exports = router;

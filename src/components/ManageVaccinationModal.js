@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RecordAdministeredControl from "./RecordAdministeredControl";
+import ConfirmVaccinationControl from "./ConfirmVaccinationControl.js";
 
 import {
   Modal,
@@ -109,8 +110,8 @@ const ManageVaccinationModal = ({
             </Table>
             <div className="bg-secondary p-3 pb-4 px-md-4 rounded">
               {vaccination.status === 'pending' ? 
-              <RecordAdministeredControl/> : 
-              <></>}
+              <ConfirmVaccinationControl vaccinationID = {vaccination.vaccinationID} onClose={onClose} onSubmit={onSubmit}/>:
+              <RecordAdministeredControl/>}
             </div>
           </Card>
         </div>

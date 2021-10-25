@@ -82,7 +82,7 @@ class Index extends React.Component {
   });
 
   revertSelection = ()=>{
-    {(()=>{
+    (()=>{
       switch(this.state.step){
         case 2 :
           this.setState({"vaccine":undefined,"centreName":undefined,"step":1});
@@ -96,7 +96,7 @@ class Index extends React.Component {
         default:
           return null;
       }
-    })()}
+    })()
   }
 
   OnVaccineRowSelected = (selectedVaccine) => {
@@ -528,7 +528,7 @@ class Index extends React.Component {
                   </Container>
                   </div>
               }
-              
+              break;          
             default:
               return null
           }

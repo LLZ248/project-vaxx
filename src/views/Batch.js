@@ -50,12 +50,11 @@ const Batch = () => {
 
     const authorized = auth.userObj.centreName === batch.centreName;
 
-    if (authorized) fetchVaccination()
-    else alert('not authorized');
+   fetchVaccination();
   }
 
   async function fetchVaccination() {
-    const vaccinationsData = await fetch("/vaccinations/ofBatch/" + "PF01");
+    const vaccinationsData = await fetch("/vaccinations/ofBatch/" + batchNo);
     const vaccinations = await vaccinationsData.json();
     setVaccinations(vaccinations);
   }

@@ -95,7 +95,7 @@ exports.update = (req, res) => {
     });
   }
   Vaccination.updateById(
-    req.params.vaccinationID,
+    req.body.vaccinationID,
     new Vaccination(req.body),
     (err, data) => {
       if (err) {

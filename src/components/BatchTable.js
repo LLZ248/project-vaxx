@@ -12,7 +12,6 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
   }
 
   return (
-    
       <Card className="shadow overflow-hidden">
         <CardHeader className="border-0 d-flex align-items-baseline justify-content-between">
           <h3 className="mb-0">Batch List</h3>
@@ -32,7 +31,7 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
           </tr>
         </thead>
         <tbody>
-          {batches === null ? <tr><td colSpan='5'> There are no batches available currently </td></tr> :
+          {batches === null ? <tr><td colSpan={viewByPatient ? '3' : '5'}> There are no batches available currently </td></tr> :
             batches.map(batch =>
               <tr
               className="hoverable-row"
@@ -58,8 +57,15 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
 
               </tr>
             )}
-       
-          {/* <tr>
+        </tbody> 
+        </Table>
+      </Card>
+  );
+};
+
+export default BatchTable;
+
+ {/* <tr>
             <th scope="row">
               <Media className="align-items-center">
                 <a
@@ -146,11 +152,3 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
               </div>
             </td>
           </tr>*/}
-        </tbody> 
-        </Table>
-          </Card>
-        
-  );
-};
-
-export default BatchTable;

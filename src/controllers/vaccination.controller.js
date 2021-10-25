@@ -44,6 +44,29 @@ exports.findAll = (req, res) => {
   });
 };
 
+exports.findByBatch = (req, res) => {
+
+  const batchNo = req.params.batchNo;
+  if(!batchNo) {
+    res.status(400).send({
+      message:
+        "Batch number not found in the request" //bad request
+    });
+    return;
+  }
+
+  Vaccination.findByBatch(batchNo, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Vaccination.",
+      });
+    else res.send(data);
+  });
+};
+
+
+
 // Retrieve one Vaccination from the database based on vaccinationID.
 exports.findOne = (req, res) => {
   Vaccination.findById(req.params.vaccinationID, (err, data) => {

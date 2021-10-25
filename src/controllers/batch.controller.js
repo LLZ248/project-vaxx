@@ -108,7 +108,9 @@ exports.update = (req, res) => {
 
 exports.viewByCenter = (req, res) => {
 
-  if(!req.params.centreName) {
+  const centerName = req.params.centreName;
+  
+  if(!centerName) {
     res.status(400).send({
       message:
         "Centre name not found in the request" //bad request
@@ -116,17 +118,16 @@ exports.viewByCenter = (req, res) => {
     return;
   }
 
-  Batch.viewByCenter(req.params.centreName, (err, data) => {
+  Batch.viewByCenter(centerName, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Batch with centreName ${req.params.centreName}.`,
+          message: `Not found Batch with centreName ${centerName}.`,
         });
       } else {
         res.status(500).send({
           message:
-            "Error retrieving Batch with centreName " +
-            req.params.centreName
+            "Error retrieving Batch with centreName " + centerName
         });
       }
     } else res.send(data);

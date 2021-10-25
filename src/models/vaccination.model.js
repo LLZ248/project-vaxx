@@ -56,6 +56,19 @@ Vaccination.getAll = result => {
   });
 };
 
+Vaccination.findByBatch = (batchNo, result) => {
+  sql.query("SELECT * FROM vaccination WHERE batchNo = ?", [batchNo], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log("vaccinations: ", res);
+    result(null, res);
+  });
+};
+
 Vaccination.updateById = (vaccinationID, vaccination, result) => {
   sql.query(
     "UPDATE vaccination SET appointmentDate = ?, status = ?, remarks = ? WHERE vaccinationID = ?",

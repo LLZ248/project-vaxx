@@ -35,6 +35,7 @@ const VaccinationTable = ({ vaccinations, role, onRowSelect }) => {
                         color={
                           vaccination.status === 'pending' ? 'dark' :
                           vaccination.status === 'confirmed' ? 'info' :
+                          vaccination.status === 'rejected' ? 'danger' :
                           /*administered*/ 'success'}> 
                         {vaccination.status}
                       </Badge>

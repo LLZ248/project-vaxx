@@ -50,10 +50,12 @@ const Batch = () => {
 
     const authorized = auth.userObj.centreName === batch.centreName;
 
-   fetchVaccination();
+    fetchVaccinations();
+    // if (authorized) fetchVaccination()
+    // else alert('not authorized');
   }
 
-  async function fetchVaccination() {
+  async function fetchVaccinations() {
     const vaccinationsData = await fetch("/vaccinations/ofBatch/" + batchNo);
     const vaccinations = await vaccinationsData.json();
     setVaccinations(vaccinations);
@@ -83,12 +85,12 @@ const Batch = () => {
           </ListGroupItem>
           <ListGroupItem> Administered 
             <Badge pill color='primary' className='ml-2'>
-              {batch.quantityAvailable}
+              {batch.quantityAdministered}
             </Badge>
           </ListGroupItem>
           <ListGroupItem> Pending 
             <Badge pill color='primary' className='ml-2'>
-              {batch.quantityAvailable}
+              //TODO find from DB
             </Badge>
           </ListGroupItem>
         </ListGroup>`
@@ -99,7 +101,9 @@ const Batch = () => {
 
       <ManageVaccinationModal batch={batch} vaccine={vaccine} 
         vaccination={selectedVaccination} 
-        isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
+        isOpen={isModalOpen} 
+        onSubmit={() => {setModalOpen(false); fetchVaccinations()}}
+        onClose={() => setModalOpen(false)}/>
     </>
   );
 };

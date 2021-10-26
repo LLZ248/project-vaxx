@@ -5,7 +5,7 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
   
   const viewByPatient = role === 'patient';
 
-  if(batches.batchNo) { //this check if the batch is actually a batch object 
+  if(batches?.batchNo) { //this check if the batch is actually a batch object 
     batches.forEach(batch => {
       batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100;
     }); 

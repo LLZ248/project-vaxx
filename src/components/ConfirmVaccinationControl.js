@@ -32,7 +32,7 @@ import {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData
                 })
-                .then(()=>{this.props.onSubmit();this.props.onClose();});
+                .then(this.props.onSubmit());
         }else{
             //Rejected
             var formData = `vaccinationID=${this.props.vaccinationID}&status=Rejected`
@@ -45,7 +45,7 @@ import {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData
                 })
-                .then(()=>{this.props.onSubmit();this.props.onClose();});
+                .then(this.props.onSubmit());
         }
       }
       onAccepted = ()=>{

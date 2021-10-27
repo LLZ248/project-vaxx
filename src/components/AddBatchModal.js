@@ -43,6 +43,8 @@ const AddBatchModal = ({centreName, onAdded}) => {
       body[key] = value;
     }
 
+    body['batchNo'] = body['vaccineID'] + body['batchNo'];
+
     const rawRes = await fetch('/batches', {
       method: 'POST',
       headers: {
@@ -174,7 +176,9 @@ const AddBatchModal = ({centreName, onAdded}) => {
                   </InputGroup>
                 </FormGroup>      
 
-                <input type="hidden" value={centreName} name="centreName" id='submit-button'/>
+                <input type="hidden" value={centreName} name="centreName"/>
+                <input type="hidden" value='0' name="quantityAdministered"/>
+                
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit">
                     Submit

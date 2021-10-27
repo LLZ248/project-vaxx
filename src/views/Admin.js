@@ -12,7 +12,7 @@ const AdminDashboard = () => {
 
   const history = useHistory();
   
-  const [batches, setBatches] = useState([]);
+  const [batches, setBatches] = useState(null);
   const [centre, setCentre] = useState('');
   const [message, setMessage] = useState('');
   

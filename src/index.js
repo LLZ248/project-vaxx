@@ -32,18 +32,11 @@ class AuthRoute extends Component{
   render(){
     const fetch = require('sync-fetch')
 
-    const formData = `username=clara@3928&password=clara@3928`;
-    const x = fetch('/administrators/verifyAdministrator', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body : formData
-      })
-
     const metadata = fetch('/verify').json()
     const role = metadata.role;
 
     if(role === "admin"){
-      return <Redirect to="/admin/batch/PF01"/>
+      return <Redirect to="/admin/dashboard"/>
     }else{
       return <AuthLayout {...this.props}/>
     }

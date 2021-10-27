@@ -8,24 +8,30 @@ import {
   InputGroup,
 } from "reactstrap";
 
-const RecordAdministeredControl = ({ vaccinationID, onSubmit }) => {
+const RecordAdministeredControl = ({ vaccinationID, batch, onSubmit }) => {
   const confirmAdministered = async (e) => {
     e.preventDefault();
 
     const remarks = e.target["remarks"].value;
 
-    const formData = `vaccinationID=${vaccinationID}&status=administered&remarks=${remarks ?? null}`;
-
     fetch("/vaccinations/update-vaccination", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData
-      // {
-      //   'vaccinationID' : vaccinationID,
-      //   'status' : 'administered',
-      //   'remarks' : remarks ?? null
-      // }
-    }).then(onSubmit());
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        vaccinationID: vaccinationID,
+        status: "administered",
+        remarks: remarks ?? null,
+      }),
+    })
+    .then(() => {
+      batch.quantityAdministered += 1; //because the vaccination has been administered
+      fetch("/batches", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(batch),
+      });
+    })
+    .then(onSubmit());
   };
 
   return (

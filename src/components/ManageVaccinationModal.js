@@ -109,7 +109,7 @@ const ManageVaccinationModal = ({
               vaccination.status === 'pending' ? 
               <ConfirmVaccinationControl vaccinationID={vaccination.vaccinationID} onSubmit={onSubmit}/> :
               vaccination.status === 'confirmed' ? 
-              <RecordAdministeredControl vaccinationID={vaccination.vaccinationID} onSubmit={onSubmit}/> :
+              <RecordAdministeredControl vaccinationID={vaccination.vaccinationID} batch={batch} onSubmit={onSubmit}/> :
               <div>
                 <h5 className="text-muted">Remarks</h5>
                 <p className="text-dark rounded border p-2 mb-4">{vaccination.remarks}</p>

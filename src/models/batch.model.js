@@ -2,10 +2,10 @@ const sql = require("../database.js");
 
 class Batch {
   constructor(batch) {
-    this.batchNo = batch.vaccineID + batch.batchNo;
+    this.batchNo = batch.batchNo;
     this.expiryDate = batch.expiryDate;
     this.quantityAvailable = batch.quantityAvailable;
-    this.quantityAdministered = 0;
+    this.quantityAdministered = batch.quantityAdministered;
     this.vaccineID = batch.vaccineID;
     this.centreName = batch.centreName;
   }
@@ -29,7 +29,15 @@ Batch.create = (newBatch, result) => {
 };
 
 Batch.findById = (batchNo, result) => {
-    sql.query(`SELECT * FROM batch WHERE batchNo = \'${batchNo}\'`, (err, res) => {
+    sql.query(`
+    SELECT *, quantityAvailable - quantityOccupied AS 'quantityRemaining' FROM
+
+    (SELECT * FROM batch WHERE batchNo = ?) AS batch,
+
+    (SELECT COUNT(*) AS 'quantityPending' FROM vaccination WHERE batchNo = ? AND status = 'pending') AS QuantityPending,
+
+    (SELECT COUNT(*) AS 'quantityOccupied' FROM vaccination WHERE batchNo = ? AND status IN ('pending','confirmed','administered')) AS quantityOccupied;`, 
+    [batchNo, batchNo, batchNo], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -102,8 +110,8 @@ Batch.getAvailable = (centreName, vaccineID, result) => {
 
 Batch.updateById = (batchNo, batch, result) => {
   sql.query(
-    "UPDATE batch SET expiryDate = ?, quantityAvailable = ?, quantityAdministered = ? WHERE batchNo = ?",
-    [batch.expiryDate, batch.quantityAvailable, batch.quantityAdministered, batch.batchNo],
+    "UPDATE batch SET quantityAvailable = ?, quantityAdministered = ? WHERE batchNo = ?",
+    [batch.quantityAvailable, batch.quantityAdministered, batch.batchNo],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -123,26 +131,9 @@ Batch.updateById = (batchNo, batch, result) => {
   );
 };
 
-Batch.findById = (batchNo, result) => {
-  sql.query("SELECT * FROM batch WHERE batchNo = ?", [batchNo], (err, res) => {
-  if (err) {
-    console.log("error: ", err);
-    result(err, null);
-    return;
-  }
-
-  if (res.length) {
-    console.log("found batch: ", res[0]);
-    result(null, res[0]);
-    return;
-  }
-
-  result({ kind: "not_found" }, null);
-});
-};
-
 Batch.viewByCenter = (centreName, result) => {
-  sql.query(`SELECT batch.batchNo, expiryDate, vaccineName, quantityAvailable, quantityAdministered, 
+  sql.query(`
+  SELECT batch.batchNo, expiryDate, vaccineName, quantityAvailable, quantityAdministered, 
   COUNT(vaccinationID) AS noOfPendingVaccination FROM Batch 
   JOIN Vaccine ON Batch.vaccineID = Vaccine.vaccineID 
   LEFT JOIN 

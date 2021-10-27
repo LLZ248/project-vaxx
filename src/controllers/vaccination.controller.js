@@ -101,13 +101,13 @@ exports.update = (req, res) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Vaccination with vaccinationID ${req.params.vaccinationID}.`,
+            message: `Not found Vaccination with vaccinationID ${req.body.vaccinationID}.`,
           });
         } else {
           res.status(500).send({
             message:
               "Error updating Vaccination with vaccinationID " +
-              req.params.vaccinationID,
+              req.body.vaccinationID,
           });
         }
       } else res.send(data);

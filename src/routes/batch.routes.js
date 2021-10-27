@@ -16,7 +16,7 @@ router.get("/available-batches", batches.findAvailable);
 router.get("/batches/:batchNo", batches.findOne);
 
 // Update a Batch with batchNo
-router.put("/batches/:batchNo", batches.update);
+router.put("/batches", batches.update);
 
 // router.get("/batches/:batchNo/vaccinations", batches.findAllVaccinations);
 router.get("/batches/ofCentre/:centreName", batches.viewByCenter)

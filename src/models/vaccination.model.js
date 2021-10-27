@@ -93,24 +93,4 @@ Vaccination.updateById = (vaccinationID, vaccination, result) => {
   );
 };
 
-
-// Vaccination.remove = (vaccinationID, result) => {
-//   sql.query("DELETE FROM vaccination WHERE vaccinationID = ?", vaccinationID, (err, res) => {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//       return;
-//     }
-
-//     if (res.affectedRows == 0) {
-//       // not found Vaccination with the vaccinationID
-//       result({ kind: "not_found" }, null);
-//       return;
-//     }
-
-//     console.log("deleted vaccination with vaccinationID: ", vaccinationID);
-//     result(null, res);
-//   });
-// };
-
 module.exports = Vaccination;

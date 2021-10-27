@@ -1,14 +1,16 @@
+import WaveLoading from "react-loadingg/lib/WaveLoading";
 import { Card, CardHeader, Table, Badge } from "reactstrap";
 
-const VaccinationTable = ({ vaccinations, role, onRowSelect }) => {
+const VaccinationTable = ({ vaccinations, onRowSelect, showChangesApplied }) => {
   require("../assets/css/hoverableTable.css");
 
-  const viewByPatient = role === "patient";
-  
   return (
     <Card className="shadow overflow-hidden">
       <CardHeader className="border-0 d-flex align-items-baseline justify-content-between">
-        <h3 className="mb-0">Vaccination List</h3>
+        <h3 className="mb-0">Vaccination list
+        <Badge className={`mx-2 d-${showChangesApplied ? 'inline' : 'none'}`} 
+          pill color='success'> Changes Applied </Badge>
+        </h3>
         <h5 className="mb-0 text-muted">Click on a vaccination to manage</h5>
       </CardHeader>
       <Table className="align-items-center table-flush" responsive>
@@ -20,7 +22,8 @@ const VaccinationTable = ({ vaccinations, role, onRowSelect }) => {
           </tr>
         </thead>
         <tbody>
-            {vaccinations === null ? <tr><td colSpan='3'> There are no vaccinations available currently </td></tr> :
+            {vaccinations === null ? <tr><td colSpan='3'> <WaveLoading color='#d2d8f7' style={{"position":"relative", "margin":"auto"}}/> </td></tr> :
+            vaccinations.length === 0 ? <tr><td colSpan='3'> There are no vaccinations available currently </td></tr> :
             vaccinations.map(vaccination =>
                 <tr
                 className="hoverable-row"
@@ -35,6 +38,7 @@ const VaccinationTable = ({ vaccinations, role, onRowSelect }) => {
                         color={
                           vaccination.status === 'pending' ? 'dark' :
                           vaccination.status === 'confirmed' ? 'info' :
+                          vaccination.status === 'rejected' ? 'danger' :
                           /*administered*/ 'success'}> 
                         {vaccination.status}
                       </Badge>

@@ -31,6 +31,7 @@ class AuthRoute extends Component{
   //Check if the user is logined admin
   render(){
     const fetch = require('sync-fetch')
+
     const metadata = fetch('/verify').json()
     const role = metadata.role;
 

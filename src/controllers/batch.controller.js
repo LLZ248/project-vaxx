@@ -86,19 +86,19 @@ exports.update = (req, res) => {
     });
   }
   Batch.updateById(
-    req.params.batchNo,
+    req.body.batchNo,
     new Batch(req.body),
     (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Batch with batchNo ${req.params.batchNo}.`,
+            message: `Not found Batch with batchNo ${req.body.batchNo}.`,
           });
         } else {
           res.status(500).send({
             message:
               "Error updating Batch with batchNo " +
-              req.params.batchNo,
+              req.body.batchNo,
           });
         }
       } else res.send(data);

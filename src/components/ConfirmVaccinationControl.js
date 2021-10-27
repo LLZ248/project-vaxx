@@ -26,16 +26,16 @@ import {
             return;
         }else if(this.state.choice === "Confirmed"){
             //Confirmed
-            const formData = `vaccinationID=${this.props.vaccinationID}&status=Confirmed`
+            const formData = `vaccinationID=${this.props.vaccinationID}&status=confirmed`
             fetch('/vaccinations/update-vaccination', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData
                 })
-                .then(()=>{this.props.onSubmit();this.props.onClose();});
+                .then(this.props.onSubmit());
         }else{
             //Rejected
-            var formData = `vaccinationID=${this.props.vaccinationID}&status=Rejected`
+            var formData = `vaccinationID=${this.props.vaccinationID}&status=rejected`
             if(this.state.remarks !== undefined){
                 formData = formData + `&remarks=${this.state.remarks}`
             }
@@ -45,7 +45,7 @@ import {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData
                 })
-                .then(()=>{this.props.onSubmit();this.props.onClose();});
+                .then(this.props.onSubmit());
         }
       }
       onAccepted = ()=>{

@@ -4,16 +4,7 @@ import ConfirmVaccinationControl from "./ConfirmVaccinationControl.js";
 
 import {
   Modal,
-  Button,
   Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
   Table,
 } from "reactstrap";
 
@@ -90,11 +81,11 @@ const ManageVaccinationModal = ({
                 </tr>
                 <tr>
                   <td className="text-muted">Vaccine Name</td>
-                  <td className="text-right">{vaccine.vaccineName}</td>
+                  <td className="text-right">{vaccine?.vaccineName}</td>
                 </tr>
                 <tr>
                   <td className="text-muted">Manufacturer</td>
-                  <td className="text-right">{vaccine.manufacturer}</td>
+                  <td className="text-right">{vaccine?.manufacturer}</td>
                 </tr>
               </tbody>
             </Table>
@@ -102,16 +93,29 @@ const ManageVaccinationModal = ({
             <thead className="thead-light">
                 <tr>
                   <th colSpan="2" className="text-center">
-                  {vaccination.status === 'pending' ? 
-                  'Administered Confirmation' : 'Appointment Approval'}
+                    {
+                    vaccination.status === 'pending' ? 
+                   'Appointment Approval' : 
+                   vaccination.status === 'pending' ? 
+                   'Administered Confirmation' :
+                   `${vaccination.status} Vaccination`
+                  }
                   </th>
                 </tr>
               </thead>
             </Table>
             <div className="bg-secondary p-3 pb-4 px-md-4 rounded">
-              {vaccination.status === 'pending' ? 
-              <ConfirmVaccinationControl vaccinationID = {vaccination.vaccinationID} onClose={onClose} onSubmit={onSubmit}/>:
-              <RecordAdministeredControl/>}
+              {
+              vaccination.status === 'pending' ? 
+              <ConfirmVaccinationControl vaccinationID={vaccination.vaccinationID} onSubmit={onSubmit}/> :
+              vaccination.status === 'confirmed' ? 
+              <RecordAdministeredControl vaccinationID={vaccination.vaccinationID} batch={batch} onSubmit={onSubmit}/> :
+              <div>
+                <h5 className="text-muted">Remarks</h5>
+                <p className="text-dark rounded border p-2 mb-4">{vaccination.remarks}</p>
+                <h5 className="text-center">This vaccination has been marked as {vaccination.status}.</h5>
+              </div>
+              }
             </div>
           </Card>
         </div>

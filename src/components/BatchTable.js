@@ -1,3 +1,4 @@
+import WaveLoading from "react-loadingg/lib/WaveLoading";
 import { Card, CardHeader, Table, Progress } from "reactstrap";
 
 const BatchTable = ({ batches, role, onRowSelect }) => {
@@ -5,7 +6,7 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
   
   const viewByPatient = role === 'patient';
 
-  if(batches.batchNo) { //this check if the batch is actually a batch object 
+  if(batches?.batchNo) { //this check if the batch is actually a batch object 
     batches.forEach(batch => {
       batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100;
     }); 
@@ -31,7 +32,8 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
           </tr>
         </thead>
         <tbody>
-          {batches === null ? <tr><td colSpan={viewByPatient ? '3' : '5'}> There are no batches available currently </td></tr> :
+          {batches === null ? <tr><td colSpan='3'> <WaveLoading color='#d2d8f7' style={{"position":"relative", "margin":"auto"}}/> </td></tr> :
+            batches.length === 0 ? <tr><td colSpan={viewByPatient ? '3' : '5'}> There are no batches available currently </td></tr> :
             batches.map(batch =>
               <tr
               className="hoverable-row"

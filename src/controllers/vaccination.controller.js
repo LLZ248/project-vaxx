@@ -101,16 +101,25 @@ exports.update = (req, res) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Vaccination with vaccinationID ${req.params.vaccinationID}.`,
+            message: `Not found Vaccination with vaccinationID ${req.body.vaccinationID}.`,
           });
         } else {
           res.status(500).send({
             message:
               "Error updating Vaccination with vaccinationID " +
-              req.params.vaccinationID,
+              req.body.vaccinationID,
           });
         }
-      } else res.send(data);
+      } else {
+        const axios = require('axios');
+        const headers = {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        };
+        var bodyData = `vaccinationID=${req.body.vaccinationID}&status=${req.body.status}`
+        if(req.body.remarks !== undefined) bodyData = bodyData + `&remarks=${req.body.remarks}`
+        //console.log(bodyData)
+        axios.post('http://localhost:5000/send-confirmation-email',bodyData, { headers }).then(result=>{console.log(result.data)});
+        res.send(data)};
     }
   );
 };

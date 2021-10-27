@@ -1,6 +1,7 @@
 const express = require('express');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');//require to read POST data
+const axios = require('axios');
 
 //Import Routes
 const patientRoute = require('./routes/patient.routes.js');
@@ -86,5 +87,33 @@ app.get("/log-out", (req, res)=>{
 	res.send("Logged Out")
 	}
 );
+
+app.post("/send-confirmation-email",(req,response)=>{
+	console.log("Sending Email")
+	var htmlText;
+	axios.get("http://localhost:5000/vaccinations/"+req.body.vaccinationID)
+	.then(response => {
+		return response.data;
+	}).then(res=>{
+		const username = res.username;
+		axios.get("http://localhost:5000/patients/findPatient?username="+username)
+		.then(res =>{return res.data;})
+		.then(res => {
+			htmlText = `<h1>Vaccination Appointment Result</h1><p>Dear ${res.fullName},<br>Your vaccination appointment ${req.body.vaccinationID} is ${req.body.status}</p>`;
+			if(req.body.remarks !== undefined){
+				htmlText = htmlText + `<p><br>Remarks : ${req.body.remarks}</p>`
+			}
+			var send = require('gmail-send')({
+				user: "vaxxproject@gmail.com",
+				pass: "CJh;G&9[*=_:'q\\p",
+				to:   "B1802130@helplive.edu.my",
+				subject: 'Vaccination Appointment Result',
+				html:    htmlText,
+			})(()=>{});
+			response.send("email sent")
+		})
+	})
+	
+})
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

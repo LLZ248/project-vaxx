@@ -26,10 +26,9 @@ const ManageVaccinationModal = ({
       setPatient(await data.json());
     }
 
-    if (vaccination != null) {
-      console.log('vac fetching pat');
+    if (vaccination.username != null) 
       fetchPatient();
-    } 
+      
   }, [vaccination]);
 
   return (

@@ -24,7 +24,6 @@ const Batch = () => {
   const batchNo = window.location.pathname.split("/").pop(); //get last segment of url
 
   const [batch, setBatch] = useState("");
-  const [centre, setCentre] = useState("");
   const [vaccine, setVaccine] = useState([]);
   const [vaccinations, setVaccinations] = useState(null);
   const [selectedVaccination, setSelectedVaccination] = useState("");
@@ -48,7 +47,6 @@ const Batch = () => {
     
     if (authorized) {
       setBatch(batch);
-      setCentre(centre);
       setVaccine(vaccine);
       fetchVaccinations();
     } 

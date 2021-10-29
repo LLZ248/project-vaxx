@@ -111,14 +111,16 @@ exports.update = (req, res) => {
           });
         }
       } else {
-        const axios = require('axios');
-        const headers = {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        };
-        var bodyData = `vaccinationID=${req.body.vaccinationID}&status=${req.body.status}`
-        if(req.body.remarks !== undefined) bodyData = bodyData + `&remarks=${req.body.remarks}`
-        //console.log(bodyData)
-        axios.post('http://localhost:5000/send-confirmation-email',bodyData, { headers }).then(result=>{console.log(result.data)});
+        if (req.body.status !== "administered"){
+          const axios = require('axios');
+          const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          };
+          var bodyData = `vaccinationID=${req.body.vaccinationID}&status=${req.body.status}`
+          if(req.body.remarks !== undefined) bodyData = bodyData + `&remarks=${req.body.remarks}`
+          //console.log(bodyData)
+          axios.post('http://localhost:5000/send-confirmation-email',bodyData, { headers }).then(result=>{console.log(result.data)});
+        }
         res.send(data)};
     }
   );

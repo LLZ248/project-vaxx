@@ -20,9 +20,9 @@ const AdminDashboard = () => {
     // alert(centre)
     const data = await fetch('/batches/ofCentre/' + centreName);
     const batches = await data.json();
-    const hasError = batches.message; //contains an error message
+    const notFound = batches.message?.startsWith('Not found');
   
-    setBatches(hasError ? null : batches);
+    setBatches(notFound ? [] : batches);
   }
 
   function onBatchAdded(newBatch) {

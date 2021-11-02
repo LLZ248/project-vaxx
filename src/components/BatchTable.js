@@ -6,11 +6,29 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
   
   const viewByPatient = role === 'patient';
 
-  if(batches?.batchNo) { //this check if the batch is actually a batch object 
+  if(batches?.length) { //this check if the batches contains any batch
     batches.forEach(batch => {
       batch.administeredCompletion = batch.quantityAdministered / batch.quantityAvailable * 100;
-    }); 
+    });
   }
+
+  console.table(batches);
+
+  const colSpan = viewByPatient ? '3' : '5';
+
+  const loadingAnimation = 
+    <tr>
+      <td colSpan={colSpan}> 
+        <WaveLoading color='#d2d8f7' style={{"position":"relative", "margin":"auto"}}/> 
+      </td>
+    </tr>;
+
+  const emptyBatchMessage = 
+    <tr>
+      <td colSpan={colSpan}> 
+        There are no batches available currently 
+      </td>
+    </tr>
 
   return (
       <Card className="shadow overflow-hidden">
@@ -23,17 +41,16 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
           <tr>
             <th scope="col">Batch No</th>
             <th scope="col">Vaccine</th>
-            <th scope="col">Expiry Date</th>
             {
-              viewByPatient ? <></> : <>
+              viewByPatient ? <th scope="col">Expiry Date</th> : <>
               <th scope="col">No. of Pending Appointments</th>
               <th scope="col">Administered Completion</th> </>
             }
           </tr>
         </thead>
         <tbody>
-          {batches === null ? <tr><td colSpan='3'> <WaveLoading color='#d2d8f7' style={{"position":"relative", "margin":"auto"}}/> </td></tr> :
-            batches.length === 0 ? <tr><td colSpan={viewByPatient ? '3' : '5'}> There are no batches available currently </td></tr> :
+          {batches === null ? loadingAnimation :
+            batches.length === 0 ? emptyBatchMessage :
             batches.map(batch =>
               <tr
               className="hoverable-row"
@@ -43,20 +60,17 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
               >
                 <td>{batch.batchNo}</td>
                 <td>{batch.vaccineName}</td>
-                <td>{batch.expiryDate}</td>
-                
-                { viewByPatient ? <></> : <>
-                  <td> {batch.noOfPendingVaccination}</td>
-                    <td>
+                { viewByPatient ? 
+                <td>{batch.expiryDate}</td> : 
+                <>
+                  <td> {batch.quantityPending}</td>
+                  <td>
                     <div className="d-flex align-items-center">
-                      <div>
-                        <Progress max="100" value={batch.administeredCompletion} barClassName="bg-success" />
-                      </div>
+                      <Progress max="100" value={batch.administeredCompletion} barClassName="bg-success" />
                       <span className="ml-2">{batch.administeredCompletion}%</span>
                     </div>
                   </td>
-                  </> }
-
+                </> }
               </tr>
             )}
         </tbody> 

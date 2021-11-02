@@ -134,7 +134,7 @@ Batch.updateById = (batchNo, batch, result) => {
 Batch.viewByCenter = (centreName, result) => {
   sql.query(`
   SELECT batch.batchNo, expiryDate, vaccineName, quantityAvailable, quantityAdministered, 
-  COUNT(vaccinationID) AS noOfPendingVaccination FROM Batch 
+  COUNT(vaccinationID) AS quantityPending FROM Batch 
   JOIN Vaccine ON Batch.vaccineID = Vaccine.vaccineID 
   LEFT JOIN 
   (SELECT batchNo, vaccinationID FROM Vaccination WHERE status = 'pending') AS PendingVaccination 

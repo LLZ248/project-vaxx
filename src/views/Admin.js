@@ -56,7 +56,7 @@ const AdminDashboard = () => {
       <>
       <AdminHeader title={centre.centreName} subtitle={centre.address}/>
       <Container className="mt--8">
-      <BatchTable batches={batches} role={'patient'} onRowSelect={selectedBatch => onBatchSelected(selectedBatch)}/>
+      <BatchTable batches={batches} onRowSelect={selectedBatch => onBatchSelected(selectedBatch)}/>
       <br/>
       <AddBatchModal centreName={centre.centreName} onAdded={newBatch => onBatchAdded(newBatch)}/> {/*pass centreName because batch must have it*/}
       {message ? <span className="alert alert-success py-2" id='success-message'>{message}</span> : null}

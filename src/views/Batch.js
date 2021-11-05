@@ -10,13 +10,12 @@
 //   Table,
 //   UncontrolledTooltip,
 // } from "reactstrap";
-import Header from "components/Headers/Header.js";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import AdminHeader from "components/Headers/AdminHeader.js";
 import VaccinationTable from "components/VaccinationTable.js";
 import ManageVaccinationModal from "components/ManageVaccinationModal.js";
-import { Badge, Card, CardBody, CardHeader, Container, ListGroup, ListGroupItem } from "reactstrap";
+import { Badge, Container, ListGroup, ListGroupItem } from "reactstrap";
 
 const Batch = () => {
   const history = useHistory();

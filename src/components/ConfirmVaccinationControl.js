@@ -115,30 +115,4 @@ import {
         
   };
   
-  export default ConfirmVaccinationControl;
-  
-{
-    /**
-     * 
-     * <form id="manageVaccinationForm">
-              <div class="form-floating my-3">
-
-                <div class="btn-group w-100" role="group" aria-label="radio toggle button group" id="statusButtonGroup">
-                  <input type="radio" class="btn-check" name="status" value="confirmed" id="rdbAccept" autocomplete="off" required="">
-                  <label class="btn btn-outline-primary" for="rdbAccept">Confirm</label>
-
-                  <input type="radio" class="btn-check" name="status" value="rejected" id="rdbtn-reject" autocomplete="off">
-                  <label class="btn btn-outline-primary" for="rdbtn-reject">Reject</label>
-                </div>
-
-                <div class="form-floating my-3">
-                  <input type="text" class="form-control" placeholder="remarks" name="remarks" id="remarks-input">
-                  <label for="floatingInput">Remarks</label>
-                </div>
-
-                <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-primary w-100" id="submitButton">Submit</button>
-                </div>
-            </div></form>
-     */
-}
+export default ConfirmVaccinationControl;

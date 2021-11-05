@@ -1,7 +1,6 @@
 import Register from "views/Register.js";
 import AdminLogin from "views/AdminLogin.js";
 import PatientLogin from "views/PatientLogin.js";
-//import VaccineView from "views/VaccineView.js"; //[deprecated]
 import Batch from "views/Batch";
 import AdminDashboard from "views/Admin.js";
 import PatientDashboard from "views/Patient.js";

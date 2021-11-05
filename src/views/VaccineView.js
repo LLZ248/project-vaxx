@@ -1,3 +1,4 @@
+//[deprecated]
 import Header from "components/Headers/Header.js";
 import VaccineTable from "components/VaccineTable.js";
 import { useState, useEffect } from "react";

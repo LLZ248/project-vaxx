@@ -100,17 +100,17 @@ app.post("/send-confirmation-email",(req,response)=>{
 		.then(res =>{return res.data;})
 		.then(res => {
 			htmlText = `<h1>Vaccination Appointment Result</h1><p>Dear ${res.fullName},<br>Your vaccination appointment ${req.body.vaccinationID} is ${req.body.status}</p>`;
-			// if(req.body.remarks !== undefined){
-			// 	htmlText = htmlText + `<p><br>Remarks : ${req.body.remarks}</p>`
-			// }
-			// var send = require('gmail-send')({
-			// 	user: "vaxxproject@gmail.com",
-			// 	pass: "CJh;G&9[*=_:'q\\p",
-			// 	to:   "B1802130@helplive.edu.my",
-			// 	subject: 'Vaccination Appointment Result',
-			// 	html:    htmlText,
-			// })(()=>{});
-			// response.send("email sent")
+			if(req.body.remarks !== undefined){
+				htmlText = htmlText + `<p><br>Remarks : ${req.body.remarks}</p>`
+			}
+			var send = require('gmail-send')({
+				user: "vaxxproject@gmail.com",
+				pass: "CJh;G&9[*=_:'q\\p",
+				to:   "B1802130@helplive.edu.my",
+				subject: 'Vaccination Appointment Result',
+				html:    htmlText,
+			})(()=>{});
+			response.send("email sent")
 		})
 	})
 	

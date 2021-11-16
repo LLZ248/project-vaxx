@@ -36,9 +36,6 @@ const Batch = () => {
     const batchData = await fetch("/batches/" + batchNo);
     const batch = await batchData.json();
     
-    const centreData = await fetch('/healthcare-centre/findCentre/?centreName=' + auth.userObj.centreName);
-    const centre = await centreData.json();
-    
     const vaccineData = await fetch("/vaccines/" + batch.vaccineID);
     const vaccine = await vaccineData.json();
     
@@ -75,8 +72,8 @@ const Batch = () => {
     fetchVaccinations()
   }
   
-  useEffect(async () => {
-    await fetchBatch();
+  useEffect(() => {
+    fetchBatch();
   }, []);
 
   return (

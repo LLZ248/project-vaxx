@@ -1,15 +1,3 @@
-// reactstrap components
-// import {
-//   Badge,
-//   DropdownMenu,
-//   DropdownItem,
-//   UncontrolledDropdown,
-//   DropdownToggle,
-//   Media,
-//   Progress,
-//   Table,
-//   UncontrolledTooltip,
-// } from "reactstrap";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import AdminHeader from "components/Headers/AdminHeader.js";
@@ -28,32 +16,6 @@ const Batch = () => {
   const [selectedVaccination, setSelectedVaccination] = useState("");
   const [showApplied, setShowApplied] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  
-  async function fetchBatch() {
-    const authData = await fetch("/verify");
-    const auth = await authData.json();
-
-    const batchData = await fetch("/batches/" + batchNo);
-    const batch = await batchData.json();
-    
-    const vaccineData = await fetch("/vaccines/" + batch.vaccineID);
-    const vaccine = await vaccineData.json();
-    
-    const authorized = auth.userObj.centreName === batch.centreName;
-    
-    if (authorized) {
-      setBatch(batch);
-      setVaccine(vaccine);
-      fetchVaccinations();
-    } 
-    else history.push('/admin/dashboard') //else take the user back to dashboard
-  }
-
-  async function fetchVaccinations() {
-    const vaccinationsData = await fetch("/vaccinations/ofBatch/" + batchNo);
-    const vaccinations = await vaccinationsData.json();
-    setVaccinations(vaccinations);
-  }
 
   function onVaccinationSelected(vaccination) {
     setSelectedVaccination(vaccination);
@@ -68,13 +30,38 @@ const Batch = () => {
   function onModalSubmitted() {
     setModalOpen(false); 
     indicateChangesApplied(); 
-    fetchBatch(); 
-    fetchVaccinations()
   }
   
   useEffect(() => {
+
+    async function fetchBatch() {
+      const authData = await fetch("/verify");
+      const auth = await authData.json();
+  
+      const batchData = await fetch("/batches/" + batchNo);
+      const batch = await batchData.json();
+      
+      const vaccineData = await fetch("/vaccines/" + batch.vaccineID);
+      const vaccine = await vaccineData.json();
+      
+      const authorized = auth.userObj.centreName === batch.centreName;
+      
+      if (authorized) {
+        setBatch(batch);
+        setVaccine(vaccine);
+        fetchVaccinations();
+      } 
+      else history.push('/admin/dashboard') //else take the user back to dashboard
+    }
+
+    async function fetchVaccinations() {
+      const vaccinationsData = await fetch("/vaccinations/ofBatch/" + batchNo);
+      const vaccinations = await vaccinationsData.json();
+      setVaccinations(vaccinations);
+    }
+
     fetchBatch();
-  }, []);
+  }, [batchNo, history, showApplied]); //dependency on showApplied will refresh the batch table upon the vaccination updated
 
   return (
     <>

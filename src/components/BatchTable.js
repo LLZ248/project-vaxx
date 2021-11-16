@@ -12,8 +12,6 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
     });
   }
 
-  console.table(batches);
-
   const colSpan = viewByPatient ? '3' : '5';
 
   const loadingAnimation = 
@@ -42,9 +40,11 @@ const BatchTable = ({ batches, role, onRowSelect }) => {
             <th scope="col">Batch No</th>
             <th scope="col">Vaccine</th>
             {
-              viewByPatient ? <th scope="col">Expiry Date</th> : <>
-              <th scope="col">No. of Pending Appointments</th>
-              <th scope="col">Administered Completion</th> </>
+              viewByPatient ? <th scope="col">Expiry Date</th> : 
+              <>
+                <th scope="col">No. of Pending Appointments</th>
+                <th scope="col">Administered Completion</th>
+              </>
             }
           </tr>
         </thead>
